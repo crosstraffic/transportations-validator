@@ -1,0 +1,88 @@
+{
+  "condition_types": [
+    {
+      "name": "facility_type",
+      "description": "Type of transportation facility",
+      "rust_enum": "FacilityType",
+      "values": [
+        {"value": "TwoLaneHighway", "display_name": "Two-Lane Highway"},
+        {"value": "BasicFreeway", "display_name": "Basic Freeway"},
+        {"value": "MultilaneHighway", "display_name": "Multilane Highway"},
+        {"value": "UrbanStreet", "display_name": "Urban Street"}
+      ]
+    },
+    {
+      "name": "city_type",
+      "description": "Urban/Rural classification",
+      "rust_enum": "CityType",
+      "values": [
+        {"value": "Urban", "display_name": "Urban"},
+        {"value": "Rural", "display_name": "Rural"}
+      ]
+    },
+    {
+      "name": "terrain_type",
+      "description": "Terrain classification",
+      "rust_enum": null,
+      "values": [
+        {"value": "Level", "display_name": "Level Terrain"},
+        {"value": "Rolling", "display_name": "Rolling Terrain"},
+        {"value": "Mountainous", "display_name": "Mountainous Terrain"}
+      ]
+    },
+    {
+      "name": "highway_type",
+      "description": "Highway capacity type",
+      "rust_enum": null,
+      "values": [
+        {"value": "basic", "display_name": "Basic"},
+        {"value": "multilane", "display_name": "Multilane"}
+      ]
+    },
+    {
+      "name": "median_type",
+      "description": "Median configuration",
+      "rust_enum": null,
+      "values": [
+        {"value": "undivided", "display_name": "Undivided"},
+        {"value": "twltl", "display_name": "Two-Way Left Turn Lane"},
+        {"value": "divided", "display_name": "Divided"}
+      ]
+    },
+    {
+      "name": "passing_type",
+      "description": "Passing configuration for two-lane highways",
+      "rust_enum": null,
+      "values": [
+        {"value": "0", "display_name": "Passing Constrained", "rust_variant": "Constrained"},
+        {"value": "1", "display_name": "Passing Zone", "rust_variant": "Zone"},
+        {"value": "2", "display_name": "Passing Lane", "rust_variant": "Lane"}
+      ]
+    },
+    {
+      "name": "vertical_class",
+      "description": "Vertical alignment class (1-5)",
+      "rust_enum": null,
+      "values": [
+        {"value": "1", "display_name": "Class 1"},
+        {"value": "2", "display_name": "Class 2"},
+        {"value": "3", "display_name": "Class 3"},
+        {"value": "4", "display_name": "Class 4"},
+        {"value": "5", "display_name": "Class 5"}
+      ]
+    },
+    {
+      "name": "horizontal_class",
+      "description": "Horizontal alignment class (0-5)",
+      "rust_enum": null,
+      "values": [
+        {"value": "0", "display_name": "Class 0"},
+        {"value": "1", "display_name": "Class 1"},
+        {"value": "2", "display_name": "Class 2"},
+        {"value": "3", "display_name": "Class 3"},
+        {"value": "4", "display_name": "Class 4"},
+        {"value": "5", "display_name": "Class 5"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: transportations-postgres
+    environment:
+      POSTGRES_USER: transportations
+      POSTGRES_PASSWORD: transportations_dev
+      POSTGRES_DB: transportations_validator
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U transportations -d transportations_validator"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: transportations-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/neo4j_dev_password
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: transportations-api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://transportations:transportations_dev@postgres:5432/transportations_validator
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: neo4j_dev_password
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+
+volumes:
+  postgres_data:
+  neo4j_data:
+  neo4j_logs:

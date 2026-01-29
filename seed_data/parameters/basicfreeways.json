@@ -1,0 +1,125 @@
+{
+  "facility_type": "BasicFreeway",
+  "parameters": [
+    {
+      "name": "Base Free Flow Speed",
+      "rust_field": "bffs",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 75.4,
+      "description": "Base free flow speed before adjustments",
+      "aliases": ["base ffs", "base speed", "bffs"]
+    },
+    {
+      "name": "Lane Width",
+      "rust_field": "lw",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 12.0,
+      "description": "Width of travel lane",
+      "aliases": ["lane_width", "lane width"]
+    },
+    {
+      "name": "Right Lateral Clearance",
+      "rust_field": "lc_r",
+      "unit": "ft",
+      "data_type": "integer",
+      "typical_min": 0,
+      "typical_max": 6,
+      "description": "Lateral clearance on right side of traveled way",
+      "aliases": ["right clearance", "right lateral clearance", "lcr"]
+    },
+    {
+      "name": "Left Lateral Clearance",
+      "rust_field": "lc_l",
+      "unit": "ft",
+      "data_type": "integer",
+      "typical_min": 0,
+      "typical_max": 6,
+      "description": "Lateral clearance on left side of traveled way",
+      "aliases": ["left clearance", "left lateral clearance", "lcl"]
+    },
+    {
+      "name": "Grade",
+      "rust_field": "grade",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -2.0,
+      "typical_max": 6.0,
+      "description": "Segment percent grade",
+      "aliases": ["percent grade", "slope"]
+    },
+    {
+      "name": "Speed Limit",
+      "rust_field": "speed_limit",
+      "unit": "mph",
+      "data_type": "integer",
+      "typical_min": 55,
+      "typical_max": 75,
+      "description": "Posted speed limit",
+      "aliases": ["posted speed", "speed limit"]
+    },
+    {
+      "name": "Peak Hour Factor",
+      "rust_field": "phf",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.85,
+      "typical_max": 0.95,
+      "description": "Ratio of hourly volume to peak 15-minute flow rate",
+      "aliases": ["PHF", "peak hour factor"]
+    },
+    {
+      "name": "Truck Percentage",
+      "rust_field": "p_t",
+      "unit": "decimal",
+      "data_type": "float",
+      "typical_min": 0.02,
+      "typical_max": 0.25,
+      "description": "Proportion of trucks and buses in traffic stream",
+      "aliases": ["truck percent", "heavy vehicle percentage", "pt"]
+    },
+    {
+      "name": "Access Point Density",
+      "rust_field": "apd",
+      "unit": "pts/mi",
+      "data_type": "integer",
+      "typical_min": 0,
+      "typical_max": 40,
+      "description": "Number of access points per mile",
+      "aliases": ["access points", "apd", "access density"]
+    },
+    {
+      "name": "Total Ramp Density",
+      "rust_field": "trd",
+      "unit": "ramps/mi",
+      "data_type": "integer",
+      "typical_min": 0,
+      "typical_max": 4,
+      "description": "Total number of ramps per mile",
+      "aliases": ["ramp density", "trd"]
+    },
+    {
+      "name": "Lane Count",
+      "rust_field": "lane_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 2,
+      "typical_max": 6,
+      "description": "Number of lanes in analysis direction",
+      "aliases": ["number of lanes", "lanes"]
+    },
+    {
+      "name": "Segment Length",
+      "rust_field": "length",
+      "unit": "mi",
+      "data_type": "float",
+      "typical_min": 0.1,
+      "typical_max": 10.0,
+      "description": "Length of analysis segment",
+      "aliases": ["length", "segment length"]
+    }
+  ]
+}

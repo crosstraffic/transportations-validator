@@ -1,0 +1,148 @@
+{
+  "facility_type": "TwoLaneHighway",
+  "parameters": [
+    {
+      "name": "Lane Width",
+      "rust_field": "lane_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 12.0,
+      "description": "Width of travel lane",
+      "aliases": ["lane_width", "lane width", "lw"]
+    },
+    {
+      "name": "Shoulder Width",
+      "rust_field": "shoulder_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10.0,
+      "description": "Width of paved shoulder",
+      "aliases": ["shoulder_width", "shoulder width"]
+    },
+    {
+      "name": "Segment Length",
+      "rust_field": "length",
+      "unit": "mi",
+      "data_type": "float",
+      "typical_min": 0.25,
+      "typical_max": 3.0,
+      "description": "Length of highway segment",
+      "aliases": ["length", "segment length"]
+    },
+    {
+      "name": "Grade",
+      "rust_field": "grade",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -3.0,
+      "typical_max": 6.0,
+      "description": "Segment percent grade",
+      "aliases": ["percent grade", "slope"]
+    },
+    {
+      "name": "Speed Limit",
+      "rust_field": "spl",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 55.0,
+      "description": "Posted speed limit",
+      "aliases": ["posted speed", "speed limit"]
+    },
+    {
+      "name": "Volume",
+      "rust_field": "volume",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 750.0,
+      "typical_max": 1100.0,
+      "description": "Demand volume for analysis direction",
+      "aliases": ["traffic volume", "demand volume"]
+    },
+    {
+      "name": "Heavy Vehicle Percentage",
+      "rust_field": "phv",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 5.0,
+      "typical_max": 25.0,
+      "description": "Percentage of heavy vehicles in traffic stream",
+      "aliases": ["truck percent", "heavy vehicle percent", "phv"]
+    },
+    {
+      "name": "Design Radius",
+      "rust_field": "design_rad",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 275.0,
+      "typical_max": 2550.0,
+      "description": "Design radius of horizontal curve",
+      "aliases": ["radius", "curve radius"]
+    },
+    {
+      "name": "Superelevation",
+      "rust_field": "sup_ele",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 8.0,
+      "description": "Superelevation rate",
+      "aliases": ["super", "superelevation"]
+    },
+    {
+      "name": "Peak Hour Factor",
+      "rust_field": "phf",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.85,
+      "typical_max": 0.95,
+      "description": "Ratio of hourly volume to peak 15-minute flow rate",
+      "aliases": ["PHF", "peak hour factor"]
+    },
+    {
+      "name": "Access Point Density",
+      "rust_field": "apd",
+      "unit": "pts/mi",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 20.0,
+      "description": "Number of access points per mile",
+      "aliases": ["access points", "apd"]
+    },
+    {
+      "name": "Passing Type",
+      "rust_field": "passing_type",
+      "unit": null,
+      "data_type": "enum",
+      "typical_min": 0,
+      "typical_max": 2,
+      "description": "Type of passing configuration (0=Constrained, 1=Zone, 2=Lane)",
+      "aliases": ["passing type", "passing configuration"],
+      "allowed_values": "0,1,2"
+    },
+    {
+      "name": "Vertical Class",
+      "rust_field": "vertical_class",
+      "unit": null,
+      "data_type": "enum",
+      "typical_min": 1,
+      "typical_max": 5,
+      "description": "Vertical alignment class",
+      "aliases": ["vertical class", "vc"],
+      "allowed_values": "1,2,3,4,5"
+    },
+    {
+      "name": "Horizontal Class",
+      "rust_field": "hor_class",
+      "unit": null,
+      "data_type": "enum",
+      "typical_min": 0,
+      "typical_max": 5,
+      "description": "Horizontal alignment class",
+      "aliases": ["horizontal class", "hc"],
+      "allowed_values": "0,1,2,3,4,5"
+    }
+  ]
+}
