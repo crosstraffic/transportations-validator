@@ -8,14 +8,14 @@ version = "0.1.0"
 description = "Validates ML-generated roads, LLM responses, and software outputs against a knowledge graph of transportation design rules"
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = "Apache-2.0"
 authors = [
     { name = "CrossTraffic Team" }
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
