@@ -8,18 +8,37 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from transportations_validator.config import get_settings
 from transportations_validator.db.postgres.connection import engine, close_db
-from transportations_validator.db.neo4j.connection import neo4j_driver, close_neo4j
+from transportations_validator.db.postgres import async_session_maker
+from transportations_validator.db.neo4j.connection import neo4j_driver, close_neo4j, get_neo4j_session
+from transportations_validator.db.neo4j.auto_sync import sync_manager, register_sync_events
+from transportations_validator.db.neo4j.sync import Neo4jSyncService
 from transportations_validator.api.v1 import validation, parameters, rules
 
 
 settings = get_settings()
 
 
+async def do_neo4j_sync() -> None:
+    """Execute Neo4j sync (called by sync_manager)."""
+    async with async_session_maker() as pg_session:
+        async for neo4j_session in get_neo4j_session():
+            sync_service = Neo4jSyncService(pg_session, neo4j_session)
+            result = await sync_service.sync_all()
+            if result.errors:
+                import logging
+                logging.getLogger(__name__).error(f"Sync errors: {result.errors}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan manager for startup/shutdown events."""
     # Startup
+    sync_manager.delay_seconds = settings.neo4j_sync_delay
+    register_sync_events()
+    sync_manager.set_sync_callback(do_neo4j_sync)
+
     yield
+
     # Shutdown
     await close_db()
     await close_neo4j()

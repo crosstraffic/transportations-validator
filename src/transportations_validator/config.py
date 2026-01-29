@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     api_prefix: str = "/api/v1"
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:8080"]
 
+    # Neo4j Sync
+    neo4j_sync_delay: float = 5.0  # Debounce delay in seconds
+
 
 @lru_cache
 def get_settings() -> Settings:
