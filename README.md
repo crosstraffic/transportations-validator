@@ -1,5 +1,9 @@
 # Transportation Validator
 
+[![Tests](https://github.com/crosstraffic/transportations-validator/actions/workflows/test.yml/badge.svg)](https://github.com/crosstraffic/transportations-validator/actions/workflows/test.yml)
+[![Docker Build](https://github.com/crosstraffic/transportations-validator/actions/workflows/docker.yml/badge.svg)](https://github.com/crosstraffic/transportations-validator/actions/workflows/docker.yml)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 A Python project that validates ML-generated roads, LLM responses, and software outputs against a knowledge graph of transportation design rules.
 
 ## Architecture
@@ -57,6 +61,7 @@ API available at http://localhost:8000
 | `make lint` | Lint code with ruff |
 | `make fmt` | Format code with ruff |
 | `make typecheck` | Type check with mypy |
+| `make pre-commit` | Install pre-commit hooks |
 | `make clean` | Remove cache files |
 | `make reset` | Reset databases and reseed |
 | `make docker-up` | Run full stack in Docker |

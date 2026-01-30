@@ -89,3 +89,4 @@ credentials/
 
 .claude/
 docs/plans/
+uv.lock

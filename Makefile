@@ -1,4 +1,4 @@
-.PHONY: help db db-stop install install-pip migrate seed serve dev test test-cov lint fmt clean reset
+.PHONY: help db db-stop install install-pip migrate seed serve dev test test-cov lint fmt clean reset pre-commit
 
 # Show available commands
 help:
@@ -16,6 +16,7 @@ help:
 	@echo "  make lint        - Lint code"
 	@echo "  make fmt         - Format code"
 	@echo "  make typecheck   - Type check with mypy"
+	@echo "  make pre-commit  - Install pre-commit hooks"
 	@echo "  make clean       - Remove cache files"
 	@echo "  make reset       - Reset databases and reseed"
 	@echo "  make docker-up   - Run full stack in Docker"
@@ -74,6 +75,11 @@ fmt:
 # Type check
 typecheck:
 	mypy src/
+
+# Install pre-commit hooks
+pre-commit:
+	uv pip install pre-commit
+	pre-commit install
 
 # Clean
 clean:
