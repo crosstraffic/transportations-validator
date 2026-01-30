@@ -2,9 +2,11 @@
 
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from transportations_validator.api.v1 import graph, parameters, rules, validation
 from transportations_validator.config import get_settings
@@ -70,6 +72,11 @@ app.include_router(validation.router, prefix=settings.api_prefix, tags=["validat
 app.include_router(parameters.router, prefix=settings.api_prefix, tags=["parameters"])
 app.include_router(rules.router, prefix=settings.api_prefix, tags=["rules"])
 app.include_router(graph.router, prefix=settings.api_prefix, tags=["graph"])
+
+# Mount static files for graph visualization
+static_path = Path(__file__).parent.parent.parent / "static"
+if static_path.exists():
+    app.mount("/static", StaticFiles(directory=str(static_path), html=True), name="static")
 
 
 @app.get("/health")

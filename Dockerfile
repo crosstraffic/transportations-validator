@@ -13,6 +13,7 @@ COPY src/ src/
 COPY migrations/ migrations/
 COPY scripts/ scripts/
 COPY seed_data/ seed_data/
+COPY static/ static/
 COPY entrypoint.sh .
 
 # Fix Windows line endings

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        #controls {
+            padding: 15px;
+            background: #16213e;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        input, select, button {
+            padding: 8px 12px;
+            border: 1px solid #0f3460;
+            border-radius: 4px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        button {
+            background: #e94560;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: #ff6b6b; }
+        #graph { width: 100%; height: calc(100vh - 60px); }
+        .node { cursor: pointer; }
+        .node text { font-size: 11px; fill: #eee; }
+        .link { stroke-opacity: 0.6; }
+        .link-label { font-size: 9px; fill: #888; }
+        #tooltip {
+            position: absolute;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            padding: 10px;
+            border-radius: 4px;
+            pointer-events: none;
+            opacity: 0;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <label>Center: <input type="text" id="center" value="lw" placeholder="rust_field"></label>
+        <label>Depth: <select id="depth">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select></label>
+        <button onclick="loadGraph()">Load Graph</button>
+        <button onclick="loadFullGraph()" style="background:#4ecdc4">Full Graph</button>
+        <label style="margin-left:20px"><input type="checkbox" id="showRules" checked> Show Rules</label>
+        <span id="status"></span>
+    </div>
+    <svg id="graph"></svg>
+    <div id="tooltip"></div>
+
+    <script>
+        const width = window.innerWidth;
+        const height = window.innerHeight - 60;
+
+        const svg = d3.select("#graph")
+            .attr("width", width)
+            .attr("height", height);
+
+        const g = svg.append("g");
+
+        // Zoom behavior
+        svg.call(d3.zoom().on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        }));
+
+        const tooltip = d3.select("#tooltip");
+
+        const colorScale = {
+            "Parameter": "#4ecdc4",
+            "DesignRule": "#ff6b6b",
+            "SourceDoc": "#ffe66d",
+            "ConditionValue": "#95e1d3"
+        };
+
+        async function loadGraph() {
+            const center = document.getElementById("center").value;
+            const depth = document.getElementById("depth").value;
+            const status = document.getElementById("status");
+
+            status.textContent = "Loading...";
+
+            try {
+                const response = await fetch(`/api/v1/graph/visualize?center=${center}&depth=${depth}`);
+                const data = await response.json();
+
+                if (data.detail) {
+                    status.textContent = `Error: ${data.detail}`;
+                    return;
+                }
+
+                status.textContent = `Loaded ${data.nodes.length} nodes, ${data.edges.length} edges`;
+                renderGraph(data);
+            } catch (err) {
+                status.textContent = `Error: ${err.message}`;
+            }
+        }
+
+        async function loadFullGraph() {
+            const status = document.getElementById("status");
+            const showRules = document.getElementById("showRules").checked;
+
+            status.textContent = "Loading full graph...";
+
+            try {
+                const response = await fetch(`/api/v1/graph/visualize/full`);
+                let data = await response.json();
+
+                if (data.detail) {
+                    status.textContent = `Error: ${data.detail}`;
+                    return;
+                }
+
+                // Filter out rules if checkbox unchecked
+                if (!showRules) {
+                    const paramNodeIds = new Set(data.nodes.filter(n => n.type === "Parameter").map(n => n.id));
+                    data.nodes = data.nodes.filter(n => n.type === "Parameter");
+                    data.edges = data.edges.filter(e => paramNodeIds.has(e.source) && paramNodeIds.has(e.target));
+                }
+
+                status.textContent = `Loaded ${data.nodes.length} nodes, ${data.edges.length} edges`;
+                renderGraph(data);
+            } catch (err) {
+                status.textContent = `Error: ${err.message}`;
+            }
+        }
+
+        function renderGraph(data) {
+            // Clear previous
+            g.selectAll("*").remove();
+
+            if (data.nodes.length === 0) {
+                g.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height / 2)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#888")
+                    .text("No nodes found");
+                return;
+            }
+
+            // Create force simulation
+            const simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.edges).id(d => d.id).distance(120))
+                .force("charge", d3.forceManyBody().strength(-400))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collision", d3.forceCollide().radius(50));
+
+            // Draw links
+            const link = g.append("g")
+                .selectAll("line")
+                .data(data.edges)
+                .join("line")
+                .attr("class", "link")
+                .attr("stroke", "#0f3460")
+                .attr("stroke-width", 2);
+
+            // Link labels
+            const linkLabel = g.append("g")
+                .selectAll("text")
+                .data(data.edges)
+                .join("text")
+                .attr("class", "link-label")
+                .text(d => d.relationship);
+
+            // Draw nodes
+            const node = g.append("g")
+                .selectAll("g")
+                .data(data.nodes)
+                .join("g")
+                .attr("class", "node")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("circle")
+                .attr("r", d => d.type === "Parameter" ? 25 : 20)
+                .attr("fill", d => colorScale[d.type] || "#888")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2);
+
+            node.append("text")
+                .attr("dy", 4)
+                .attr("text-anchor", "middle")
+                .text(d => d.rust_field || d.label?.substring(0, 10) || d.id);
+
+            // Tooltip
+            node.on("mouseover", (event, d) => {
+                tooltip.style("opacity", 1)
+                    .html(`
+                        <strong>${d.label || d.id}</strong><br>
+                        Type: ${d.type}<br>
+                        ${d.rust_field ? `Field: ${d.rust_field}<br>` : ""}
+                        ${d.facility_type ? `Facility: ${d.facility_type}<br>` : ""}
+                        ${d.rule_type ? `Rule Type: ${d.rule_type}<br>` : ""}
+                        ${d.severity ? `Severity: ${d.severity}` : ""}
+                    `)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.style("opacity", 0);
+            })
+            .on("click", (event, d) => {
+                if (d.rust_field) {
+                    document.getElementById("center").value = d.rust_field;
+                    loadGraph();
+                }
+            });
+
+            // Simulation tick
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                linkLabel
+                    .attr("x", d => (d.source.x + d.target.x) / 2)
+                    .attr("y", d => (d.source.y + d.target.y) / 2);
+
+                node.attr("transform", d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+        }
+
+        // Load on start
+        loadGraph();
+    </script>
+</body>
+</html>

@@ -236,6 +236,97 @@ async def analyze_parameter_impact(
     )
 
 
+@router.get("/visualize/full", response_model=GraphVisualization)
+async def visualize_full_graph(
+    neo4j=Depends(get_neo4j_session),
+) -> GraphVisualization:
+    """Get the full knowledge graph with all nodes and relationships."""
+    query = """
+    MATCH (n)
+    WHERE n:Parameter OR n:DesignRule
+    OPTIONAL MATCH (n)-[r]-(m)
+    WHERE m:Parameter OR m:DesignRule
+    WITH collect(DISTINCT n) + collect(DISTINCT m) as allNodes, collect(DISTINCT r) as rels
+    UNWIND allNodes as node
+    WITH collect(DISTINCT node) as nodes, rels
+    RETURN nodes, rels
+    """
+
+    result = await neo4j.run(query)
+    record = await result.single()
+
+    if not record:
+        return GraphVisualization(nodes=[], edges=[])
+
+    nodes = []
+    node_ids = set()
+
+    for node in record["nodes"]:
+        if node is None:
+            continue
+        labels = list(node.labels)
+        node_type = labels[0] if labels else "Unknown"
+
+        if node_type == "Parameter":
+            node_id = f"param_{node.get('id', node.get('rust_field'))}"
+            if node_id not in node_ids:
+                nodes.append(
+                    {
+                        "id": node_id,
+                        "type": "Parameter",
+                        "label": node.get("name", node.get("rust_field")),
+                        "rust_field": node.get("rust_field"),
+                        "facility_type": node.get("facility_type"),
+                    }
+                )
+                node_ids.add(node_id)
+
+        elif node_type == "DesignRule":
+            node_id = f"rule_{node.get('id')}"
+            if node_id not in node_ids:
+                nodes.append(
+                    {
+                        "id": node_id,
+                        "type": "DesignRule",
+                        "label": node.get("name"),
+                        "rule_type": node.get("rule_type"),
+                        "severity": node.get("severity"),
+                    }
+                )
+                node_ids.add(node_id)
+
+    edges = []
+    for rel in record["rels"]:
+        if rel is None:
+            continue
+        start_node = rel.start_node
+        end_node = rel.end_node
+
+        start_labels = list(start_node.labels)
+        end_labels = list(end_node.labels)
+
+        if "Parameter" in start_labels:
+            source = f"param_{start_node.get('id', start_node.get('rust_field'))}"
+        else:
+            source = f"rule_{start_node.get('id')}"
+
+        if "Parameter" in end_labels:
+            target = f"param_{end_node.get('id', end_node.get('rust_field'))}"
+        else:
+            target = f"rule_{end_node.get('id')}"
+
+        edges.append(
+            GraphEdge(
+                source=source,
+                target=target,
+                relationship=rel.type,
+                properties=dict(rel) if rel else None,
+            )
+        )
+
+    return GraphVisualization(nodes=nodes, edges=edges)
+
+
 @router.get("/visualize", response_model=GraphVisualization)
 async def visualize_graph(
     center: str = Query(..., description="Center node rust_field"),
