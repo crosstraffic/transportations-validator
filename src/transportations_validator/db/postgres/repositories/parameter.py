@@ -1,12 +1,12 @@
 """Parameter repository."""
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from transportations_validator.db.postgres.repositories.base import BaseRepository
-from transportations_validator.models.parameter import Parameter, ParameterAlias, FacilityType
+from transportations_validator.models.parameter import FacilityType, Parameter, ParameterAlias
 
 
 class ParameterRepository(BaseRepository[Parameter]):
@@ -14,9 +14,7 @@ class ParameterRepository(BaseRepository[Parameter]):
 
     model = Parameter
 
-    async def get_by_facility_type(
-        self, facility_type: FacilityType
-    ) -> Sequence[Parameter]:
+    async def get_by_facility_type(self, facility_type: FacilityType) -> Sequence[Parameter]:
         """Get all parameters for a facility type."""
         result = await self.session.execute(
             select(Parameter)
@@ -48,9 +46,7 @@ class ParameterRepository(BaseRepository[Parameter]):
     async def get_with_aliases(self, id: int) -> Parameter | None:
         """Get parameter with aliases loaded."""
         result = await self.session.execute(
-            select(Parameter)
-            .where(Parameter.id == id)
-            .options(selectinload(Parameter.aliases))
+            select(Parameter).where(Parameter.id == id).options(selectinload(Parameter.aliases))
         )
         return result.scalar_one_or_none()
 

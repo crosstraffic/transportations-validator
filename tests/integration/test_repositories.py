@@ -1,14 +1,13 @@
 """Integration tests for database repositories."""
 
 import pytest
-
 from transportations_validator.db.postgres.repositories import (
+    ConditionRepository,
     ParameterRepository,
     RuleRepository,
-    ConditionRepository,
     SourceRepository,
 )
-from transportations_validator.models.parameter import FacilityType, DataType
+from transportations_validator.models.parameter import DataType, FacilityType
 from transportations_validator.models.rule import RuleType, Severity
 
 
@@ -20,15 +19,17 @@ class TestParameterRepository:
         """Test creating a parameter."""
         repo = ParameterRepository(session)
 
-        param = await repo.create({
-            "name": "Lane Width",
-            "rust_field": "lw",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-            "unit": "ft",
-            "data_type": DataType.FLOAT,
-            "typical_min": 10.0,
-            "typical_max": 12.0,
-        })
+        param = await repo.create(
+            {
+                "name": "Lane Width",
+                "rust_field": "lw",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+                "unit": "ft",
+                "data_type": DataType.FLOAT,
+                "typical_min": 10.0,
+                "typical_max": 12.0,
+            }
+        )
 
         assert param.id is not None
         assert param.name == "Lane Width"
@@ -39,11 +40,13 @@ class TestParameterRepository:
         """Test getting parameter by ID."""
         repo = ParameterRepository(session)
 
-        created = await repo.create({
-            "name": "Test Param",
-            "rust_field": "test",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
+        created = await repo.create(
+            {
+                "name": "Test Param",
+                "rust_field": "test",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
 
         retrieved = await repo.get_by_id(created.id)
         assert retrieved is not None
@@ -53,21 +56,27 @@ class TestParameterRepository:
         """Test getting parameters by facility type."""
         repo = ParameterRepository(session)
 
-        await repo.create({
-            "name": "Param 1",
-            "rust_field": "p1",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
-        await repo.create({
-            "name": "Param 2",
-            "rust_field": "p2",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
-        await repo.create({
-            "name": "Param 3",
-            "rust_field": "p3",
-            "facility_type": FacilityType.TWO_LANE_HIGHWAY,
-        })
+        await repo.create(
+            {
+                "name": "Param 1",
+                "rust_field": "p1",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
+        await repo.create(
+            {
+                "name": "Param 2",
+                "rust_field": "p2",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
+        await repo.create(
+            {
+                "name": "Param 3",
+                "rust_field": "p3",
+                "facility_type": FacilityType.TWO_LANE_HIGHWAY,
+            }
+        )
 
         bf_params = await repo.get_by_facility_type(FacilityType.BASIC_FREEWAY)
         assert len(bf_params) == 2
@@ -79,11 +88,13 @@ class TestParameterRepository:
         """Test adding parameter alias."""
         repo = ParameterRepository(session)
 
-        param = await repo.create({
-            "name": "Lane Width",
-            "rust_field": "lw",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
+        param = await repo.create(
+            {
+                "name": "Lane Width",
+                "rust_field": "lw",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
 
         alias = await repo.add_alias(param.id, "lane_width", "test", 0.9)
 
@@ -95,11 +106,13 @@ class TestParameterRepository:
         """Test resolving parameter by rust field name."""
         repo = ParameterRepository(session)
 
-        await repo.create({
-            "name": "Lane Width",
-            "rust_field": "lw",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
+        await repo.create(
+            {
+                "name": "Lane Width",
+                "rust_field": "lw",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
 
         resolved = await repo.resolve_parameter_name("lw", FacilityType.BASIC_FREEWAY)
         assert resolved is not None
@@ -115,20 +128,24 @@ class TestRuleRepository:
         param_repo = ParameterRepository(session)
         rule_repo = RuleRepository(session)
 
-        param = await param_repo.create({
-            "name": "Lane Width",
-            "rust_field": "lw",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
+        param = await param_repo.create(
+            {
+                "name": "Lane Width",
+                "rust_field": "lw",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
 
-        rule = await rule_repo.create({
-            "parameter_id": param.id,
-            "name": "Lane Width Range",
-            "rule_type": RuleType.RANGE,
-            "severity": Severity.ERROR,
-            "min_value": 10.0,
-            "max_value": 12.0,
-        })
+        rule = await rule_repo.create(
+            {
+                "parameter_id": param.id,
+                "name": "Lane Width Range",
+                "rule_type": RuleType.RANGE,
+                "severity": Severity.ERROR,
+                "min_value": 10.0,
+                "max_value": 12.0,
+            }
+        )
 
         assert rule.id is not None
         assert rule.name == "Lane Width Range"
@@ -139,24 +156,30 @@ class TestRuleRepository:
         param_repo = ParameterRepository(session)
         rule_repo = RuleRepository(session)
 
-        param = await param_repo.create({
-            "name": "Test Param",
-            "rust_field": "test",
-            "facility_type": FacilityType.BASIC_FREEWAY,
-        })
+        param = await param_repo.create(
+            {
+                "name": "Test Param",
+                "rust_field": "test",
+                "facility_type": FacilityType.BASIC_FREEWAY,
+            }
+        )
 
-        await rule_repo.create({
-            "parameter_id": param.id,
-            "name": "Rule 1",
-            "rule_type": RuleType.RANGE,
-            "severity": Severity.ERROR,
-        })
-        await rule_repo.create({
-            "parameter_id": param.id,
-            "name": "Rule 2",
-            "rule_type": RuleType.MIN,
-            "severity": Severity.WARNING,
-        })
+        await rule_repo.create(
+            {
+                "parameter_id": param.id,
+                "name": "Rule 1",
+                "rule_type": RuleType.RANGE,
+                "severity": Severity.ERROR,
+            }
+        )
+        await rule_repo.create(
+            {
+                "parameter_id": param.id,
+                "name": "Rule 2",
+                "rule_type": RuleType.MIN,
+                "severity": Severity.WARNING,
+            }
+        )
 
         rules = await rule_repo.get_by_parameter_id(param.id)
         assert len(rules) == 2
@@ -217,13 +240,15 @@ class TestSourceRepository:
         """Test creating source document."""
         repo = SourceRepository(session)
 
-        source = await repo.create({
-            "title": "Highway Capacity Manual",
-            "abbreviation": "HCM",
-            "edition": "7th Edition",
-            "jurisdiction": "federal",
-            "priority": 100,
-        })
+        source = await repo.create(
+            {
+                "title": "Highway Capacity Manual",
+                "abbreviation": "HCM",
+                "edition": "7th Edition",
+                "jurisdiction": "federal",
+                "priority": 100,
+            }
+        )
 
         assert source.id is not None
         assert source.abbreviation == "HCM"
@@ -232,10 +257,12 @@ class TestSourceRepository:
         """Test getting source by abbreviation."""
         repo = SourceRepository(session)
 
-        await repo.create({
-            "title": "Highway Capacity Manual",
-            "abbreviation": "HCM",
-        })
+        await repo.create(
+            {
+                "title": "Highway Capacity Manual",
+                "abbreviation": "HCM",
+            }
+        )
 
         retrieved = await repo.get_by_abbreviation("HCM")
         assert retrieved is not None
@@ -245,10 +272,12 @@ class TestSourceRepository:
         """Test creating source reference."""
         repo = SourceRepository(session)
 
-        source = await repo.create({
-            "title": "HCM",
-            "abbreviation": "HCM",
-        })
+        source = await repo.create(
+            {
+                "title": "HCM",
+                "abbreviation": "HCM",
+            }
+        )
 
         ref = await repo.create_reference(
             source_doc_id=source.id,

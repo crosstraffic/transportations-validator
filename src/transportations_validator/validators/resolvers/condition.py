@@ -1,6 +1,7 @@
 """Condition resolver for matching context to rules."""
 
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,13 +21,9 @@ class ConditionResolver:
         types = await self.condition_repo.get_all_with_values()
 
         for ctype in types:
-            self._condition_cache[ctype.name] = {
-                val.value.lower(): val.id for val in ctype.values
-            }
+            self._condition_cache[ctype.name] = {val.value.lower(): val.id for val in ctype.values}
 
-    async def resolve_context(
-        self, context: dict[str, Any]
-    ) -> dict[str, int]:
+    async def resolve_context(self, context: dict[str, Any]) -> dict[str, int]:
         """Resolve context values to condition value IDs."""
         if not self._condition_cache:
             await self.load_conditions()
@@ -72,9 +69,7 @@ class ConditionResolver:
 
         return True
 
-    async def get_applicable_condition_values(
-        self, condition_type: str
-    ) -> list[str]:
+    async def get_applicable_condition_values(self, condition_type: str) -> list[str]:
         """Get all valid values for a condition type."""
         if not self._condition_cache:
             await self.load_conditions()
@@ -84,9 +79,7 @@ class ConditionResolver:
 
         return []
 
-    def normalize_context_value(
-        self, condition_type: str, value: Any
-    ) -> str | None:
+    def normalize_context_value(self, condition_type: str, value: Any) -> str | None:
         """Normalize a context value to match database format."""
         if condition_type not in self._condition_cache:
             return None

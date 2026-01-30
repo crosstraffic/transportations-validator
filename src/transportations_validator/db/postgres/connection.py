@@ -1,6 +1,6 @@
 """PostgreSQL async connection management."""
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,

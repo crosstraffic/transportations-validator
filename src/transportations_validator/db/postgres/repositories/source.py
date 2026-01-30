@@ -1,6 +1,6 @@
 """Source document and reference repository."""
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -23,9 +23,7 @@ class SourceRepository(BaseRepository[SourceDoc]):
         )
         return result.scalar_one_or_none()
 
-    async def get_by_jurisdiction(
-        self, jurisdiction: str
-    ) -> Sequence[SourceDoc]:
+    async def get_by_jurisdiction(self, jurisdiction: str) -> Sequence[SourceDoc]:
         """Get all source documents for a jurisdiction."""
         result = await self.session.execute(
             select(SourceDoc)
@@ -37,9 +35,7 @@ class SourceRepository(BaseRepository[SourceDoc]):
     async def get_with_references(self, id: int) -> SourceDoc | None:
         """Get source document with references loaded."""
         result = await self.session.execute(
-            select(SourceDoc)
-            .where(SourceDoc.id == id)
-            .options(selectinload(SourceDoc.references))
+            select(SourceDoc).where(SourceDoc.id == id).options(selectinload(SourceDoc.references))
         )
         return result.scalar_one_or_none()
 
@@ -77,11 +73,7 @@ class SourceRepository(BaseRepository[SourceDoc]):
         section: str | None = None,
     ) -> SourceRef | None:
         """Find a reference by document abbreviation and location."""
-        query = (
-            select(SourceRef)
-            .join(SourceDoc)
-            .where(SourceDoc.abbreviation == abbreviation)
-        )
+        query = select(SourceRef).join(SourceDoc).where(SourceDoc.abbreviation == abbreviation)
 
         if chapter:
             query = query.where(SourceRef.chapter == chapter)

@@ -5,16 +5,16 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from transportations_validator.db.neo4j import Neo4jSyncService
 from transportations_validator.db.postgres import get_session
-from transportations_validator.db.neo4j import get_neo4j_session, Neo4jSyncService
-from transportations_validator.validators import ValidationEngine
 from transportations_validator.models.validation import (
-    ValidationRequest,
-    TextValidationRequest,
-    ValidationResponse,
     SourceType,
     SyncTriggerResponse,
+    TextValidationRequest,
+    ValidationRequest,
+    ValidationResponse,
 )
+from transportations_validator.validators import ValidationEngine
 
 router = APIRouter()
 

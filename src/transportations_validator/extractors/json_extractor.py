@@ -3,7 +3,7 @@
 from typing import Any
 
 from transportations_validator.extractors.base import BaseExtractor, ExtractionResult
-from transportations_validator.models.validation import SourceType, ValidationContext
+from transportations_validator.models.validation import SourceType
 
 
 class JSONExtractor(BaseExtractor):
@@ -14,16 +14,43 @@ class JSONExtractor(BaseExtractor):
     # Known parameter keys that we can extract
     KNOWN_PARAMS = {
         # BasicFreeway parameters
-        "lane_width", "lw", "bffs", "ffs", "grade", "speed_limit", "phf",
-        "p_t", "truck_percentage", "apd", "trd", "lc_r", "lc_l",
-        "lateral_clearance", "capacity", "density", "lane_count",
+        "lane_width",
+        "lw",
+        "bffs",
+        "ffs",
+        "grade",
+        "speed_limit",
+        "phf",
+        "p_t",
+        "truck_percentage",
+        "apd",
+        "trd",
+        "lc_r",
+        "lc_l",
+        "lateral_clearance",
+        "capacity",
+        "density",
+        "lane_count",
         # TwoLaneHighway parameters
-        "shoulder_width", "length", "spl", "volume", "phv",
-        "design_rad", "sup_ele", "superelevation", "passing_type",
-        "vertical_class", "horizontal_class", "hor_class",
+        "shoulder_width",
+        "length",
+        "spl",
+        "volume",
+        "phv",
+        "design_rad",
+        "sup_ele",
+        "superelevation",
+        "passing_type",
+        "vertical_class",
+        "horizontal_class",
+        "hor_class",
         # Context parameters
-        "facility_type", "city_type", "terrain_type", "highway_type",
-        "median_type", "jurisdiction",
+        "facility_type",
+        "city_type",
+        "terrain_type",
+        "highway_type",
+        "median_type",
+        "jurisdiction",
     }
 
     def can_extract(self, data: Any) -> bool:
@@ -45,7 +72,7 @@ class JSONExtractor(BaseExtractor):
         # Extract all numeric parameters
         for key, value in data.items():
             if key in self.KNOWN_PARAMS:
-                if isinstance(value, (int, float)):
+                if isinstance(value, int | float):
                     parameters[key] = {
                         "value": value,
                         "name": self._key_to_name(key),
@@ -77,16 +104,14 @@ class JSONExtractor(BaseExtractor):
             errors=errors,
         )
 
-    def _extract_segment(
-        self, segment: dict[str, Any], index: int
-    ) -> dict[str, Any]:
+    def _extract_segment(self, segment: dict[str, Any], index: int) -> dict[str, Any]:
         """Extract parameters from a segment."""
         params = {}
         prefix = f"segment_{index}_"
 
         for key, value in segment.items():
             if key in self.KNOWN_PARAMS:
-                if isinstance(value, (int, float, str)):
+                if isinstance(value, int | float | str):
                     params[f"{prefix}{key}"] = {
                         "value": value,
                         "name": self._key_to_name(key),

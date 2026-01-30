@@ -1,11 +1,10 @@
 """Unit tests for extractors."""
 
-import pytest
 
 from transportations_validator.extractors import (
-    RustLibExtractor,
     JSONExtractor,
     LLMResponseExtractor,
+    RustLibExtractor,
 )
 from transportations_validator.models.validation import SourceType
 

@@ -1,8 +1,7 @@
 """Condition type and value models."""
 
-from typing import Optional
 
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from transportations_validator.models.base import Base, TimestampMixin
@@ -15,8 +14,8 @@ class ConditionType(Base, TimestampMixin):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
-    description: Mapped[Optional[str]] = mapped_column(Text)
-    rust_enum: Mapped[Optional[str]] = mapped_column(String(100))
+    description: Mapped[str | None] = mapped_column(Text)
+    rust_enum: Mapped[str | None] = mapped_column(String(100))
 
     # Relationships
     values: Mapped[list["ConditionValue"]] = relationship(
@@ -33,13 +32,11 @@ class ConditionValue(Base, TimestampMixin):
     __tablename__ = "condition_value"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    condition_type_id: Mapped[int] = mapped_column(
-        ForeignKey("condition_type.id"), nullable=False
-    )
+    condition_type_id: Mapped[int] = mapped_column(ForeignKey("condition_type.id"), nullable=False)
     value: Mapped[str] = mapped_column(String(100), nullable=False)
-    display_name: Mapped[Optional[str]] = mapped_column(String(100))
-    rust_variant: Mapped[Optional[str]] = mapped_column(String(100))
-    description: Mapped[Optional[str]] = mapped_column(Text)
+    display_name: Mapped[str | None] = mapped_column(String(100))
+    rust_variant: Mapped[str | None] = mapped_column(String(100))
+    description: Mapped[str | None] = mapped_column(Text)
     sort_order: Mapped[int] = mapped_column(default=0)
 
     # Relationships

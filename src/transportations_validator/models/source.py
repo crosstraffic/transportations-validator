@@ -1,9 +1,7 @@
 """Source document and reference models."""
 
-from datetime import datetime
-from typing import Optional
 
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from transportations_validator.models.base import Base, TimestampMixin
@@ -17,12 +15,12 @@ class SourceDoc(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     abbreviation: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    edition: Mapped[Optional[str]] = mapped_column(String(50))
-    publisher: Mapped[Optional[str]] = mapped_column(String(255))
-    publication_year: Mapped[Optional[int]] = mapped_column()
+    edition: Mapped[str | None] = mapped_column(String(50))
+    publisher: Mapped[str | None] = mapped_column(String(255))
+    publication_year: Mapped[int | None] = mapped_column()
     jurisdiction: Mapped[str] = mapped_column(String(100), default="federal")
     priority: Mapped[int] = mapped_column(default=100)
-    description: Mapped[Optional[str]] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(Text)
 
     # Relationships
     references: Mapped[list["SourceRef"]] = relationship(
@@ -40,13 +38,13 @@ class SourceRef(Base, TimestampMixin):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     source_doc_id: Mapped[int] = mapped_column(ForeignKey("source_doc.id"), nullable=False)
-    chapter: Mapped[Optional[str]] = mapped_column(String(50))
-    section: Mapped[Optional[str]] = mapped_column(String(100))
-    page_start: Mapped[Optional[int]] = mapped_column()
-    page_end: Mapped[Optional[int]] = mapped_column()
-    exhibit: Mapped[Optional[str]] = mapped_column(String(50))
-    equation: Mapped[Optional[str]] = mapped_column(String(50))
-    notes: Mapped[Optional[str]] = mapped_column(Text)
+    chapter: Mapped[str | None] = mapped_column(String(50))
+    section: Mapped[str | None] = mapped_column(String(100))
+    page_start: Mapped[int | None] = mapped_column()
+    page_end: Mapped[int | None] = mapped_column()
+    exhibit: Mapped[str | None] = mapped_column(String(50))
+    equation: Mapped[str | None] = mapped_column(String(50))
+    notes: Mapped[str | None] = mapped_column(Text)
 
     # Relationships
     document: Mapped[SourceDoc] = relationship(back_populates="references")
