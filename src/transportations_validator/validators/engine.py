@@ -1,23 +1,31 @@
 """Core validation engine orchestrator."""
 
+import logging
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from transportations_validator.db.postgres.repositories import ParameterRepository, RuleRepository
+from transportations_validator.extractors import (
+    JSONExtractor,
+    LLMResponseExtractor,
+    RustLibExtractor,
+)
 from transportations_validator.extractors.base import ExtractionResult
-from transportations_validator.extractors import RustLibExtractor, JSONExtractor, LLMResponseExtractor
+from transportations_validator.models.parameter import FacilityType
+from transportations_validator.models.rule import RuleType, Severity
 from transportations_validator.models.validation import (
+    ParameterValidation,
+    RuleViolation,
     SourceType,
     ValidationContext,
     ValidationResult,
-    ParameterValidation,
-    RuleViolation,
 )
-from transportations_validator.models.rule import RuleType, Severity
-from transportations_validator.models.parameter import FacilityType
-from transportations_validator.db.postgres.repositories import ParameterRepository, RuleRepository
+from transportations_validator.validators.formula import FormulaError, FormulaEvaluator
 from transportations_validator.validators.resolvers.condition import ConditionResolver
 from transportations_validator.validators.resolvers.jurisdiction import JurisdictionResolver
+
+logger = logging.getLogger(__name__)
 
 
 class ValidationEngine:
@@ -36,6 +44,9 @@ class ValidationEngine:
             JSONExtractor(),
             LLMResponseExtractor(),
         ]
+
+        # Formula evaluator for cross-parameter rules
+        self.formula_evaluator = FormulaEvaluator()
 
     async def validate(
         self,
@@ -74,6 +85,7 @@ class ValidationEngine:
                 param_data,
                 extraction.facility_type,
                 merged_context,
+                extraction.parameters,  # Pass all params for formula evaluation
             )
 
             if validation:
@@ -93,9 +105,7 @@ class ValidationEngine:
             parameters=param_validations,
         ), extraction
 
-    def _extract(
-        self, data: Any, source_type: SourceType | None = None
-    ) -> ExtractionResult:
+    def _extract(self, data: Any, source_type: SourceType | None = None) -> ExtractionResult:
         """Extract parameters from data using appropriate extractor."""
         if source_type:
             # Use specific extractor
@@ -140,6 +150,7 @@ class ValidationEngine:
         param_data: dict[str, Any],
         facility_type: str | None,
         context: dict[str, Any],
+        all_params: dict[str, Any] | None = None,
     ) -> ParameterValidation | None:
         """Validate a single parameter against applicable rules."""
         value = param_data.get("value")
@@ -180,7 +191,7 @@ class ValidationEngine:
         warnings: list[RuleViolation] = []
 
         for rule in rules:
-            violation = self._check_rule(rule, value)
+            violation = self._check_rule(rule, value, all_params)
             if violation:
                 if rule.severity == Severity.ERROR:
                     violations.append(violation)
@@ -196,7 +207,9 @@ class ValidationEngine:
             warnings=warnings,
         )
 
-    def _check_rule(self, rule: Any, value: Any) -> RuleViolation | None:
+    def _check_rule(
+        self, rule: Any, value: Any, all_params: dict[str, Any] | None = None
+    ) -> RuleViolation | None:
         """Check if a value violates a rule."""
         try:
             if rule.rule_type == RuleType.RANGE:
@@ -207,6 +220,8 @@ class ValidationEngine:
                 return self._check_max(rule, value)
             elif rule.rule_type == RuleType.ENUM:
                 return self._check_enum(rule, value)
+            elif rule.rule_type == RuleType.FORMULA:
+                return self._check_formula(rule, value, all_params)
         except (TypeError, ValueError):
             return None
 
@@ -313,6 +328,58 @@ class ValidationEngine:
             )
 
         return None
+
+    def _check_formula(
+        self, rule: Any, value: Any, all_params: dict[str, Any] | None
+    ) -> RuleViolation | None:
+        """Check formula constraint.
+
+        Formula rules can reference multiple parameters and perform calculations.
+        The formula should evaluate to True if the constraint is satisfied.
+        """
+        if not rule.formula:
+            return None
+
+        if all_params is None:
+            all_params = {}
+
+        # Build params dict with actual values
+        params = {}
+        for key, param_data in all_params.items():
+            if isinstance(param_data, dict) and "value" in param_data:
+                params[key] = param_data["value"]
+            else:
+                params[key] = param_data
+
+        try:
+            result = self.formula_evaluator.evaluate(rule.formula, params)
+            if not result:
+                # Formula returned False - constraint violated
+                return RuleViolation(
+                    rule_id=rule.id,
+                    rule_name=rule.name,
+                    severity=rule.severity.value,
+                    message=rule.error_message or f"Formula constraint failed: {rule.formula}",
+                    expected=f"Formula: {rule.formula}",
+                    actual=self._format_formula_params(rule.formula, params),
+                    citation=self._get_citation(rule),
+                )
+        except FormulaError as e:
+            # Log formula errors but don't fail validation
+            logger.warning(f"Formula evaluation error for rule '{rule.name}': {e}")
+            return None
+
+        return None
+
+    def _format_formula_params(self, formula: str, params: dict[str, Any]) -> str:
+        """Format parameter values used in a formula for error reporting."""
+        # Extract parameter names from formula
+        referenced = self.formula_evaluator.extract_parameters(formula)
+        relevant = {k: v for k, v in params.items() if k in referenced}
+        if relevant:
+            parts = [f"{k}={v}" for k, v in sorted(relevant.items())]
+            return ", ".join(parts)
+        return str(params)
 
     def _get_citation(self, rule: Any) -> str | None:
         """Get citation string from rule sources."""

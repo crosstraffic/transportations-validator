@@ -209,6 +209,61 @@
       "description": "Horizontal class must be 0-5",
       "error_message": "Horizontal class must be between 0 and 5",
       "source_ref": {"chapter": "15", "section": "15-8"}
+    },
+    {
+      "parameter_rust_field": "bffs",
+      "facility_type": "BasicFreeway",
+      "name": "Base FFS vs Speed Limit",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "bffs >= speed_limit + 5",
+      "description": "Base free-flow speed should typically exceed posted speed limit by at least 5 mph",
+      "error_message": "Base FFS should be at least 5 mph above posted speed limit",
+      "source_ref": {"chapter": "12", "section": "12-13"}
+    },
+    {
+      "parameter_rust_field": "lw",
+      "facility_type": "BasicFreeway",
+      "name": "Lane Width Plus Right Clearance",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lw + lc_r >= 13",
+      "description": "Combined lane width and right lateral clearance should provide adequate clear zone",
+      "error_message": "Lane width plus right clearance should be at least 13 ft",
+      "source_ref": {"chapter": "12", "section": "12-15"}
+    },
+    {
+      "parameter_rust_field": "trd",
+      "facility_type": "BasicFreeway",
+      "name": "Ramp Density vs Lane Count",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "trd <= 2 or lane_count >= 3",
+      "description": "High ramp density requires adequate lane count to maintain operations",
+      "error_message": "High ramp density (>2/mi) requires at least 3 lanes",
+      "source_ref": {"chapter": "12", "section": "12-16"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Lane Width Plus Shoulder",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lane_width + shoulder_width >= 14",
+      "description": "Combined lane and shoulder width should provide adequate roadway width",
+      "error_message": "Lane width plus shoulder width should be at least 14 ft",
+      "source_ref": {"chapter": "15", "section": "15-8"}
+    },
+    {
+      "parameter_rust_field": "grade",
+      "facility_type": "TwoLaneHighway",
+      "name": "Grade vs Vertical Class Consistency",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "(vertical_class <= 2 and abs(grade) <= 3) or (vertical_class >= 3 and abs(grade) > 2) or vertical_class == 3",
+      "description": "Vertical class should be consistent with grade steepness",
+      "error_message": "Vertical class may not match reported grade",
+      "source_ref": {"chapter": "15", "section": "15-9"}
     }
   ]
 }
