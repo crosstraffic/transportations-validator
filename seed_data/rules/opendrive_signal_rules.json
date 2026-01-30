@@ -1,0 +1,195 @@
+{
+  "source_doc": {
+    "title": "OpenDRIVE Signal and Object Standards",
+    "abbreviation": "OPENDRIVE-SIG",
+    "edition": "1.7",
+    "publisher": "ASAM",
+    "publication_year": 2022,
+    "jurisdiction": "international",
+    "priority": 90
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "signal_s",
+      "facility_type": "TrafficSign",
+      "name": "Signal S-Coordinate Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Signal s-coordinate must be >= 0",
+      "error_message": "Signal s-coordinate cannot be negative",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_t",
+      "facility_type": "TrafficSign",
+      "name": "Signal T-Coordinate Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -30.0,
+      "max_value": 30.0,
+      "description": "Signal lateral position should be reasonable",
+      "error_message": "Signal t-coordinate exceeds typical range",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_zoffset",
+      "facility_type": "TrafficSign",
+      "name": "Signal Z-Offset Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Signal z-offset should be >= 0 (above road)",
+      "error_message": "Signal z-offset should not be negative",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_zoffset",
+      "facility_type": "TrafficSign",
+      "name": "Signal Z-Offset MUTCD Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 1.5,
+      "max_value": 8.0,
+      "description": "Typical sign height 1.5-8m above road",
+      "error_message": "Signal z-offset outside typical MUTCD range",
+      "source_ref": {"chapter": "MUTCD", "section": "2A.18"}
+    },
+    {
+      "parameter_rust_field": "signal_hoffset",
+      "facility_type": "TrafficSign",
+      "name": "Signal Heading Offset Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -3.14159265,
+      "max_value": 3.14159265,
+      "description": "Heading offset must be within [-π, π]",
+      "error_message": "Signal heading offset outside valid range",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_pitch",
+      "facility_type": "TrafficSign",
+      "name": "Signal Pitch Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -0.5,
+      "max_value": 0.5,
+      "description": "Signal pitch typically within ±0.5 rad (±29°)",
+      "error_message": "Signal pitch exceeds typical tilt range",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_roll",
+      "facility_type": "TrafficSign",
+      "name": "Signal Roll Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -0.5,
+      "max_value": 0.5,
+      "description": "Signal roll typically within ±0.5 rad (±29°)",
+      "error_message": "Signal roll exceeds typical rotation range",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_height_dim",
+      "facility_type": "TrafficSign",
+      "name": "Signal Height Dimension Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.1,
+      "description": "Signal height dimension must be positive",
+      "error_message": "Signal height dimension must be > 0",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_height_dim",
+      "facility_type": "TrafficSign",
+      "name": "Signal Height Dimension Typical",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 0.3,
+      "max_value": 2.5,
+      "description": "Typical sign height 0.3-2.5m",
+      "error_message": "Signal height outside typical range",
+      "source_ref": {"chapter": "MUTCD", "section": "2A"}
+    },
+    {
+      "parameter_rust_field": "signal_width_dim",
+      "facility_type": "TrafficSign",
+      "name": "Signal Width Dimension Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.1,
+      "description": "Signal width dimension must be positive",
+      "error_message": "Signal width dimension must be > 0",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "signal_value",
+      "facility_type": "TrafficSign",
+      "name": "Signal Value Non-Negative",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 0.0,
+      "description": "Signal value typically non-negative (e.g., speed limit)",
+      "error_message": "Signal value is negative - verify if intentional",
+      "source_ref": {"chapter": "10", "section": "Signals"}
+    },
+    {
+      "parameter_rust_field": "object_length",
+      "facility_type": "TrafficSign",
+      "name": "Object Length Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Object length must be >= 0",
+      "error_message": "Object length cannot be negative",
+      "source_ref": {"chapter": "11", "section": "Objects"}
+    },
+    {
+      "parameter_rust_field": "object_width",
+      "facility_type": "TrafficSign",
+      "name": "Object Width Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Object width must be >= 0",
+      "error_message": "Object width cannot be negative",
+      "source_ref": {"chapter": "11", "section": "Objects"}
+    },
+    {
+      "parameter_rust_field": "object_height",
+      "facility_type": "TrafficSign",
+      "name": "Object Height Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Object height must be >= 0",
+      "error_message": "Object height cannot be negative",
+      "source_ref": {"chapter": "11", "section": "Objects"}
+    },
+    {
+      "parameter_rust_field": "object_radius",
+      "facility_type": "TrafficSign",
+      "name": "Object Radius Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Object radius must be >= 0",
+      "error_message": "Object radius cannot be negative",
+      "source_ref": {"chapter": "11", "section": "Objects"}
+    },
+    {
+      "parameter_rust_field": "object_valid_length",
+      "facility_type": "TrafficSign",
+      "name": "Object Valid Length Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Object valid length must be >= 0",
+      "error_message": "Object valid length cannot be negative",
+      "source_ref": {"chapter": "11", "section": "Objects"}
+    }
+  ]
+}

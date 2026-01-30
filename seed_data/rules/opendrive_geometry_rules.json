@@ -1,0 +1,200 @@
+{
+  "source_doc": {
+    "title": "ASAM OpenDRIVE Specification",
+    "abbreviation": "OPENDRIVE",
+    "edition": "1.7",
+    "publisher": "ASAM",
+    "publication_year": 2022,
+    "jurisdiction": "international",
+    "priority": 90
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "s_coord",
+      "facility_type": "LaneGeometry",
+      "name": "S-Coordinate Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "S-coordinate must be >= 0 per OpenDRIVE spec",
+      "error_message": "S-coordinate cannot be negative",
+      "source_ref": {"chapter": "5.3", "section": "Geometry"}
+    },
+    {
+      "parameter_rust_field": "geometry_length",
+      "facility_type": "LaneGeometry",
+      "name": "Geometry Length Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.001,
+      "description": "Geometry element length must be positive",
+      "error_message": "Geometry length must be > 0",
+      "source_ref": {"chapter": "5.3", "section": "Geometry"}
+    },
+    {
+      "parameter_rust_field": "geometry_length",
+      "facility_type": "LaneGeometry",
+      "name": "Geometry Length Physical Limit",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 10000.0,
+      "description": "Single geometry element should not exceed 10km",
+      "error_message": "Geometry length exceeds 10km - consider splitting",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "hdg",
+      "facility_type": "LaneGeometry",
+      "name": "Heading Angle Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -3.14159265,
+      "max_value": 3.14159265,
+      "description": "Heading must be within [-π, π] radians",
+      "error_message": "Heading angle outside valid range [-π, π]",
+      "source_ref": {"chapter": "5.3", "section": "Geometry"}
+    },
+    {
+      "parameter_rust_field": "arc_curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Arc Curvature Physical Limit",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -0.1,
+      "max_value": 0.1,
+      "description": "Curvature |1/R| should not exceed 0.1 (R > 10m)",
+      "error_message": "Arc curvature implies radius < 10m - implausible for roads",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "arc_curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Arc Curvature Highway Limit",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -0.01,
+      "max_value": 0.01,
+      "description": "Highway curves typically have |curvature| < 0.01",
+      "error_message": "Arc curvature implies tight curve (R < 100m)",
+      "source_ref": {"chapter": "AASHTO", "section": "3.3"}
+    },
+    {
+      "parameter_rust_field": "curv_start",
+      "facility_type": "LaneGeometry",
+      "name": "Spiral Start Curvature Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -0.1,
+      "max_value": 0.1,
+      "description": "Spiral start curvature within physical limits",
+      "error_message": "Spiral start curvature outside physical limits",
+      "source_ref": {"chapter": "5.3", "section": "Spiral"}
+    },
+    {
+      "parameter_rust_field": "curv_end",
+      "facility_type": "LaneGeometry",
+      "name": "Spiral End Curvature Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -0.1,
+      "max_value": 0.1,
+      "description": "Spiral end curvature within physical limits",
+      "error_message": "Spiral end curvature outside physical limits",
+      "source_ref": {"chapter": "5.3", "section": "Spiral"}
+    },
+    {
+      "parameter_rust_field": "elevation",
+      "facility_type": "LaneGeometry",
+      "name": "Elevation Physical Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -500.0,
+      "max_value": 6000.0,
+      "description": "Elevation must be within Earth surface range",
+      "error_message": "Elevation outside physical range (-500m to 6000m)",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "superelevation",
+      "facility_type": "LaneGeometry",
+      "name": "Superelevation Physical Limit",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -0.20,
+      "max_value": 0.20,
+      "description": "Superelevation typically within ±12% (0.12 rad)",
+      "error_message": "Superelevation exceeds physical limits",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "superelevation",
+      "facility_type": "LaneGeometry",
+      "name": "Superelevation AASHTO Limit",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -0.14,
+      "max_value": 0.14,
+      "description": "AASHTO max superelevation is typically 8% (0.08 rad)",
+      "error_message": "Superelevation exceeds typical AASHTO maximum",
+      "source_ref": {"chapter": "AASHTO", "section": "3.3.4"}
+    },
+    {
+      "parameter_rust_field": "lane_id",
+      "facility_type": "LaneGeometry",
+      "name": "Lane ID Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": -20,
+      "max_value": 20,
+      "description": "Lane ID should be within reasonable range",
+      "error_message": "Lane ID outside expected range [-20, 20]",
+      "source_ref": {"chapter": "9", "section": "Lanes"}
+    },
+    {
+      "parameter_rust_field": "lane_section_s",
+      "facility_type": "LaneGeometry",
+      "name": "Lane Section S Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Lane section s must be >= 0",
+      "error_message": "Lane section s-coordinate cannot be negative",
+      "source_ref": {"chapter": "9", "section": "LaneSection"}
+    },
+    {
+      "parameter_rust_field": "width_soffset",
+      "facility_type": "LaneGeometry",
+      "name": "Width S-Offset Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Width sOffset must be >= 0",
+      "error_message": "Width sOffset cannot be negative",
+      "source_ref": {"chapter": "9", "section": "Width"}
+    },
+    {
+      "parameter_rust_field": "lane_offset_t",
+      "facility_type": "LaneGeometry",
+      "name": "Lane Offset Physical Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -50.0,
+      "max_value": 50.0,
+      "description": "Lane offset should be within reasonable range",
+      "error_message": "Lane offset exceeds 50m from reference line",
+      "source_ref": {"chapter": "9", "section": "LaneOffset"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "LaneGeometry",
+      "name": "OpenDRIVE Lane Width Standard",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 2.5,
+      "max_value": 4.0,
+      "description": "Standard lane width per OpenDRIVE examples (3m default)",
+      "error_message": "Lane width outside typical OpenDRIVE range (2.5-4.0m)",
+      "source_ref": {"chapter": "9", "section": "Width"}
+    }
+  ]
+}

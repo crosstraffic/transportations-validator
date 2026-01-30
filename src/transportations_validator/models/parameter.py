@@ -12,10 +12,19 @@ from transportations_validator.models.base import Base, TimestampMixin
 class FacilityType(str, Enum):
     """Transportation facility types."""
 
+    # Traditional roadway types
     BASIC_FREEWAY = "BasicFreeway"
     TWO_LANE_HIGHWAY = "TwoLaneHighway"
     MULTILANE_HIGHWAY = "MultilaneHighway"
     URBAN_STREET = "UrbanStreet"
+
+    # Digital twin / lane detection types
+    LANE_GEOMETRY = "LaneGeometry"
+    SIDEWALK = "Sidewalk"
+    CROSSWALK = "Crosswalk"
+    TRAFFIC_SIGN = "TrafficSign"
+    TRAFFIC_SIGNAL = "TrafficSignal"
+    PAVEMENT_MARKING = "PavementMarking"
 
 
 class DataType(str, Enum):
@@ -25,6 +34,8 @@ class DataType(str, Enum):
     INTEGER = "integer"
     PERCENTAGE = "percentage"
     ENUM = "enum"
+    BOOLEAN = "boolean"
+    STRING = "string"
 
 
 class Parameter(Base, TimestampMixin):

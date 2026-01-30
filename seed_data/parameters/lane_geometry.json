@@ -1,0 +1,182 @@
+{
+  "facility_type": "LaneGeometry",
+  "parameters": [
+    {
+      "name": "Lane Width",
+      "rust_field": "lane_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 9.0,
+      "typical_max": 14.0,
+      "description": "Width of detected lane",
+      "aliases": ["width", "laneWidth", "lane_w"]
+    },
+    {
+      "name": "Lane Length",
+      "rust_field": "lane_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 5280.0,
+      "description": "Length of lane segment",
+      "aliases": ["length", "segment_length", "laneLength"]
+    },
+    {
+      "name": "Lane Count",
+      "rust_field": "lane_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 1,
+      "typical_max": 8,
+      "description": "Number of lanes in direction",
+      "aliases": ["num_lanes", "laneCount", "lanes"]
+    },
+    {
+      "name": "Lane Type",
+      "rust_field": "lane_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "travel,turn_left,turn_right,hov,parking,bike,bus,shoulder",
+      "description": "Functional type of lane",
+      "aliases": ["type", "laneType"]
+    },
+    {
+      "name": "Centerline Offset",
+      "rust_field": "centerline_offset",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": -2.0,
+      "typical_max": 2.0,
+      "description": "Lateral offset from expected centerline position",
+      "aliases": ["cl_offset", "center_offset"]
+    },
+    {
+      "name": "Left Boundary Offset",
+      "rust_field": "left_boundary_offset",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": -1.0,
+      "typical_max": 1.0,
+      "description": "Offset of left boundary from expected position",
+      "aliases": ["left_offset", "lb_offset"]
+    },
+    {
+      "name": "Right Boundary Offset",
+      "rust_field": "right_boundary_offset",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": -1.0,
+      "typical_max": 1.0,
+      "description": "Offset of right boundary from expected position",
+      "aliases": ["right_offset", "rb_offset"]
+    },
+    {
+      "name": "Lane Curvature",
+      "rust_field": "curvature",
+      "unit": "1/ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 0.01,
+      "description": "Horizontal curvature (1/radius)",
+      "aliases": ["curve", "horizontal_curvature"]
+    },
+    {
+      "name": "Lane Heading",
+      "rust_field": "heading",
+      "unit": "deg",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 360.0,
+      "description": "Lane heading/direction in degrees",
+      "aliases": ["direction", "bearing", "azimuth"]
+    },
+    {
+      "name": "Lane Grade",
+      "rust_field": "lane_grade",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -15.0,
+      "typical_max": 15.0,
+      "description": "Longitudinal grade/slope of lane",
+      "aliases": ["grade", "slope"]
+    },
+    {
+      "name": "Cross Slope",
+      "rust_field": "cross_slope",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -8.0,
+      "typical_max": 8.0,
+      "description": "Transverse slope for drainage/superelevation",
+      "aliases": ["superelevation", "super", "crown"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Width Variance",
+      "rust_field": "width_variance",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 2.0,
+      "description": "Variance in detected width along segment",
+      "aliases": ["width_std", "width_variation"]
+    },
+    {
+      "name": "Boundary Continuity Score",
+      "rust_field": "continuity_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Quality score for boundary continuity",
+      "aliases": ["continuity", "boundary_quality"]
+    },
+    {
+      "name": "Adjacent Lane Width",
+      "rust_field": "adjacent_lane_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 9.0,
+      "typical_max": 14.0,
+      "description": "Width of adjacent lane for consistency checking",
+      "aliases": ["adj_width", "neighbor_width"]
+    },
+    {
+      "name": "Left Line Type",
+      "rust_field": "left_line_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "solid_white,broken_white,solid_yellow,broken_yellow,double_yellow,double_white,none",
+      "description": "Type of left lane boundary marking",
+      "aliases": ["left_marking", "left_boundary_type"]
+    },
+    {
+      "name": "Right Line Type",
+      "rust_field": "right_line_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "solid_white,broken_white,solid_yellow,broken_yellow,double_yellow,double_white,none",
+      "description": "Type of right lane boundary marking",
+      "aliases": ["right_marking", "right_boundary_type"]
+    },
+    {
+      "name": "Speed Limit",
+      "rust_field": "speed_limit",
+      "unit": "mph",
+      "data_type": "integer",
+      "typical_min": 15,
+      "typical_max": 85,
+      "description": "Posted or inferred speed limit",
+      "aliases": ["posted_speed", "spl"]
+    }
+  ]
+}

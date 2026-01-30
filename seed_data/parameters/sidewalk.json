@@ -1,0 +1,129 @@
+{
+  "facility_type": "Sidewalk",
+  "parameters": [
+    {
+      "name": "Sidewalk Width",
+      "rust_field": "sidewalk_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 15.0,
+      "description": "Width of detected sidewalk",
+      "aliases": ["width", "sw_width", "walkway_width"]
+    },
+    {
+      "name": "Buffer Width",
+      "rust_field": "buffer_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10.0,
+      "description": "Width of buffer/furniture zone between sidewalk and roadway",
+      "aliases": ["setback", "furniture_zone", "planting_strip"]
+    },
+    {
+      "name": "Cross Slope",
+      "rust_field": "cross_slope",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 2.0,
+      "description": "Transverse slope for drainage (ADA max 2%)",
+      "aliases": ["xslope", "transverse_slope"]
+    },
+    {
+      "name": "Running Slope",
+      "rust_field": "running_slope",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 8.33,
+      "description": "Longitudinal slope along direction of travel",
+      "aliases": ["grade", "longitudinal_slope"]
+    },
+    {
+      "name": "Surface Type",
+      "rust_field": "surface_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "concrete,asphalt,brick,paver,gravel,other",
+      "description": "Material type of sidewalk surface",
+      "aliases": ["material", "pavement_type"]
+    },
+    {
+      "name": "Clear Width",
+      "rust_field": "clear_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 3.0,
+      "typical_max": 15.0,
+      "description": "Unobstructed passable width (excluding furniture, poles)",
+      "aliases": ["passable_width", "accessible_width"]
+    },
+    {
+      "name": "Sidewalk Length",
+      "rust_field": "sidewalk_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 5280.0,
+      "description": "Length of detected sidewalk segment",
+      "aliases": ["length", "segment_length"]
+    },
+    {
+      "name": "Curb Height",
+      "rust_field": "curb_height",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 8.0,
+      "description": "Height of curb adjacent to sidewalk",
+      "aliases": ["curb_ht", "curb_elevation"]
+    },
+    {
+      "name": "Curb Type",
+      "rust_field": "curb_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "vertical,rolled,mountable,none",
+      "description": "Type of curb adjacent to sidewalk",
+      "aliases": ["curb_style"]
+    },
+    {
+      "name": "Sidewalk Condition",
+      "rust_field": "condition_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Condition/quality score of sidewalk surface",
+      "aliases": ["quality", "condition"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Obstruction Present",
+      "rust_field": "has_obstruction",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether obstructions are detected in sidewalk path",
+      "aliases": ["obstructed", "blocked"]
+    },
+    {
+      "name": "Adjacent to Roadway",
+      "rust_field": "roadway_adjacent",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether sidewalk is directly adjacent to travel lanes",
+      "aliases": ["at_road", "road_adjacent"]
+    }
+  ]
+}

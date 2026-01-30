@@ -1,0 +1,192 @@
+{
+  "source_doc": {
+    "title": "Manual on Uniform Traffic Control Devices",
+    "abbreviation": "MUTCD",
+    "edition": "11th Edition",
+    "publisher": "Federal Highway Administration",
+    "publication_year": 2023,
+    "jurisdiction": "federal",
+    "priority": 95
+  },
+  "parameters": [
+    {
+      "name": "Lane Line Width",
+      "rust_field": "lane_line_width",
+      "facility_type": "TwoLaneHighway",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 6.0,
+      "description": "Width of longitudinal lane line markings"
+    },
+    {
+      "name": "Edge Line Width",
+      "rust_field": "edge_line_width",
+      "facility_type": "TwoLaneHighway",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 8.0,
+      "description": "Width of edge line markings"
+    },
+    {
+      "name": "Center Line Width",
+      "rust_field": "center_line_width",
+      "facility_type": "TwoLaneHighway",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 6.0,
+      "description": "Width of center line markings"
+    },
+    {
+      "name": "Broken Line Segment Length",
+      "rust_field": "broken_line_segment",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 10.0,
+      "description": "Length of broken line segments"
+    },
+    {
+      "name": "Broken Line Gap Length",
+      "rust_field": "broken_line_gap",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 30.0,
+      "typical_max": 30.0,
+      "description": "Gap length between broken line segments"
+    },
+    {
+      "name": "Stop Bar Width",
+      "rust_field": "stop_bar_width",
+      "facility_type": "UrbanStreet",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 12.0,
+      "typical_max": 24.0,
+      "description": "Width of stop bar markings"
+    },
+    {
+      "name": "Crosswalk Line Width",
+      "rust_field": "crosswalk_width",
+      "facility_type": "UrbanStreet",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 6.0,
+      "typical_max": 24.0,
+      "description": "Width of crosswalk marking lines"
+    }
+  ],
+  "rules": [
+    {
+      "parameter_rust_field": "lane_line_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Lane Line Width Normal (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 4.0,
+      "max_value": 6.0,
+      "description": "Normal width for longitudinal lane line markings",
+      "error_message": "Lane line width must be 4-6 inches per MUTCD Section 3A.05",
+      "source_ref": {"chapter": "3A", "section": "3A.05"}
+    },
+    {
+      "parameter_rust_field": "edge_line_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Edge Line Width Normal (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 4.0,
+      "max_value": 6.0,
+      "description": "Normal width for edge line markings",
+      "error_message": "Edge line width must be 4-6 inches (normal) per MUTCD",
+      "source_ref": {"chapter": "3A", "section": "3A.05"}
+    },
+    {
+      "parameter_rust_field": "edge_line_width",
+      "facility_type": "BasicFreeway",
+      "name": "Edge Line Width Wide - Freeway (MUTCD)",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 6.0,
+      "max_value": 8.0,
+      "description": "Wide edge lines recommended for freeways",
+      "error_message": "Wide edge lines (6-8 in) recommended for freeways",
+      "source_ref": {"chapter": "3A", "section": "3A.05"}
+    },
+    {
+      "parameter_rust_field": "center_line_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Center Line Width (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 4.0,
+      "max_value": 6.0,
+      "description": "Width of center line markings",
+      "error_message": "Center line width must be 4-6 inches per MUTCD",
+      "source_ref": {"chapter": "3B", "section": "3B.01"}
+    },
+    {
+      "parameter_rust_field": "broken_line_segment",
+      "facility_type": "TwoLaneHighway",
+      "name": "Broken Line Segment Length (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 10.0,
+      "max_value": 10.0,
+      "description": "Standard broken line segment is 10 ft",
+      "error_message": "Broken line segment should be 10 ft per MUTCD",
+      "source_ref": {"chapter": "3A", "section": "3A.06"}
+    },
+    {
+      "parameter_rust_field": "broken_line_gap",
+      "facility_type": "TwoLaneHighway",
+      "name": "Broken Line Gap Length (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 30.0,
+      "max_value": 30.0,
+      "description": "Standard broken line gap is 30 ft",
+      "error_message": "Broken line gap should be 30 ft per MUTCD",
+      "source_ref": {"chapter": "3A", "section": "3A.06"}
+    },
+    {
+      "parameter_rust_field": "stop_bar_width",
+      "facility_type": "UrbanStreet",
+      "name": "Stop Bar Width (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 12.0,
+      "max_value": 24.0,
+      "description": "Stop bar width range",
+      "error_message": "Stop bar width must be 12-24 inches per MUTCD",
+      "source_ref": {"chapter": "3B", "section": "3B.16"}
+    },
+    {
+      "parameter_rust_field": "crosswalk_width",
+      "facility_type": "UrbanStreet",
+      "name": "Crosswalk Line Width (MUTCD)",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 6.0,
+      "max_value": 24.0,
+      "description": "Crosswalk marking line width",
+      "error_message": "Crosswalk lines must be 6-24 inches per MUTCD",
+      "source_ref": {"chapter": "3B", "section": "3B.18"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Minimum Lane Width for Markings (MUTCD)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 9.0,
+      "description": "Lanes narrower than 9 ft should not have center line markings",
+      "error_message": "Lane width below 9 ft - center line markings not recommended",
+      "source_ref": {"chapter": "3B", "section": "3B.01"}
+    }
+  ]
+}

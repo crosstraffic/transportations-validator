@@ -1,0 +1,156 @@
+{
+  "facility_type": "TrafficSign",
+  "parameters": [
+    {
+      "name": "Sign Height",
+      "rust_field": "sign_height",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 5.0,
+      "typical_max": 12.0,
+      "description": "Height from ground to bottom of sign",
+      "aliases": ["mounting_height", "bottom_height"]
+    },
+    {
+      "name": "Lateral Offset",
+      "rust_field": "lateral_offset",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 2.0,
+      "typical_max": 12.0,
+      "description": "Distance from edge of traveled way to near edge of sign",
+      "aliases": ["offset", "setback", "clearance"]
+    },
+    {
+      "name": "Sign Width",
+      "rust_field": "sign_width",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 12.0,
+      "typical_max": 96.0,
+      "description": "Width of sign panel",
+      "aliases": ["width", "panel_width"]
+    },
+    {
+      "name": "Sign Height Dimension",
+      "rust_field": "sign_height_dim",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 12.0,
+      "typical_max": 96.0,
+      "description": "Height of sign panel",
+      "aliases": ["height_dim", "panel_height"]
+    },
+    {
+      "name": "Mounting Type",
+      "rust_field": "mount_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "post,overhead,bridge,cantilever,building,portable",
+      "description": "Type of sign mounting/support",
+      "aliases": ["support_type", "installation"]
+    },
+    {
+      "name": "MUTCD Code",
+      "rust_field": "mutcd_code",
+      "unit": null,
+      "data_type": "string",
+      "description": "MUTCD sign designation code",
+      "aliases": ["sign_code", "designation"]
+    },
+    {
+      "name": "Sign Category",
+      "rust_field": "sign_category",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "regulatory,warning,guide,construction,school,recreational",
+      "description": "MUTCD sign category",
+      "aliases": ["type", "category"]
+    },
+    {
+      "name": "Retroreflectivity",
+      "rust_field": "retroreflectivity",
+      "unit": "cd/lux/m²",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 500.0,
+      "description": "Retroreflectivity measurement",
+      "aliases": ["retro", "reflectivity"]
+    },
+    {
+      "name": "Sheeting Type",
+      "rust_field": "sheeting_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "type1,type3,type4,type8,type9,type10,type11",
+      "description": "ASTM D4956 sheeting type",
+      "aliases": ["material", "reflective_type"]
+    },
+    {
+      "name": "Sign Condition",
+      "rust_field": "condition_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Overall sign condition score",
+      "aliases": ["condition", "quality"]
+    },
+    {
+      "name": "Visibility Score",
+      "rust_field": "visibility_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Daytime visibility/legibility score",
+      "aliases": ["legibility", "readability"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Sign Orientation",
+      "rust_field": "orientation",
+      "unit": "deg",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 360.0,
+      "description": "Sign facing direction in degrees",
+      "aliases": ["facing", "heading", "angle"]
+    },
+    {
+      "name": "Tilt Angle",
+      "rust_field": "tilt_angle",
+      "unit": "deg",
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 10.0,
+      "description": "Sign tilt from vertical",
+      "aliases": ["tilt", "lean"]
+    },
+    {
+      "name": "Occluded",
+      "rust_field": "is_occluded",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether sign is partially occluded",
+      "aliases": ["blocked", "obstructed"]
+    },
+    {
+      "name": "Text Readable",
+      "rust_field": "text_readable",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether sign text/symbols are legible",
+      "aliases": ["legible", "readable"]
+    }
+  ]
+}

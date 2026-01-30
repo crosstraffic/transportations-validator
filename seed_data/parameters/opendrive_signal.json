@@ -1,0 +1,195 @@
+{
+  "facility_type": "TrafficSign",
+  "parameters": [
+    {
+      "name": "Signal S-Coordinate",
+      "rust_field": "signal_s",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "Position along road reference line",
+      "aliases": ["s", "s_coord"]
+    },
+    {
+      "name": "Signal T-Coordinate",
+      "rust_field": "signal_t",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -20.0,
+      "typical_max": 20.0,
+      "description": "Lateral position from reference line",
+      "aliases": ["t", "t_coord", "lateral"]
+    },
+    {
+      "name": "Signal Z-Offset",
+      "rust_field": "signal_zoffset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10.0,
+      "description": "Vertical offset from road surface",
+      "aliases": ["zOffset", "z_offset", "height_offset"]
+    },
+    {
+      "name": "Signal Heading Offset",
+      "rust_field": "signal_hoffset",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": -3.14159,
+      "typical_max": 3.14159,
+      "description": "Heading angle offset from road direction",
+      "aliases": ["hOffset", "h_offset", "heading"]
+    },
+    {
+      "name": "Signal Pitch",
+      "rust_field": "signal_pitch",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": -0.5,
+      "typical_max": 0.5,
+      "description": "Pitch angle of signal",
+      "aliases": ["pitch", "tilt"]
+    },
+    {
+      "name": "Signal Roll",
+      "rust_field": "signal_roll",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": -0.5,
+      "typical_max": 0.5,
+      "description": "Roll angle of signal",
+      "aliases": ["roll", "rotation"]
+    },
+    {
+      "name": "Signal Height Dimension",
+      "rust_field": "signal_height_dim",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.1,
+      "typical_max": 3.0,
+      "description": "Height of signal panel",
+      "aliases": ["height", "panel_height"]
+    },
+    {
+      "name": "Signal Width Dimension",
+      "rust_field": "signal_width_dim",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.1,
+      "typical_max": 3.0,
+      "description": "Width of signal panel",
+      "aliases": ["width", "panel_width"]
+    },
+    {
+      "name": "Signal Orientation",
+      "rust_field": "signal_orientation",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "+,-,none",
+      "description": "Direction of applicable traffic",
+      "aliases": ["orientation", "direction"]
+    },
+    {
+      "name": "Signal Dynamic",
+      "rust_field": "signal_dynamic",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether signal can change state",
+      "aliases": ["dynamic", "is_dynamic"]
+    },
+    {
+      "name": "Signal Country Code",
+      "rust_field": "signal_country",
+      "unit": null,
+      "data_type": "string",
+      "description": "ISO country code for signal standard",
+      "aliases": ["country", "countryCode"]
+    },
+    {
+      "name": "Signal Type Code",
+      "rust_field": "signal_type_code",
+      "unit": null,
+      "data_type": "string",
+      "description": "Signal type identifier",
+      "aliases": ["type", "signalType"]
+    },
+    {
+      "name": "Signal Subtype Code",
+      "rust_field": "signal_subtype_code",
+      "unit": null,
+      "data_type": "string",
+      "description": "Signal subtype identifier",
+      "aliases": ["subtype", "signalSubtype"]
+    },
+    {
+      "name": "Signal Value",
+      "rust_field": "signal_value",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1000.0,
+      "description": "Value associated with signal (e.g., speed limit)",
+      "aliases": ["value", "limit"]
+    },
+    {
+      "name": "Object Type",
+      "rust_field": "object_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "none,obstacle,car,pole,tree,vegetation,barrier,building,parkingSpace,patch,railing,trafficIsland,crosswalk,streetLamp,gantry,soundBarrier,roadMark",
+      "description": "OpenDRIVE object type",
+      "aliases": ["type", "objType"]
+    },
+    {
+      "name": "Object Length",
+      "rust_field": "object_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 100.0,
+      "description": "Length of object bounding box",
+      "aliases": ["length", "obj_length"]
+    },
+    {
+      "name": "Object Width",
+      "rust_field": "object_width",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Width of object bounding box",
+      "aliases": ["width", "obj_width"]
+    },
+    {
+      "name": "Object Height",
+      "rust_field": "object_height",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Height of object bounding box",
+      "aliases": ["height", "obj_height"]
+    },
+    {
+      "name": "Object Radius",
+      "rust_field": "object_radius",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Radius for circular objects",
+      "aliases": ["radius", "obj_radius"]
+    },
+    {
+      "name": "Object Valid Length",
+      "rust_field": "object_valid_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "Length along road for which object is valid",
+      "aliases": ["validLength", "valid_range"]
+    }
+  ]
+}

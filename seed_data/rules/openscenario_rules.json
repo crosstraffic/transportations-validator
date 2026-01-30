@@ -1,0 +1,207 @@
+{
+  "source_doc": {
+    "title": "ASAM OpenSCENARIO Specification",
+    "abbreviation": "OPENSCENARIO",
+    "edition": "1.2",
+    "publisher": "ASAM",
+    "publication_year": 2023,
+    "jurisdiction": "international",
+    "priority": 90
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "vehicle_max_speed",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Speed Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Maximum speed must be non-negative",
+      "error_message": "Vehicle max speed cannot be negative",
+      "source_ref": {"chapter": "Entities", "section": "Performance"}
+    },
+    {
+      "parameter_rust_field": "vehicle_max_speed",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Speed Physical Limit",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 100.0,
+      "description": "Max speed typically below 100 m/s (360 km/h)",
+      "error_message": "Vehicle max speed exceeds 360 km/h - verify if intentional",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "vehicle_max_accel",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Acceleration Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Maximum acceleration must be non-negative",
+      "error_message": "Vehicle max acceleration cannot be negative",
+      "source_ref": {"chapter": "Entities", "section": "Performance"}
+    },
+    {
+      "parameter_rust_field": "vehicle_max_accel",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Acceleration Physical Limit",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 15.0,
+      "description": "Typical vehicle acceleration < 15 m/s²",
+      "error_message": "Vehicle acceleration exceeds 15 m/s² - verify if intentional",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "vehicle_max_decel",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Deceleration Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Maximum deceleration must be non-negative",
+      "error_message": "Vehicle max deceleration cannot be negative",
+      "source_ref": {"chapter": "Entities", "section": "Performance"}
+    },
+    {
+      "parameter_rust_field": "vehicle_max_decel",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Max Deceleration Physical Limit",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 15.0,
+      "description": "Typical braking deceleration < 15 m/s²",
+      "error_message": "Vehicle deceleration exceeds 15 m/s² - extreme braking",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "bbox_length",
+      "facility_type": "LaneGeometry",
+      "name": "Bounding Box Length Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.1,
+      "description": "Vehicle length must be positive",
+      "error_message": "Bounding box length must be > 0",
+      "source_ref": {"chapter": "Entities", "section": "BoundingBox"}
+    },
+    {
+      "parameter_rust_field": "bbox_length",
+      "facility_type": "LaneGeometry",
+      "name": "Bounding Box Length Car Range",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 3.5,
+      "max_value": 5.5,
+      "description": "Typical car length 3.5-5.5m",
+      "error_message": "Vehicle length outside typical car range",
+      "source_ref": {"chapter": "Physical", "section": "Vehicles"}
+    },
+    {
+      "parameter_rust_field": "bbox_width",
+      "facility_type": "LaneGeometry",
+      "name": "Bounding Box Width Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.1,
+      "description": "Vehicle width must be positive",
+      "error_message": "Bounding box width must be > 0",
+      "source_ref": {"chapter": "Entities", "section": "BoundingBox"}
+    },
+    {
+      "parameter_rust_field": "bbox_width",
+      "facility_type": "LaneGeometry",
+      "name": "Bounding Box Width Car Range",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 1.5,
+      "max_value": 2.5,
+      "description": "Typical car width 1.5-2.5m",
+      "error_message": "Vehicle width outside typical car range",
+      "source_ref": {"chapter": "Physical", "section": "Vehicles"}
+    },
+    {
+      "parameter_rust_field": "bbox_height",
+      "facility_type": "LaneGeometry",
+      "name": "Bounding Box Height Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.1,
+      "description": "Vehicle height must be positive",
+      "error_message": "Bounding box height must be > 0",
+      "source_ref": {"chapter": "Entities", "section": "BoundingBox"}
+    },
+    {
+      "parameter_rust_field": "wheel_diameter",
+      "facility_type": "LaneGeometry",
+      "name": "Wheel Diameter Physical Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.3,
+      "max_value": 1.5,
+      "description": "Typical wheel diameter 0.3-1.5m",
+      "error_message": "Wheel diameter outside typical range",
+      "source_ref": {"chapter": "Entities", "section": "Axles"}
+    },
+    {
+      "parameter_rust_field": "track_width",
+      "facility_type": "LaneGeometry",
+      "name": "Track Width Physical Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 1.0,
+      "max_value": 3.0,
+      "description": "Typical track width 1.0-3.0m",
+      "error_message": "Track width outside typical range",
+      "source_ref": {"chapter": "Entities", "section": "Axles"}
+    },
+    {
+      "parameter_rust_field": "max_steer",
+      "facility_type": "LaneGeometry",
+      "name": "Max Steering Angle Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "description": "Max steering typically 0-1.0 rad (0-57°)",
+      "error_message": "Max steering angle outside typical range",
+      "source_ref": {"chapter": "Entities", "section": "Axles"}
+    },
+    {
+      "parameter_rust_field": "vehicle_mass",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Mass Positive",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 1.0,
+      "description": "Vehicle mass must be positive",
+      "error_message": "Vehicle mass must be > 0",
+      "source_ref": {"chapter": "Entities", "section": "Vehicle"}
+    },
+    {
+      "parameter_rust_field": "vehicle_mass",
+      "facility_type": "LaneGeometry",
+      "name": "Vehicle Mass Car Range",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 800.0,
+      "max_value": 3000.0,
+      "description": "Typical car mass 800-3000 kg",
+      "error_message": "Vehicle mass outside typical car range",
+      "source_ref": {"chapter": "Physical", "section": "Vehicles"}
+    },
+    {
+      "parameter_rust_field": "pedestrian_mass",
+      "facility_type": "LaneGeometry",
+      "name": "Pedestrian Mass Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 10.0,
+      "max_value": 200.0,
+      "description": "Pedestrian mass typically 10-200 kg",
+      "error_message": "Pedestrian mass outside reasonable range",
+      "source_ref": {"chapter": "Entities", "section": "Pedestrian"}
+    }
+  ]
+}

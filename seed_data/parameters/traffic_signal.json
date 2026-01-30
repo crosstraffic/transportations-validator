@@ -1,0 +1,145 @@
+{
+  "facility_type": "TrafficSignal",
+  "parameters": [
+    {
+      "name": "Signal Height",
+      "rust_field": "signal_height",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 15.0,
+      "typical_max": 25.0,
+      "description": "Height of signal head from ground",
+      "aliases": ["height", "mounting_height"]
+    },
+    {
+      "name": "Lateral Position",
+      "rust_field": "lateral_position",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": -50.0,
+      "typical_max": 50.0,
+      "description": "Lateral position relative to approach lane centerline",
+      "aliases": ["offset", "position"]
+    },
+    {
+      "name": "Mounting Type",
+      "rust_field": "mount_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "mast_arm,span_wire,pedestal,post_top,overhead",
+      "description": "Type of signal mounting",
+      "aliases": ["support", "installation"]
+    },
+    {
+      "name": "Signal Type",
+      "rust_field": "signal_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "vehicle,pedestrian,bicycle,transit,lane_control,ramp_meter,beacon",
+      "description": "Type of traffic signal",
+      "aliases": ["type", "category"]
+    },
+    {
+      "name": "Number of Sections",
+      "rust_field": "num_sections",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 1,
+      "typical_max": 5,
+      "description": "Number of signal sections/lenses",
+      "aliases": ["sections", "lenses"]
+    },
+    {
+      "name": "Lens Diameter",
+      "rust_field": "lens_diameter",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 8.0,
+      "typical_max": 12.0,
+      "description": "Diameter of signal lenses",
+      "aliases": ["diameter", "size"]
+    },
+    {
+      "name": "Head Orientation",
+      "rust_field": "head_orientation",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "vertical,horizontal,cluster",
+      "description": "Orientation of signal head",
+      "aliases": ["orientation", "arrangement"]
+    },
+    {
+      "name": "Signal Heading",
+      "rust_field": "heading",
+      "unit": "deg",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 360.0,
+      "description": "Direction signal is facing",
+      "aliases": ["facing", "direction", "azimuth"]
+    },
+    {
+      "name": "Backplate Present",
+      "rust_field": "has_backplate",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether signal has backplate for visibility",
+      "aliases": ["backplate", "background"]
+    },
+    {
+      "name": "LED Technology",
+      "rust_field": "is_led",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether signal uses LED technology",
+      "aliases": ["led", "led_signal"]
+    },
+    {
+      "name": "Visibility Distance",
+      "rust_field": "visibility_distance",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 100.0,
+      "typical_max": 1000.0,
+      "description": "Distance from which signal is visible",
+      "aliases": ["sight_distance", "visible_range"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Current State",
+      "rust_field": "current_state",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "red,yellow,green,flashing_red,flashing_yellow,off,unknown",
+      "description": "Current signal indication",
+      "aliases": ["state", "indication", "phase"]
+    },
+    {
+      "name": "Occluded",
+      "rust_field": "is_occluded",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether signal is partially occluded",
+      "aliases": ["blocked", "obstructed"]
+    },
+    {
+      "name": "Condition Score",
+      "rust_field": "condition_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Overall signal condition score",
+      "aliases": ["condition", "quality"]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-.PHONY: help db db-stop install install-pip migrate seed serve dev test test-cov lint fmt clean reset pre-commit
+.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev test test-cov lint fmt clean reset pre-commit
 
 # Show available commands
 help:
@@ -8,7 +8,9 @@ help:
 	@echo "  make install     - Install with uv"
 	@echo "  make install-pip - Install with pip"
 	@echo "  make migrate     - Run alembic migrations"
-	@echo "  make seed        - Load seed data"
+	@echo "  make seed        - Load seed data into PostgreSQL"
+	@echo "  make sync        - Sync PostgreSQL to Neo4j"
+	@echo "  make setup-data  - Full data setup (migrate + seed + sync)"
 	@echo "  make serve       - Start dev server :8000"
 	@echo "  make dev         - Full setup (db + migrate + serve)"
 	@echo "  make test        - Run tests"
@@ -45,9 +47,17 @@ install-pip:
 migrate:
 	alembic upgrade head
 
-# Load seed data
+# Load seed data into PostgreSQL
 seed:
 	python -m scripts.load_seed_data
+
+# Sync PostgreSQL to Neo4j
+sync:
+	python -m scripts.sync_neo4j
+
+# Full data setup: migrate + seed + sync
+setup-data: migrate seed sync
+	@echo "Data setup complete! PostgreSQL and Neo4j are ready."
 
 # Start dev server
 serve:
@@ -86,10 +96,10 @@ clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	rm -rf .pytest_cache htmlcov .coverage .mypy_cache
 
-# Reset databases
+# Reset databases (full reset with Neo4j sync)
 reset:
 	docker compose down -v
-	$(MAKE) db migrate seed
+	$(MAKE) db setup-data
 
 # Run full stack in Docker
 docker-up:

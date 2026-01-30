@@ -1,0 +1,280 @@
+{
+  "source_doc": {
+    "title": "ADA Standards for Accessible Design & PROWAG",
+    "abbreviation": "ADA-PROWAG",
+    "edition": "2023",
+    "publisher": "US Access Board / DOJ",
+    "publication_year": 2023,
+    "jurisdiction": "federal",
+    "priority": 95
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "sidewalk_width",
+      "facility_type": "Sidewalk",
+      "name": "Sidewalk Width Physical Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 3.0,
+      "description": "Minimum physically passable width",
+      "error_message": "Sidewalk width below absolute minimum (3 ft)",
+      "source_ref": {"chapter": "PROWAG", "section": "R302.3"}
+    },
+    {
+      "parameter_rust_field": "sidewalk_width",
+      "facility_type": "Sidewalk",
+      "name": "Sidewalk Width ADA Minimum",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 4.0,
+      "description": "ADA minimum sidewalk width for accessibility",
+      "error_message": "Sidewalk width below ADA minimum (4 ft)",
+      "source_ref": {"chapter": "PROWAG", "section": "R302.3"}
+    },
+    {
+      "parameter_rust_field": "sidewalk_width",
+      "facility_type": "Sidewalk",
+      "name": "Sidewalk Width AASHTO Recommendation",
+      "rule_type": "min",
+      "severity": "info",
+      "min_value": 5.0,
+      "description": "AASHTO recommended minimum for comfortable pedestrian flow",
+      "error_message": "Sidewalk width below AASHTO recommended 5 ft",
+      "source_ref": {"chapter": "4", "section": "4.13"}
+    },
+    {
+      "parameter_rust_field": "clear_width",
+      "facility_type": "Sidewalk",
+      "name": "Clear Width ADA Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 3.0,
+      "description": "Minimum clear width for wheelchair passage (single direction)",
+      "error_message": "Clear width below ADA minimum (3 ft)",
+      "source_ref": {"chapter": "ADA", "section": "403.5.1"}
+    },
+    {
+      "parameter_rust_field": "clear_width",
+      "facility_type": "Sidewalk",
+      "name": "Clear Width Two-Way Passing",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 5.0,
+      "description": "Recommended clear width for two wheelchairs to pass",
+      "error_message": "Clear width insufficient for two-way wheelchair passing (5 ft)",
+      "source_ref": {"chapter": "ADA", "section": "403.5.1"}
+    },
+    {
+      "parameter_rust_field": "cross_slope",
+      "facility_type": "Sidewalk",
+      "name": "Cross Slope ADA Maximum",
+      "rule_type": "max",
+      "severity": "error",
+      "max_value": 2.0,
+      "description": "Maximum cross slope for accessibility",
+      "error_message": "Cross slope exceeds ADA maximum (2%)",
+      "source_ref": {"chapter": "PROWAG", "section": "R302.6"}
+    },
+    {
+      "parameter_rust_field": "running_slope",
+      "facility_type": "Sidewalk",
+      "name": "Running Slope Non-Ramp Maximum",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 5.0,
+      "description": "Running slope exceeding 5% requires ramp treatment",
+      "error_message": "Running slope exceeds 5% - may require ramp treatment",
+      "source_ref": {"chapter": "PROWAG", "section": "R302.5"}
+    },
+    {
+      "parameter_rust_field": "running_slope",
+      "facility_type": "Sidewalk",
+      "name": "Running Slope Ramp Maximum",
+      "rule_type": "max",
+      "severity": "error",
+      "max_value": 8.33,
+      "description": "Maximum running slope for ramps (1:12)",
+      "error_message": "Running slope exceeds maximum ramp slope (8.33%)",
+      "source_ref": {"chapter": "ADA", "section": "405.2"}
+    },
+    {
+      "parameter_rust_field": "buffer_width",
+      "facility_type": "Sidewalk",
+      "name": "Buffer Width Recommendation",
+      "rule_type": "min",
+      "severity": "info",
+      "min_value": 2.0,
+      "description": "Recommended buffer between sidewalk and travel lanes",
+      "error_message": "Buffer width below recommended 2 ft minimum",
+      "source_ref": {"chapter": "AASHTO", "section": "4.13"}
+    },
+    {
+      "parameter_rust_field": "curb_height",
+      "facility_type": "Sidewalk",
+      "name": "Curb Height Physical Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 8.0,
+      "description": "Curb height must be within physical limits",
+      "error_message": "Curb height outside physical range (0-8 in)",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "confidence",
+      "facility_type": "Sidewalk",
+      "name": "Sidewalk Detection Confidence",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 0.7,
+      "description": "Minimum confidence for reliable sidewalk detection",
+      "error_message": "Low sidewalk detection confidence - manual review recommended",
+      "source_ref": {"chapter": "Quality", "section": "Confidence"}
+    },
+    {
+      "parameter_rust_field": "crosswalk_width",
+      "facility_type": "Crosswalk",
+      "name": "Crosswalk Width MUTCD Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 6.0,
+      "description": "Minimum crosswalk width per MUTCD",
+      "error_message": "Crosswalk width below MUTCD minimum (6 ft)",
+      "source_ref": {"chapter": "3B", "section": "3B.18"}
+    },
+    {
+      "parameter_rust_field": "crosswalk_width",
+      "facility_type": "Crosswalk",
+      "name": "Crosswalk Width Preferred",
+      "rule_type": "min",
+      "severity": "info",
+      "min_value": 10.0,
+      "description": "Preferred crosswalk width for high pedestrian volumes",
+      "error_message": "Crosswalk width below preferred 10 ft for visibility",
+      "source_ref": {"chapter": "3B", "section": "3B.18"}
+    },
+    {
+      "parameter_rust_field": "crosswalk_length",
+      "facility_type": "Crosswalk",
+      "name": "Crosswalk Length Physical Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 10.0,
+      "max_value": 120.0,
+      "description": "Crossing distance must be physically reasonable",
+      "error_message": "Crosswalk length outside physical limits",
+      "source_ref": {"chapter": "Physical", "section": "Plausibility"}
+    },
+    {
+      "parameter_rust_field": "stripe_width",
+      "facility_type": "Crosswalk",
+      "name": "Stripe Width MUTCD Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 6.0,
+      "max_value": 24.0,
+      "description": "Standard crosswalk stripe width per MUTCD",
+      "error_message": "Stripe width outside MUTCD range (6-24 in)",
+      "source_ref": {"chapter": "3B", "section": "3B.18"}
+    },
+    {
+      "parameter_rust_field": "curb_ramp_width",
+      "facility_type": "Crosswalk",
+      "name": "Curb Ramp Width ADA Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 3.0,
+      "description": "Minimum curb ramp width excluding flared sides",
+      "error_message": "Curb ramp width below ADA minimum (3 ft)",
+      "source_ref": {"chapter": "ADA", "section": "405.5"}
+    },
+    {
+      "parameter_rust_field": "curb_ramp_width",
+      "facility_type": "Crosswalk",
+      "name": "Curb Ramp Width Preferred",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 4.0,
+      "description": "Preferred curb ramp width for accessibility",
+      "error_message": "Curb ramp width below preferred 4 ft",
+      "source_ref": {"chapter": "PROWAG", "section": "R304.5.1"}
+    },
+    {
+      "parameter_rust_field": "curb_ramp_slope",
+      "facility_type": "Crosswalk",
+      "name": "Curb Ramp Slope ADA Maximum",
+      "rule_type": "max",
+      "severity": "error",
+      "max_value": 8.33,
+      "description": "Maximum curb ramp slope (1:12)",
+      "error_message": "Curb ramp slope exceeds ADA maximum (8.33%)",
+      "source_ref": {"chapter": "ADA", "section": "405.2"}
+    },
+    {
+      "parameter_rust_field": "flare_slope",
+      "facility_type": "Crosswalk",
+      "name": "Flare Slope ADA Maximum",
+      "rule_type": "max",
+      "severity": "error",
+      "max_value": 10.0,
+      "description": "Maximum flared side slope (1:10)",
+      "error_message": "Flare slope exceeds ADA maximum (10%)",
+      "source_ref": {"chapter": "ADA", "section": "405.8"}
+    },
+    {
+      "parameter_rust_field": "landing_width",
+      "facility_type": "Crosswalk",
+      "name": "Landing Width ADA Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 4.0,
+      "description": "Minimum landing width at top of curb ramp",
+      "error_message": "Landing width below ADA minimum (4 ft)",
+      "source_ref": {"chapter": "ADA", "section": "405.7"}
+    },
+    {
+      "parameter_rust_field": "landing_depth",
+      "facility_type": "Crosswalk",
+      "name": "Landing Depth ADA Minimum",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 4.0,
+      "description": "Minimum landing depth at top of curb ramp",
+      "error_message": "Landing depth below ADA minimum (4 ft)",
+      "source_ref": {"chapter": "ADA", "section": "405.7"}
+    },
+    {
+      "parameter_rust_field": "crossing_time",
+      "facility_type": "Crosswalk",
+      "name": "Crossing Time Formula Check",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "crossing_time >= crosswalk_length / 3.5",
+      "description": "Crossing time should allow 3.5 ft/sec walking speed (ADA)",
+      "error_message": "Crossing time insufficient for ADA walking speed (3.5 ft/sec)",
+      "source_ref": {"chapter": "MUTCD", "section": "4E.06"}
+    },
+    {
+      "parameter_rust_field": "confidence",
+      "facility_type": "Crosswalk",
+      "name": "Crosswalk Detection Confidence",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 0.7,
+      "description": "Minimum confidence for reliable crosswalk detection",
+      "error_message": "Low crosswalk detection confidence - manual review recommended",
+      "source_ref": {"chapter": "Quality", "section": "Confidence"}
+    },
+    {
+      "parameter_rust_field": "visibility_score",
+      "facility_type": "Crosswalk",
+      "name": "Marking Visibility Minimum",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 0.6,
+      "description": "Minimum visibility score for safe crosswalk markings",
+      "error_message": "Low marking visibility - maintenance may be needed",
+      "source_ref": {"chapter": "Quality", "section": "Visibility"}
+    }
+  ]
+}

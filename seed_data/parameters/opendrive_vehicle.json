@@ -1,0 +1,173 @@
+{
+  "facility_type": "LaneGeometry",
+  "parameters": [
+    {
+      "name": "Vehicle Max Speed",
+      "rust_field": "vehicle_max_speed",
+      "unit": "m/s",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 100.0,
+      "description": "Maximum vehicle speed (OpenSCENARIO performance)",
+      "aliases": ["maxSpeed", "max_velocity"]
+    },
+    {
+      "name": "Vehicle Max Acceleration",
+      "rust_field": "vehicle_max_accel",
+      "unit": "m/s²",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 15.0,
+      "description": "Maximum acceleration capability",
+      "aliases": ["maxAcceleration", "max_accel"]
+    },
+    {
+      "name": "Vehicle Max Deceleration",
+      "rust_field": "vehicle_max_decel",
+      "unit": "m/s²",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 15.0,
+      "description": "Maximum deceleration/braking capability",
+      "aliases": ["maxDeceleration", "max_brake"]
+    },
+    {
+      "name": "Bounding Box Length",
+      "rust_field": "bbox_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 1.0,
+      "typical_max": 25.0,
+      "description": "Vehicle bounding box length",
+      "aliases": ["length", "vehicle_length"]
+    },
+    {
+      "name": "Bounding Box Width",
+      "rust_field": "bbox_width",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.5,
+      "typical_max": 4.0,
+      "description": "Vehicle bounding box width",
+      "aliases": ["width", "vehicle_width"]
+    },
+    {
+      "name": "Bounding Box Height",
+      "rust_field": "bbox_height",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.5,
+      "typical_max": 5.0,
+      "description": "Vehicle bounding box height",
+      "aliases": ["height", "vehicle_height"]
+    },
+    {
+      "name": "Bounding Box Rear Offset",
+      "rust_field": "bbox_rear_offset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 5.0,
+      "description": "Distance from vehicle center to rear",
+      "aliases": ["rear_offset", "back_offset"]
+    },
+    {
+      "name": "Bounding Box Front Offset",
+      "rust_field": "bbox_front_offset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 5.0,
+      "description": "Distance from vehicle center to front",
+      "aliases": ["front_offset"]
+    },
+    {
+      "name": "Wheel Diameter",
+      "rust_field": "wheel_diameter",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.3,
+      "typical_max": 1.5,
+      "description": "Wheel/tire diameter",
+      "aliases": ["wheelDiameter", "tire_diameter"]
+    },
+    {
+      "name": "Track Width",
+      "rust_field": "track_width",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 1.0,
+      "typical_max": 3.0,
+      "description": "Distance between left and right wheels",
+      "aliases": ["trackWidth", "axle_width"]
+    },
+    {
+      "name": "Max Steering Angle",
+      "rust_field": "max_steer",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Maximum steering angle",
+      "aliases": ["maxSteer", "steer_limit"]
+    },
+    {
+      "name": "Front Axle Position",
+      "rust_field": "front_axle_pos",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10.0,
+      "description": "X position of front axle from vehicle center",
+      "aliases": ["front_axle_x", "axle_front"]
+    },
+    {
+      "name": "Rear Axle Position",
+      "rust_field": "rear_axle_pos",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 0.0,
+      "description": "X position of rear axle from vehicle center",
+      "aliases": ["rear_axle_x", "axle_rear"]
+    },
+    {
+      "name": "Vehicle Category",
+      "rust_field": "vehicle_category",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "car,van,truck,trailer,semitrailer,bus,motorbike,bicycle,train,tram",
+      "description": "OpenSCENARIO vehicle category",
+      "aliases": ["vehicleType", "category"]
+    },
+    {
+      "name": "Vehicle Mass",
+      "rust_field": "vehicle_mass",
+      "unit": "kg",
+      "data_type": "float",
+      "typical_min": 100.0,
+      "typical_max": 50000.0,
+      "description": "Vehicle mass",
+      "aliases": ["mass", "weight"]
+    },
+    {
+      "name": "Pedestrian Category",
+      "rust_field": "pedestrian_category",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "pedestrian,wheelchair,animal",
+      "description": "OpenSCENARIO pedestrian category",
+      "aliases": ["pedCategory", "ped_type"]
+    },
+    {
+      "name": "Pedestrian Mass",
+      "rust_field": "pedestrian_mass",
+      "unit": "kg",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 200.0,
+      "description": "Pedestrian body mass",
+      "aliases": ["ped_mass", "body_weight"]
+    }
+  ]
+}
