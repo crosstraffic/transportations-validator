@@ -93,7 +93,7 @@ reset:
 
 # Run full stack in Docker
 docker-up:
-	docker compose up -d
+	docker compose up -d --build
 
 # Stop full stack
 docker-down:

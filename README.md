@@ -95,6 +95,12 @@ make docker-down
 | `/api/v1/sync/trigger` | POST | Trigger PG→Neo4j sync |
 | `/api/v1/parameters/` | GET | List all parameters |
 | `/api/v1/rules/` | GET | List all rules |
+| `/api/v1/graph/parameters/{field}/related` | GET | Find related parameters |
+| `/api/v1/graph/rules/{id}/citations` | GET | Get rule citations |
+| `/api/v1/graph/conflicts` | GET | Find conflicting rules |
+| `/api/v1/graph/impact` | GET | Analyze parameter change impact |
+| `/api/v1/graph/visualize` | GET | Get D3-compatible graph data |
+| `/api/v1/graph/suggest` | GET | Suggest related checks |
 
 ## Usage Examples
 

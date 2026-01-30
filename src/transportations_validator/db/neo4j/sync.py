@@ -1,17 +1,21 @@
 """PostgreSQL to Neo4j synchronization service."""
 
+import json
+import logging
 from dataclasses import dataclass
-from typing import Any
+from pathlib import Path
 
 from neo4j import AsyncSession as Neo4jSession
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession as PgSession
 from sqlalchemy.orm import selectinload
 
-from transportations_validator.models.source import SourceDoc, SourceRef
+from transportations_validator.models.condition import ConditionType
 from transportations_validator.models.parameter import Parameter
-from transportations_validator.models.condition import ConditionType, ConditionValue
 from transportations_validator.models.rule import DesignRule
+from transportations_validator.models.source import SourceDoc
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -57,6 +61,10 @@ class Neo4jSyncService:
 
             n, r = await self._sync_rules()
             nodes += n
+            rels += r
+
+            # Sync parameter relationships from seed data
+            r = await self._sync_parameter_relationships()
             rels += r
 
             result.nodes_synced = nodes
@@ -236,7 +244,7 @@ class Neo4jSyncService:
 
         result = await self.pg.execute(
             select(DesignRule)
-            .where(DesignRule.is_active == True)
+            .where(DesignRule.is_active.is_(True))
             .options(
                 selectinload(DesignRule.conditions),
                 selectinload(DesignRule.sources),
@@ -311,3 +319,66 @@ class Neo4jSyncService:
                 rels += 1
 
         return nodes, rels
+
+    async def _sync_parameter_relationships(self) -> int:
+        """Sync parameter relationships from seed data."""
+        rels = 0
+
+        # Load relationships from seed data file
+        seed_path = (
+            Path(__file__).parent.parent.parent.parent.parent
+            / "seed_data"
+            / "relationships"
+            / "parameter_relationships.json"
+        )
+
+        if not seed_path.exists():
+            logger.warning(f"Parameter relationships file not found: {seed_path}")
+            return 0
+
+        with open(seed_path) as f:
+            data = json.load(f)
+
+        for rel in data.get("relationships", []):
+            from_field = rel["from_field"]
+            to_field = rel["to_field"]
+            rel_type = rel["type"]
+            facility_type = rel.get("facility_type")
+            description = rel.get("description", "")
+
+            # Build the query based on whether facility_type is specified
+            if facility_type:
+                query = f"""
+                MATCH (p1:Parameter {{rust_field: $from_field, facility_type: $facility_type}})
+                MATCH (p2:Parameter {{rust_field: $to_field, facility_type: $facility_type}})
+                MERGE (p1)-[r:{rel_type}]->(p2)
+                SET r.description = $description
+                """
+                params = {
+                    "from_field": from_field,
+                    "to_field": to_field,
+                    "facility_type": facility_type,
+                    "description": description,
+                }
+            else:
+                query = f"""
+                MATCH (p1:Parameter {{rust_field: $from_field}})
+                MATCH (p2:Parameter {{rust_field: $to_field}})
+                WHERE p1.facility_type = p2.facility_type
+                MERGE (p1)-[r:{rel_type}]->(p2)
+                SET r.description = $description
+                """
+                params = {
+                    "from_field": from_field,
+                    "to_field": to_field,
+                    "description": description,
+                }
+
+            try:
+                result = await self.neo4j.run(query, **params)
+                summary = await result.consume()
+                rels += summary.counters.relationships_created
+            except Exception as e:
+                logger.warning(f"Failed to create relationship {from_field}->{to_field}: {e}")
+
+        return rels

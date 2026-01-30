@@ -1,0 +1,103 @@
+{
+  "description": "Defines relationships between parameters for knowledge graph",
+  "relationships": [
+    {
+      "from_field": "design_speed",
+      "to_field": "ssd",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Design speed determines required stopping sight distance"
+    },
+    {
+      "from_field": "speed_limit",
+      "to_field": "ssd",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Speed limit influences stopping sight distance requirements"
+    },
+    {
+      "from_field": "grade",
+      "to_field": "ssd",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Grade affects braking distance in stopping sight distance calculation"
+    },
+    {
+      "from_field": "lane_width",
+      "to_field": "shoulder_width",
+      "type": "RELATED_TO",
+      "facility_type": "TwoLaneHighway",
+      "description": "Combined width affects capacity and safety"
+    },
+    {
+      "from_field": "lw",
+      "to_field": "lc_r",
+      "type": "RELATED_TO",
+      "facility_type": "BasicFreeway",
+      "description": "Lane width and lateral clearance combine for effective roadway width"
+    },
+    {
+      "from_field": "lw",
+      "to_field": "lc_l",
+      "type": "RELATED_TO",
+      "facility_type": "BasicFreeway",
+      "description": "Lane width and lateral clearance combine for effective roadway width"
+    },
+    {
+      "from_field": "speed_limit",
+      "to_field": "bffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Speed limit influences base free-flow speed"
+    },
+    {
+      "from_field": "trd",
+      "to_field": "bffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Ramp density affects free-flow speed through friction"
+    },
+    {
+      "from_field": "lane_count",
+      "to_field": "trd",
+      "type": "RELATED_TO",
+      "facility_type": "BasicFreeway",
+      "description": "Lane count affects acceptable ramp density"
+    },
+    {
+      "from_field": "apd",
+      "to_field": "bffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Access point density affects free-flow speed"
+    },
+    {
+      "from_field": "p_t",
+      "to_field": "phf",
+      "type": "RELATED_TO",
+      "facility_type": "BasicFreeway",
+      "description": "Truck percentage and peak hour factor both affect capacity"
+    },
+    {
+      "from_field": "grade",
+      "to_field": "vertical_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Grade determines vertical class assignment"
+    },
+    {
+      "from_field": "hor_class",
+      "to_field": "spl",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Horizontal alignment class affects appropriate speed"
+    },
+    {
+      "from_field": "sup_ele",
+      "to_field": "hor_class",
+      "type": "RELATED_TO",
+      "facility_type": "TwoLaneHighway",
+      "description": "Superelevation relates to horizontal curvature"
+    }
+  ]
+}

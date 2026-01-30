@@ -1,19 +1,21 @@
 """FastAPI application entry point."""
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from transportations_validator.api.v1 import graph, parameters, rules, validation
 from transportations_validator.config import get_settings
-from transportations_validator.db.postgres.connection import engine, close_db
-from transportations_validator.db.postgres import async_session_maker
-from transportations_validator.db.neo4j.connection import neo4j_driver, close_neo4j, get_neo4j_session
-from transportations_validator.db.neo4j.auto_sync import sync_manager, register_sync_events
+from transportations_validator.db.neo4j.auto_sync import register_sync_events, sync_manager
+from transportations_validator.db.neo4j.connection import (
+    close_neo4j,
+    get_neo4j_session,
+)
 from transportations_validator.db.neo4j.sync import Neo4jSyncService
-from transportations_validator.api.v1 import validation, parameters, rules
-
+from transportations_validator.db.postgres import async_session_maker
+from transportations_validator.db.postgres.connection import close_db
 
 settings = get_settings()
 
@@ -26,6 +28,7 @@ async def do_neo4j_sync() -> None:
             result = await sync_service.sync_all()
             if result.errors:
                 import logging
+
                 logging.getLogger(__name__).error(f"Sync errors: {result.errors}")
 
 
@@ -66,6 +69,7 @@ app.add_middleware(
 app.include_router(validation.router, prefix=settings.api_prefix, tags=["validation"])
 app.include_router(parameters.router, prefix=settings.api_prefix, tags=["parameters"])
 app.include_router(rules.router, prefix=settings.api_prefix, tags=["rules"])
+app.include_router(graph.router, prefix=settings.api_prefix, tags=["graph"])
 
 
 @app.get("/health")
