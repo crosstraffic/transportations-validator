@@ -1,21 +1,21 @@
 """Parameter CRUD API endpoints."""
 
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from transportations_validator.db.postgres import get_session
 from transportations_validator.db.postgres.repositories import ParameterRepository
-from transportations_validator.models.validation import ParameterResponse, ParameterCreate
 from transportations_validator.models.parameter import FacilityType
+from transportations_validator.models.validation import ParameterCreate, ParameterResponse
 
 router = APIRouter()
 
 
 @router.get("/parameters/", response_model=list[ParameterResponse])
 async def list_parameters(
-    facility_type: Optional[str] = Query(None, description="Filter by facility type"),
+    facility_type: str | None = Query(None, description="Filter by facility type"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     session: AsyncSession = Depends(get_session),
@@ -98,16 +98,18 @@ async def create_parameter(
 
     repo = ParameterRepository(session)
 
-    param = await repo.create({
-        "name": data.name,
-        "rust_field": data.rust_field,
-        "facility_type": facility_type,
-        "unit": data.unit,
-        "data_type": data.data_type,
-        "description": data.description,
-        "typical_min": data.typical_min,
-        "typical_max": data.typical_max,
-    })
+    param = await repo.create(
+        {
+            "name": data.name,
+            "rust_field": data.rust_field,
+            "facility_type": facility_type,
+            "unit": data.unit,
+            "data_type": data.data_type,
+            "description": data.description,
+            "typical_min": data.typical_min,
+            "typical_max": data.typical_max,
+        }
+    )
 
     return ParameterResponse(
         id=param.id,
@@ -176,7 +178,7 @@ async def add_parameter_alias(
 @router.get("/parameters/resolve/{name}")
 async def resolve_parameter(
     name: str,
-    facility_type: Optional[str] = Query(None),
+    facility_type: str | None = Query(None),
     session: AsyncSession = Depends(get_session),
 ) -> ParameterResponse:
     """

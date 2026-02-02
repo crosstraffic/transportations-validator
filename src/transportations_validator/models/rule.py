@@ -1,9 +1,9 @@
 """Design rule and related models."""
 
 from enum import Enum
-from typing import Optional
 
-from sqlalchemy import String, Text, Float, Boolean, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Boolean, Float, ForeignKey, String, Text
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from transportations_validator.models.base import Base, TimestampMixin
@@ -37,27 +37,25 @@ class DesignRule(Base, TimestampMixin):
     parameter_id: Mapped[int] = mapped_column(ForeignKey("parameter.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     rule_type: Mapped[RuleType] = mapped_column(
-        SQLEnum(RuleType, values_callable=lambda x: [e.value for e in x]),
-        nullable=False
+        SQLEnum(RuleType, values_callable=lambda x: [e.value for e in x]), nullable=False
     )
     severity: Mapped[Severity] = mapped_column(
-        SQLEnum(Severity, values_callable=lambda x: [e.value for e in x]),
-        default=Severity.ERROR
+        SQLEnum(Severity, values_callable=lambda x: [e.value for e in x]), default=Severity.ERROR
     )
 
     # Value constraints
-    min_value: Mapped[Optional[float]] = mapped_column(Float)
-    max_value: Mapped[Optional[float]] = mapped_column(Float)
-    allowed_values: Mapped[Optional[str]] = mapped_column(Text)
-    formula: Mapped[Optional[str]] = mapped_column(Text)
+    min_value: Mapped[float | None] = mapped_column(Float)
+    max_value: Mapped[float | None] = mapped_column(Float)
+    allowed_values: Mapped[str | None] = mapped_column(Text)
+    formula: Mapped[str | None] = mapped_column(Text)
 
     # Boundary behavior
     min_inclusive: Mapped[bool] = mapped_column(Boolean, default=True)
     max_inclusive: Mapped[bool] = mapped_column(Boolean, default=True)
 
     # Description and error message
-    description: Mapped[Optional[str]] = mapped_column(Text)
-    error_message: Mapped[Optional[str]] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(Text)
+    error_message: Mapped[str | None] = mapped_column(Text)
 
     # Active flag
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -112,6 +110,6 @@ class RuleSource(Base, TimestampMixin):
         return f"<RuleSource(id={self.id}, rule_id={self.rule_id})>"
 
 
-# Import for type hints
-from transportations_validator.models.condition import ConditionValue
-from transportations_validator.models.source import SourceRef
+# Import for type hints (at bottom to avoid circular imports)
+from transportations_validator.models.condition import ConditionValue  # noqa: E402
+from transportations_validator.models.source import SourceRef  # noqa: E402

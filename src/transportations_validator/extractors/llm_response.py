@@ -6,7 +6,6 @@ from typing import Any
 from transportations_validator.extractors.base import BaseExtractor, ExtractionResult
 from transportations_validator.models.validation import SourceType, ValidationContext
 
-
 # Patterns for extracting parameter values from text
 PARAMETER_PATTERNS = {
     "lane_width": [
@@ -106,8 +105,17 @@ class LLMResponseExtractor(BaseExtractor):
 
         # Check for transportation-related keywords
         keywords = [
-            "lane", "speed", "grade", "volume", "highway", "freeway",
-            "road", "traffic", "capacity", "shoulder", "radius",
+            "lane",
+            "speed",
+            "grade",
+            "volume",
+            "highway",
+            "freeway",
+            "road",
+            "traffic",
+            "capacity",
+            "shoulder",
+            "radius",
         ]
         text_lower = data.lower()
         return any(kw in text_lower for kw in keywords)
@@ -170,9 +178,7 @@ class LLMResponseExtractor(BaseExtractor):
 
         return ValidationContext(**context_data)
 
-    def _detect_facility_type(
-        self, text: str, params: dict[str, Any]
-    ) -> str | None:
+    def _detect_facility_type(self, text: str, params: dict[str, Any]) -> str | None:
         """Detect facility type from text and extracted parameters."""
         # Check explicit mentions
         if "basic freeway" in text or "basicfreeway" in text:

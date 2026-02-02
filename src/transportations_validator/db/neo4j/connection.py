@@ -1,8 +1,8 @@
 """Neo4j connection management."""
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
-from neo4j import AsyncGraphDatabase, AsyncDriver, AsyncSession
+from neo4j import AsyncDriver, AsyncGraphDatabase, AsyncSession
 
 from transportations_validator.config import get_settings
 

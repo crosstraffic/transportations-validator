@@ -1,0 +1,166 @@
+{
+  "facility_type": "Crosswalk",
+  "parameters": [
+    {
+      "name": "Crosswalk Width",
+      "rust_field": "crosswalk_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 6.0,
+      "typical_max": 25.0,
+      "description": "Width of crosswalk (perpendicular to traffic flow)",
+      "aliases": ["width", "cw_width"]
+    },
+    {
+      "name": "Crosswalk Length",
+      "rust_field": "crosswalk_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 100.0,
+      "description": "Length of crosswalk (crossing distance)",
+      "aliases": ["length", "crossing_distance"]
+    },
+    {
+      "name": "Stripe Width",
+      "rust_field": "stripe_width",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 6.0,
+      "typical_max": 24.0,
+      "description": "Width of individual crosswalk stripes",
+      "aliases": ["marking_width", "line_width"]
+    },
+    {
+      "name": "Stripe Spacing",
+      "rust_field": "stripe_spacing",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 12.0,
+      "typical_max": 60.0,
+      "description": "Spacing between crosswalk stripes",
+      "aliases": ["gap_width", "stripe_gap"]
+    },
+    {
+      "name": "Marking Type",
+      "rust_field": "marking_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "standard,continental,ladder,zebra,solid,dashed,none",
+      "description": "Type of crosswalk marking pattern",
+      "aliases": ["pattern", "style", "crosswalk_type"]
+    },
+    {
+      "name": "Curb Ramp Present",
+      "rust_field": "curb_ramp_present",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether ADA curb ramps are present at crosswalk ends",
+      "aliases": ["has_ramp", "ramp_present", "curb_ramp"]
+    },
+    {
+      "name": "Detectable Warning Present",
+      "rust_field": "detectable_warning",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether truncated dome detectable warnings are present",
+      "aliases": ["truncated_domes", "tactile_warning", "dwp"]
+    },
+    {
+      "name": "Curb Ramp Width",
+      "rust_field": "curb_ramp_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 3.0,
+      "typical_max": 8.0,
+      "description": "Width of curb ramp",
+      "aliases": ["ramp_width"]
+    },
+    {
+      "name": "Curb Ramp Slope",
+      "rust_field": "curb_ramp_slope",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 8.33,
+      "description": "Running slope of curb ramp",
+      "aliases": ["ramp_slope", "ramp_grade"]
+    },
+    {
+      "name": "Curb Ramp Flare Slope",
+      "rust_field": "flare_slope",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10.0,
+      "description": "Slope of curb ramp flared sides",
+      "aliases": ["flare", "side_slope"]
+    },
+    {
+      "name": "Landing Width",
+      "rust_field": "landing_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 8.0,
+      "description": "Width of level landing at top of curb ramp",
+      "aliases": ["top_landing"]
+    },
+    {
+      "name": "Landing Depth",
+      "rust_field": "landing_depth",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 8.0,
+      "description": "Depth of level landing at top of curb ramp",
+      "aliases": ["landing_length"]
+    },
+    {
+      "name": "Signal Controlled",
+      "rust_field": "signal_controlled",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether crosswalk is at signalized intersection",
+      "aliases": ["signalized", "has_signal"]
+    },
+    {
+      "name": "Pedestrian Signal Present",
+      "rust_field": "ped_signal_present",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Whether pedestrian signal heads are present",
+      "aliases": ["ped_signal", "walk_signal"]
+    },
+    {
+      "name": "Crossing Time",
+      "rust_field": "crossing_time",
+      "unit": "sec",
+      "data_type": "float",
+      "typical_min": 5.0,
+      "typical_max": 60.0,
+      "description": "Required crossing time at typical walking speed",
+      "aliases": ["walk_time", "ped_phase"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Visibility Score",
+      "rust_field": "visibility_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Marking visibility/retroreflectivity quality score",
+      "aliases": ["marking_quality", "retro_score"]
+    }
+  ]
+}

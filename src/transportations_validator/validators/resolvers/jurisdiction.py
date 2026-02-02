@@ -1,11 +1,11 @@
 """Jurisdiction resolver for prioritizing rules by authority."""
 
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from transportations_validator.db.postgres.repositories import SourceRepository
-
 
 # Jurisdiction hierarchy (lower number = higher priority)
 DEFAULT_PRIORITIES = {
@@ -61,9 +61,7 @@ class JurisdictionResolver:
 
         return [rule for _, rule in prioritized]
 
-    async def _get_rule_priority(
-        self, rule: Any, target_jurisdiction: str | None
-    ) -> int:
+    async def _get_rule_priority(self, rule: Any, target_jurisdiction: str | None) -> int:
         """Get priority for a specific rule."""
         if not hasattr(rule, "sources") or not rule.sources:
             # No source, use default federal priority
@@ -78,10 +76,7 @@ class JurisdictionResolver:
                 priority = doc.priority
 
                 # Boost priority if matches target jurisdiction
-                if (
-                    target_jurisdiction
-                    and doc.jurisdiction.lower() == target_jurisdiction.lower()
-                ):
+                if target_jurisdiction and doc.jurisdiction.lower() == target_jurisdiction.lower():
                     priority = max(1, priority - 50)  # Boost by 50
 
                 best_priority = min(best_priority, priority)
@@ -104,9 +99,7 @@ class JurisdictionResolver:
 
         return filtered
 
-    async def _rule_from_jurisdiction(
-        self, rule: Any, jurisdiction: str
-    ) -> bool:
+    async def _rule_from_jurisdiction(self, rule: Any, jurisdiction: str) -> bool:
         """Check if a rule is from a specific jurisdiction."""
         if not hasattr(rule, "sources") or not rule.sources:
             return False
@@ -142,9 +135,7 @@ class JurisdictionResolver:
             prioritized = await self.prioritize_rules(param_rules, jurisdiction)
             if prioritized:
                 # Take all rules with the same (highest) priority
-                best_priority = await self._get_rule_priority(
-                    prioritized[0], jurisdiction
-                )
+                best_priority = await self._get_rule_priority(prioritized[0], jurisdiction)
                 for rule in prioritized:
                     rule_priority = await self._get_rule_priority(rule, jurisdiction)
                     if rule_priority == best_priority:

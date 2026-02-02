@@ -1,13 +1,14 @@
 """Design rule repository."""
 
-from typing import Sequence, Any
+from collections.abc import Sequence
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from transportations_validator.db.postgres.repositories.base import BaseRepository
+from transportations_validator.models.condition import ConditionValue
 from transportations_validator.models.rule import DesignRule, RuleCondition, RuleSource
-from transportations_validator.models.condition import ConditionValue, ConditionType
 from transportations_validator.models.source import SourceRef
 
 
@@ -21,7 +22,7 @@ class RuleRepository(BaseRepository[DesignRule]):
         result = await self.session.execute(
             select(DesignRule)
             .where(DesignRule.parameter_id == parameter_id)
-            .where(DesignRule.is_active == True)
+            .where(DesignRule.is_active.is_(True))
             .options(
                 selectinload(DesignRule.conditions)
                 .selectinload(RuleCondition.condition_value)
@@ -66,9 +67,7 @@ class RuleRepository(BaseRepository[DesignRule]):
 
         return applicable_rules
 
-    async def _rule_matches_context(
-        self, rule: DesignRule, context: dict[str, Any]
-    ) -> bool:
+    async def _rule_matches_context(self, rule: DesignRule, context: dict[str, Any]) -> bool:
         """Check if a rule's conditions match the given context."""
         if not rule.conditions:
             # No conditions = applies to all contexts

@@ -1,0 +1,229 @@
+{
+  "facility_type": "LaneGeometry",
+  "parameters": [
+    {
+      "name": "Reference Line S-Coordinate",
+      "rust_field": "s_coord",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "Position along road reference line (OpenDRIVE s-coordinate)",
+      "aliases": ["s", "s_position", "station"]
+    },
+    {
+      "name": "Reference Line X-Coordinate",
+      "rust_field": "x_coord",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -100000.0,
+      "typical_max": 100000.0,
+      "description": "Inertial X coordinate of geometry start",
+      "aliases": ["x", "x_start", "x_position"]
+    },
+    {
+      "name": "Reference Line Y-Coordinate",
+      "rust_field": "y_coord",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -100000.0,
+      "typical_max": 100000.0,
+      "description": "Inertial Y coordinate of geometry start",
+      "aliases": ["y", "y_start", "y_position"]
+    },
+    {
+      "name": "Heading Angle",
+      "rust_field": "hdg",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": -3.14159,
+      "typical_max": 3.14159,
+      "description": "Start heading/orientation angle in radians",
+      "aliases": ["heading", "h_start", "orientation"]
+    },
+    {
+      "name": "Geometry Length",
+      "rust_field": "geometry_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.1,
+      "typical_max": 10000.0,
+      "description": "Length of geometry element",
+      "aliases": ["length", "segment_length"]
+    },
+    {
+      "name": "Arc Curvature",
+      "rust_field": "arc_curvature",
+      "unit": "1/m",
+      "data_type": "float",
+      "typical_min": -0.1,
+      "typical_max": 0.1,
+      "description": "Curvature of arc (positive=left, negative=right)",
+      "aliases": ["curvature", "curve"]
+    },
+    {
+      "name": "Spiral Start Curvature",
+      "rust_field": "curv_start",
+      "unit": "1/m",
+      "data_type": "float",
+      "typical_min": -0.1,
+      "typical_max": 0.1,
+      "description": "Starting curvature of spiral/clothoid",
+      "aliases": ["curvStart", "start_curvature"]
+    },
+    {
+      "name": "Spiral End Curvature",
+      "rust_field": "curv_end",
+      "unit": "1/m",
+      "data_type": "float",
+      "typical_min": -0.1,
+      "typical_max": 0.1,
+      "description": "Ending curvature of spiral/clothoid",
+      "aliases": ["curvEnd", "end_curvature"]
+    },
+    {
+      "name": "Curvature Change Rate",
+      "rust_field": "cdot",
+      "unit": "1/m/m",
+      "data_type": "float",
+      "typical_min": -0.01,
+      "typical_max": 0.01,
+      "description": "Rate of curvature change per meter (clothoid parameter)",
+      "aliases": ["curvature_dot", "curvature_rate"]
+    },
+    {
+      "name": "Polynomial Coefficient A",
+      "rust_field": "poly_a",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": -1000.0,
+      "typical_max": 1000.0,
+      "description": "Constant term in polynomial (elevation/width/offset)",
+      "aliases": ["a", "a_coeff"]
+    },
+    {
+      "name": "Polynomial Coefficient B",
+      "rust_field": "poly_b",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": -100.0,
+      "typical_max": 100.0,
+      "description": "Linear coefficient in polynomial",
+      "aliases": ["b", "b_coeff"]
+    },
+    {
+      "name": "Polynomial Coefficient C",
+      "rust_field": "poly_c",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 10.0,
+      "description": "Quadratic coefficient in polynomial",
+      "aliases": ["c", "c_coeff"]
+    },
+    {
+      "name": "Polynomial Coefficient D",
+      "rust_field": "poly_d",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": -1.0,
+      "typical_max": 1.0,
+      "description": "Cubic coefficient in polynomial",
+      "aliases": ["d", "d_coeff"]
+    },
+    {
+      "name": "Elevation",
+      "rust_field": "elevation",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -500.0,
+      "typical_max": 5000.0,
+      "description": "Road elevation above reference datum",
+      "aliases": ["z", "height", "altitude"]
+    },
+    {
+      "name": "Superelevation",
+      "rust_field": "superelevation",
+      "unit": "rad",
+      "data_type": "float",
+      "typical_min": -0.15,
+      "typical_max": 0.15,
+      "description": "Road banking/superelevation angle",
+      "aliases": ["super", "banking", "cant"]
+    },
+    {
+      "name": "Geometry Type",
+      "rust_field": "geometry_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "line,arc,spiral,poly3,paramPoly3",
+      "description": "Type of geometry element",
+      "aliases": ["type", "geom_type"]
+    },
+    {
+      "name": "Parameter Range",
+      "rust_field": "p_range",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "normalized,arcLength",
+      "description": "Parameter range type for paramPoly3",
+      "aliases": ["pRange", "param_range"]
+    },
+    {
+      "name": "Lane Section S-Offset",
+      "rust_field": "lane_section_s",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "Start s-coordinate of lane section",
+      "aliases": ["section_s", "laneSection_s"]
+    },
+    {
+      "name": "Lane Width S-Offset",
+      "rust_field": "width_soffset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1000.0,
+      "description": "S-offset within lane section for width definition",
+      "aliases": ["sOffset", "s_offset"]
+    },
+    {
+      "name": "Lane Offset T",
+      "rust_field": "lane_offset_t",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -20.0,
+      "typical_max": 20.0,
+      "description": "Lateral offset of lane center from reference line",
+      "aliases": ["t", "t_offset", "lateral_offset"]
+    },
+    {
+      "name": "Lane ID",
+      "rust_field": "lane_id",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": -10,
+      "typical_max": 10,
+      "description": "Lane identifier (negative=left, positive=right, 0=center)",
+      "aliases": ["id", "laneId"]
+    },
+    {
+      "name": "Road ID",
+      "rust_field": "road_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Unique road identifier",
+      "aliases": ["roadId", "id"]
+    },
+    {
+      "name": "Junction ID",
+      "rust_field": "junction_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Junction identifier (-1 for non-junction roads)",
+      "aliases": ["junctionId", "junction"]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 """Pydantic models for validation requests and responses."""
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -18,15 +18,15 @@ class SourceType(str, Enum):
 class ValidationContext(BaseModel):
     """Context for validation (conditions that apply)."""
 
-    facility_type: Optional[str] = None
-    city_type: Optional[str] = None
-    terrain_type: Optional[str] = None
-    highway_type: Optional[str] = None
-    median_type: Optional[str] = None
-    passing_type: Optional[int] = None
-    vertical_class: Optional[int] = None
-    horizontal_class: Optional[int] = None
-    jurisdiction: Optional[str] = None
+    facility_type: str | None = None
+    city_type: str | None = None
+    terrain_type: str | None = None
+    highway_type: str | None = None
+    median_type: str | None = None
+    passing_type: int | None = None
+    vertical_class: int | None = None
+    horizontal_class: int | None = None
+    jurisdiction: str | None = None
 
     class Config:
         extra = "allow"
@@ -36,24 +36,20 @@ class ValidationRequest(BaseModel):
     """Request to validate data."""
 
     data: dict[str, Any] = Field(..., description="Data to validate")
-    source_type: Optional[SourceType] = Field(
+    source_type: SourceType | None = Field(
         default=None, description="Type of source (auto-detected if not provided)"
     )
-    context: Optional[ValidationContext] = Field(
+    context: ValidationContext | None = Field(
         default=None, description="Validation context (conditions)"
     )
-    strict: bool = Field(
-        default=False, description="If true, treat warnings as errors"
-    )
+    strict: bool = Field(default=False, description="If true, treat warnings as errors")
 
 
 class TextValidationRequest(BaseModel):
     """Request to validate LLM text output."""
 
     text: str = Field(..., description="LLM response text to validate")
-    context: Optional[ValidationContext] = Field(
-        default=None, description="Validation context"
-    )
+    context: ValidationContext | None = Field(default=None, description="Validation context")
     extract_values: bool = Field(
         default=True, description="Whether to extract parameter values from text"
     )
@@ -66,16 +62,16 @@ class RuleViolation(BaseModel):
     rule_name: str
     severity: str
     message: str
-    expected: Optional[str] = None
-    actual: Optional[str] = None
-    citation: Optional[str] = None
+    expected: str | None = None
+    actual: str | None = None
+    citation: str | None = None
 
 
 class ParameterValidation(BaseModel):
     """Validation result for a single parameter."""
 
     parameter_name: str
-    rust_field: Optional[str] = None
+    rust_field: str | None = None
     value: Any
     is_valid: bool
     violations: list[RuleViolation] = Field(default_factory=list)
@@ -96,10 +92,10 @@ class ValidationResponse(BaseModel):
 
     success: bool
     source_type: SourceType
-    facility_type: Optional[str] = None
+    facility_type: str | None = None
     result: ValidationResult
-    extracted_context: Optional[ValidationContext] = None
-    message: Optional[str] = None
+    extracted_context: ValidationContext | None = None
+    message: str | None = None
 
 
 # API Response Models for CRUD operations
@@ -112,11 +108,11 @@ class ParameterResponse(BaseModel):
     name: str
     rust_field: str
     facility_type: str
-    unit: Optional[str] = None
+    unit: str | None = None
     data_type: str
-    description: Optional[str] = None
-    typical_min: Optional[float] = None
-    typical_max: Optional[float] = None
+    description: str | None = None
+    typical_min: float | None = None
+    typical_max: float | None = None
 
     class Config:
         from_attributes = True
@@ -128,11 +124,11 @@ class ParameterCreate(BaseModel):
     name: str
     rust_field: str
     facility_type: str
-    unit: Optional[str] = None
+    unit: str | None = None
     data_type: str = "float"
-    description: Optional[str] = None
-    typical_min: Optional[float] = None
-    typical_max: Optional[float] = None
+    description: str | None = None
+    typical_min: float | None = None
+    typical_max: float | None = None
 
 
 class RuleResponse(BaseModel):
@@ -143,10 +139,10 @@ class RuleResponse(BaseModel):
     name: str
     rule_type: str
     severity: str
-    min_value: Optional[float] = None
-    max_value: Optional[float] = None
-    allowed_values: Optional[str] = None
-    description: Optional[str] = None
+    min_value: float | None = None
+    max_value: float | None = None
+    allowed_values: str | None = None
+    description: str | None = None
     is_active: bool
 
     class Config:
@@ -160,11 +156,11 @@ class RuleCreate(BaseModel):
     name: str
     rule_type: str
     severity: str = "error"
-    min_value: Optional[float] = None
-    max_value: Optional[float] = None
-    allowed_values: Optional[str] = None
-    description: Optional[str] = None
-    error_message: Optional[str] = None
+    min_value: float | None = None
+    max_value: float | None = None
+    allowed_values: str | None = None
+    description: str | None = None
+    error_message: str | None = None
 
 
 class SyncTriggerResponse(BaseModel):

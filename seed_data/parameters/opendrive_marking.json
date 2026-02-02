@@ -1,0 +1,128 @@
+{
+  "facility_type": "PavementMarking",
+  "parameters": [
+    {
+      "name": "Road Mark S-Offset",
+      "rust_field": "mark_soffset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "S-coordinate offset for road marking start",
+      "aliases": ["sOffset", "s_offset"]
+    },
+    {
+      "name": "Road Mark Type",
+      "rust_field": "road_mark_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "none,solid,broken,solid_solid,solid_broken,broken_solid,broken_broken,botts_dots,grass,curb,custom,edge",
+      "description": "OpenDRIVE road mark type",
+      "aliases": ["type", "markType"]
+    },
+    {
+      "name": "Road Mark Weight",
+      "rust_field": "mark_weight",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "standard,bold",
+      "description": "Line weight (standard=0.15m, bold=0.3m)",
+      "aliases": ["weight", "line_weight"]
+    },
+    {
+      "name": "Road Mark Color",
+      "rust_field": "mark_color",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "standard,blue,green,red,white,yellow,orange",
+      "description": "OpenDRIVE road mark color",
+      "aliases": ["color", "line_color"]
+    },
+    {
+      "name": "Road Mark Width",
+      "rust_field": "mark_width",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.05,
+      "typical_max": 0.5,
+      "description": "Width of road marking line",
+      "aliases": ["width", "line_width"]
+    },
+    {
+      "name": "Road Mark Height",
+      "rust_field": "mark_height",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 0.1,
+      "description": "Height/thickness of road marking",
+      "aliases": ["height", "thickness"]
+    },
+    {
+      "name": "Lane Change Rule",
+      "rust_field": "lane_change",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "increase,decrease,both,none",
+      "description": "Lane change permission at this marking",
+      "aliases": ["laneChange", "change_rule"]
+    },
+    {
+      "name": "Road Mark Rule",
+      "rust_field": "mark_rule",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "no_passing,caution,none",
+      "description": "Traffic rule associated with marking",
+      "aliases": ["rule", "traffic_rule"]
+    },
+    {
+      "name": "Explicit Line Length",
+      "rust_field": "explicit_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Length of explicit line segment",
+      "aliases": ["length", "segment_length"]
+    },
+    {
+      "name": "Explicit Line T-Offset",
+      "rust_field": "explicit_toffset",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -5.0,
+      "typical_max": 5.0,
+      "description": "Lateral offset of explicit line",
+      "aliases": ["tOffset", "t_offset"]
+    },
+    {
+      "name": "Lane Material Surface",
+      "rust_field": "material_surface",
+      "unit": null,
+      "data_type": "string",
+      "description": "Lane surface material identifier",
+      "aliases": ["surface", "material"]
+    },
+    {
+      "name": "Lane Material Friction",
+      "rust_field": "material_friction",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Surface friction coefficient",
+      "aliases": ["friction", "mu"]
+    },
+    {
+      "name": "Lane Material Roughness",
+      "rust_field": "material_roughness",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Surface roughness value",
+      "aliases": ["roughness", "texture"]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "facility_type": "PavementMarking",
+  "parameters": [
+    {
+      "name": "Line Width",
+      "rust_field": "line_width",
+      "unit": "in",
+      "data_type": "float",
+      "typical_min": 4.0,
+      "typical_max": 12.0,
+      "description": "Width of pavement marking line",
+      "aliases": ["width", "stripe_width"]
+    },
+    {
+      "name": "Line Length",
+      "rust_field": "line_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 1.0,
+      "typical_max": 50.0,
+      "description": "Length of marking segment (for broken lines)",
+      "aliases": ["segment_length", "stripe_length"]
+    },
+    {
+      "name": "Gap Length",
+      "rust_field": "gap_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 40.0,
+      "description": "Gap between marking segments (for broken lines)",
+      "aliases": ["break_length", "space"]
+    },
+    {
+      "name": "Line Color",
+      "rust_field": "line_color",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "white,yellow,blue,red,purple",
+      "description": "Color of pavement marking",
+      "aliases": ["color", "marking_color"]
+    },
+    {
+      "name": "Line Pattern",
+      "rust_field": "line_pattern",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "solid,broken,dotted,double_solid,double_broken,solid_broken,broken_solid",
+      "description": "Pattern of pavement marking",
+      "aliases": ["pattern", "type", "style"]
+    },
+    {
+      "name": "Marking Type",
+      "rust_field": "marking_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "lane_line,edge_line,centerline,crosswalk,stop_line,yield_line,arrow,symbol,word,chevron,rumble_strip",
+      "description": "Functional type of marking",
+      "aliases": ["type", "function"]
+    },
+    {
+      "name": "Retroreflectivity",
+      "rust_field": "retroreflectivity",
+      "unit": "mcd/m²/lux",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 500.0,
+      "description": "Retroreflectivity measurement of marking",
+      "aliases": ["retro", "reflectivity"]
+    },
+    {
+      "name": "Material Type",
+      "rust_field": "material_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "paint,thermoplastic,tape,epoxy,mma",
+      "description": "Marking material type",
+      "aliases": ["material", "product"]
+    },
+    {
+      "name": "Condition Score",
+      "rust_field": "condition_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Overall marking condition/wear score",
+      "aliases": ["condition", "wear"]
+    },
+    {
+      "name": "Detection Confidence",
+      "rust_field": "confidence",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "ML model detection confidence score",
+      "aliases": ["conf", "score", "detection_score"]
+    },
+    {
+      "name": "Visibility Score",
+      "rust_field": "visibility_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Daytime visibility score",
+      "aliases": ["visibility", "legibility"]
+    },
+    {
+      "name": "Night Visibility",
+      "rust_field": "night_visibility",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Nighttime visibility score",
+      "aliases": ["night_score", "dark_visibility"]
+    },
+    {
+      "name": "Continuity Score",
+      "rust_field": "continuity_score",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Score for marking continuity/completeness",
+      "aliases": ["continuity", "completeness"]
+    },
+    {
+      "name": "Edge Sharpness",
+      "rust_field": "edge_sharpness",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 1.0,
+      "description": "Score for marking edge definition",
+      "aliases": ["sharpness", "definition"]
+    }
+  ]
+}

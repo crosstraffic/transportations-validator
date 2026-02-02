@@ -5,7 +5,6 @@ from typing import Any
 from transportations_validator.extractors.base import BaseExtractor, ExtractionResult
 from transportations_validator.models.validation import SourceType, ValidationContext
 
-
 # Mapping of Rust field names to canonical parameter names
 BASICFREEWAY_FIELDS = {
     "apd": {"name": "Access Point Density", "unit": "pts/mi"},
@@ -136,9 +135,7 @@ class RustLibExtractor(BaseExtractor):
 
         return None
 
-    def _extract_basicfreeway(
-        self, data: dict[str, Any], errors: list[str]
-    ) -> dict[str, Any]:
+    def _extract_basicfreeway(self, data: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         """Extract BasicFreeway parameters."""
         params = {}
 
@@ -154,9 +151,7 @@ class RustLibExtractor(BaseExtractor):
 
         return params
 
-    def _extract_twolane(
-        self, data: dict[str, Any], errors: list[str]
-    ) -> dict[str, Any]:
+    def _extract_twolane(self, data: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         """Extract TwoLaneHighway parameters."""
         params = {}
 
@@ -210,9 +205,7 @@ class RustLibExtractor(BaseExtractor):
 
         return params
 
-    def _build_context(
-        self, data: dict[str, Any], facility_type: str | None
-    ) -> ValidationContext:
+    def _build_context(self, data: dict[str, Any], facility_type: str | None) -> ValidationContext:
         """Build validation context from data."""
         context_data: dict[str, Any] = {}
 

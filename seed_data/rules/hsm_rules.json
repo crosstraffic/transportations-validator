@@ -1,0 +1,209 @@
+{
+  "source_doc": {
+    "title": "Highway Safety Manual",
+    "abbreviation": "HSM",
+    "edition": "1st Edition with Supplement",
+    "publisher": "AASHTO",
+    "publication_year": 2014,
+    "jurisdiction": "federal",
+    "priority": 85
+  },
+  "parameters": [
+    {
+      "name": "Clear Zone Width",
+      "rust_field": "clear_zone",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 7.0,
+      "typical_max": 30.0,
+      "description": "Roadside clear zone width"
+    },
+    {
+      "name": "Driveway Density",
+      "rust_field": "driveway_density",
+      "facility_type": "TwoLaneHighway",
+      "unit": "per mi",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Number of driveways per mile"
+    },
+    {
+      "name": "Horizontal Curve Radius",
+      "rust_field": "curve_radius",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 100.0,
+      "typical_max": 10000.0,
+      "description": "Horizontal curve radius"
+    },
+    {
+      "name": "Horizontal Curve Length",
+      "rust_field": "curve_length",
+      "facility_type": "TwoLaneHighway",
+      "unit": "mi",
+      "data_type": "float",
+      "typical_min": 0.01,
+      "typical_max": 2.0,
+      "description": "Length of horizontal curve"
+    },
+    {
+      "name": "Rumble Strip Presence",
+      "rust_field": "rumble_strips",
+      "facility_type": "TwoLaneHighway",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "none,centerline,shoulder,both",
+      "description": "Type of rumble strip installation"
+    },
+    {
+      "name": "Lighting Presence",
+      "rust_field": "lighting",
+      "facility_type": "TwoLaneHighway",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "none,partial,full",
+      "description": "Roadway lighting installation"
+    },
+    {
+      "name": "Automated Speed Enforcement",
+      "rust_field": "speed_enforcement",
+      "facility_type": "UrbanStreet",
+      "unit": null,
+      "data_type": "boolean",
+      "description": "Presence of automated speed enforcement"
+    }
+  ],
+  "rules": [
+    {
+      "parameter_rust_field": "clear_zone",
+      "facility_type": "TwoLaneHighway",
+      "name": "Clear Zone - Low Speed (HSM)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 7.0,
+      "description": "Minimum clear zone for design speeds under 40 mph",
+      "error_message": "Clear zone should be at least 7 ft for low-speed facilities",
+      "source_ref": {"chapter": "10", "section": "10.7"},
+      "conditions": [{"type": "speed_category", "value": "low"}]
+    },
+    {
+      "parameter_rust_field": "clear_zone",
+      "facility_type": "TwoLaneHighway",
+      "name": "Clear Zone - Moderate Speed (HSM)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 14.0,
+      "description": "Minimum clear zone for design speeds 40-50 mph",
+      "error_message": "Clear zone should be at least 14 ft for moderate-speed facilities",
+      "source_ref": {"chapter": "10", "section": "10.7"},
+      "conditions": [{"type": "speed_category", "value": "moderate"}]
+    },
+    {
+      "parameter_rust_field": "clear_zone",
+      "facility_type": "TwoLaneHighway",
+      "name": "Clear Zone - High Speed (HSM)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 22.0,
+      "description": "Minimum clear zone for design speeds over 50 mph",
+      "error_message": "Clear zone should be at least 22 ft for high-speed facilities",
+      "source_ref": {"chapter": "10", "section": "10.7"},
+      "conditions": [{"type": "speed_category", "value": "high"}]
+    },
+    {
+      "parameter_rust_field": "driveway_density",
+      "facility_type": "TwoLaneHighway",
+      "name": "Driveway Density - Rural (HSM)",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 5.0,
+      "description": "Recommended maximum driveway density for rural two-lane roads",
+      "error_message": "High driveway density (>5/mi) increases crash risk",
+      "source_ref": {"chapter": "10", "section": "10.6"}
+    },
+    {
+      "parameter_rust_field": "driveway_density",
+      "facility_type": "UrbanStreet",
+      "name": "Driveway Density - Urban Arterial (HSM)",
+      "rule_type": "max",
+      "severity": "warning",
+      "max_value": 20.0,
+      "description": "High driveway density increases crash risk on urban arterials",
+      "error_message": "Driveway density above 20/mi significantly increases crash risk",
+      "source_ref": {"chapter": "12", "section": "12.6"}
+    },
+    {
+      "parameter_rust_field": "curve_radius",
+      "facility_type": "TwoLaneHighway",
+      "name": "Minimum Curve Radius - 30 mph (HSM)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 273.0,
+      "description": "Minimum horizontal curve radius for 30 mph design speed",
+      "error_message": "Curve radius below minimum for 30 mph design speed",
+      "source_ref": {"chapter": "10", "section": "10.5"},
+      "conditions": [{"type": "design_speed", "value": "30"}]
+    },
+    {
+      "parameter_rust_field": "curve_radius",
+      "facility_type": "TwoLaneHighway",
+      "name": "Minimum Curve Radius - 45 mph (HSM)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 643.0,
+      "description": "Minimum horizontal curve radius for 45 mph design speed",
+      "error_message": "Curve radius below minimum for 45 mph design speed",
+      "source_ref": {"chapter": "10", "section": "10.5"},
+      "conditions": [{"type": "design_speed", "value": "45"}]
+    },
+    {
+      "parameter_rust_field": "curve_radius",
+      "facility_type": "TwoLaneHighway",
+      "name": "Minimum Curve Radius - 60 mph (HSM)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 1200.0,
+      "description": "Minimum horizontal curve radius for 60 mph design speed",
+      "error_message": "Curve radius below minimum for 60 mph design speed",
+      "source_ref": {"chapter": "10", "section": "10.5"},
+      "conditions": [{"type": "design_speed", "value": "60"}]
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Lane Width Safety CMF (HSM)",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 11.0,
+      "max_value": 12.0,
+      "description": "Lane widths of 11-12 ft have lowest crash modification factor",
+      "error_message": "Lane width outside optimal safety range (11-12 ft)",
+      "source_ref": {"chapter": "10", "section": "10.6"}
+    },
+    {
+      "parameter_rust_field": "shoulder_width",
+      "facility_type": "TwoLaneHighway",
+      "name": "Shoulder Width Safety CMF (HSM)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 6.0,
+      "description": "Shoulder widths of 6+ ft associated with reduced crash rates",
+      "error_message": "Shoulder width below 6 ft increases run-off-road crash risk",
+      "source_ref": {"chapter": "10", "section": "10.6"}
+    },
+    {
+      "parameter_rust_field": "rumble_strips",
+      "facility_type": "TwoLaneHighway",
+      "name": "Rumble Strip Recommendation (HSM)",
+      "rule_type": "enum",
+      "severity": "info",
+      "allowed_values": "centerline,shoulder,both",
+      "description": "Rumble strips recommended for safety on rural two-lane roads",
+      "error_message": "Consider installing rumble strips for crash reduction",
+      "source_ref": {"chapter": "10", "section": "10.7"}
+    }
+  ]
+}

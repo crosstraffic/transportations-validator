@@ -5,11 +5,10 @@ import logging
 from typing import Any
 
 from sqlalchemy import event
-from sqlalchemy.orm import Session
 
+from transportations_validator.models.condition import ConditionType, ConditionValue
 from transportations_validator.models.parameter import Parameter, ParameterAlias
 from transportations_validator.models.rule import DesignRule, RuleCondition, RuleSource
-from transportations_validator.models.condition import ConditionType, ConditionValue
 from transportations_validator.models.source import SourceDoc, SourceRef
 
 logger = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 """Condition type and value repository."""
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -30,9 +30,7 @@ class ConditionRepository(BaseRepository[ConditionType]):
         )
         return result.scalars().all()
 
-    async def get_value_by_name(
-        self, type_name: str, value: str
-    ) -> ConditionValue | None:
+    async def get_value_by_name(self, type_name: str, value: str) -> ConditionValue | None:
         """Get a specific condition value by type name and value."""
         result = await self.session.execute(
             select(ConditionValue)

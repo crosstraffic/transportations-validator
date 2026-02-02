@@ -1,0 +1,267 @@
+{
+  "source_doc": {
+    "title": "A Policy on Geometric Design of Highways and Streets",
+    "abbreviation": "AASHTO-GB",
+    "edition": "7th Edition",
+    "publisher": "AASHTO",
+    "publication_year": 2018,
+    "jurisdiction": "federal",
+    "priority": 90
+  },
+  "parameters": [
+    {
+      "name": "Stopping Sight Distance",
+      "rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 115.0,
+      "typical_max": 910.0,
+      "description": "Available stopping sight distance"
+    },
+    {
+      "name": "Passing Sight Distance",
+      "rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 400.0,
+      "typical_max": 2800.0,
+      "description": "Available passing sight distance"
+    },
+    {
+      "name": "Decision Sight Distance",
+      "rust_field": "dsd",
+      "facility_type": "BasicFreeway",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 450.0,
+      "typical_max": 1275.0,
+      "description": "Decision sight distance for complex situations"
+    },
+    {
+      "name": "Design Speed",
+      "rust_field": "design_speed",
+      "facility_type": "TwoLaneHighway",
+      "unit": "mph",
+      "data_type": "integer",
+      "typical_min": 20,
+      "typical_max": 80,
+      "description": "Design speed of the roadway"
+    },
+    {
+      "name": "Design Speed",
+      "rust_field": "design_speed",
+      "facility_type": "BasicFreeway",
+      "unit": "mph",
+      "data_type": "integer",
+      "typical_min": 50,
+      "typical_max": 80,
+      "description": "Design speed of the freeway"
+    }
+  ],
+  "rules": [
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 20 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 115.0,
+      "description": "Minimum stopping sight distance for 20 mph design speed",
+      "error_message": "SSD must be at least 115 ft for 20 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "20"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 30 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 200.0,
+      "description": "Minimum stopping sight distance for 30 mph design speed",
+      "error_message": "SSD must be at least 200 ft for 30 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "30"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 40 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 305.0,
+      "description": "Minimum stopping sight distance for 40 mph design speed",
+      "error_message": "SSD must be at least 305 ft for 40 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "40"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 50 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 425.0,
+      "description": "Minimum stopping sight distance for 50 mph design speed",
+      "error_message": "SSD must be at least 425 ft for 50 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "50"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 60 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 570.0,
+      "description": "Minimum stopping sight distance for 60 mph design speed",
+      "error_message": "SSD must be at least 570 ft for 60 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "60"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 70 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 730.0,
+      "description": "Minimum stopping sight distance for 70 mph design speed",
+      "error_message": "SSD must be at least 730 ft for 70 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "70"}]
+    },
+    {
+      "parameter_rust_field": "ssd",
+      "facility_type": "TwoLaneHighway",
+      "name": "SSD - 80 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 910.0,
+      "description": "Minimum stopping sight distance for 80 mph design speed",
+      "error_message": "SSD must be at least 910 ft for 80 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.2", "exhibit": "3-1"},
+      "conditions": [{"type": "design_speed", "value": "80"}]
+    },
+    {
+      "parameter_rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "name": "PSD - 30 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 500.0,
+      "description": "Minimum passing sight distance for 30 mph design speed",
+      "error_message": "PSD must be at least 500 ft for 30 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.3", "exhibit": "3-4"},
+      "conditions": [{"type": "design_speed", "value": "30"}]
+    },
+    {
+      "parameter_rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "name": "PSD - 40 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 600.0,
+      "description": "Minimum passing sight distance for 40 mph design speed",
+      "error_message": "PSD must be at least 600 ft for 40 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.3", "exhibit": "3-4"},
+      "conditions": [{"type": "design_speed", "value": "40"}]
+    },
+    {
+      "parameter_rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "name": "PSD - 50 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 1000.0,
+      "description": "Minimum passing sight distance for 50 mph design speed",
+      "error_message": "PSD must be at least 1000 ft for 50 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.3", "exhibit": "3-4"},
+      "conditions": [{"type": "design_speed", "value": "50"}]
+    },
+    {
+      "parameter_rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "name": "PSD - 60 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 1400.0,
+      "description": "Minimum passing sight distance for 60 mph design speed",
+      "error_message": "PSD must be at least 1400 ft for 60 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.3", "exhibit": "3-4"},
+      "conditions": [{"type": "design_speed", "value": "60"}]
+    },
+    {
+      "parameter_rust_field": "psd",
+      "facility_type": "TwoLaneHighway",
+      "name": "PSD - 70 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 1900.0,
+      "description": "Minimum passing sight distance for 70 mph design speed",
+      "error_message": "PSD must be at least 1900 ft for 70 mph design speed",
+      "source_ref": {"chapter": "3", "section": "3.2.3", "exhibit": "3-4"},
+      "conditions": [{"type": "design_speed", "value": "70"}]
+    },
+    {
+      "parameter_rust_field": "dsd",
+      "facility_type": "BasicFreeway",
+      "name": "DSD - 50 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 450.0,
+      "description": "Minimum decision sight distance for 50 mph on freeways",
+      "error_message": "Decision sight distance should be at least 450 ft for 50 mph",
+      "source_ref": {"chapter": "3", "section": "3.2.4", "exhibit": "3-7"},
+      "conditions": [{"type": "design_speed", "value": "50"}]
+    },
+    {
+      "parameter_rust_field": "dsd",
+      "facility_type": "BasicFreeway",
+      "name": "DSD - 60 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 675.0,
+      "description": "Minimum decision sight distance for 60 mph on freeways",
+      "error_message": "Decision sight distance should be at least 675 ft for 60 mph",
+      "source_ref": {"chapter": "3", "section": "3.2.4", "exhibit": "3-7"},
+      "conditions": [{"type": "design_speed", "value": "60"}]
+    },
+    {
+      "parameter_rust_field": "dsd",
+      "facility_type": "BasicFreeway",
+      "name": "DSD - 70 mph Design Speed (AASHTO)",
+      "rule_type": "min",
+      "severity": "warning",
+      "min_value": 975.0,
+      "description": "Minimum decision sight distance for 70 mph on freeways",
+      "error_message": "Decision sight distance should be at least 975 ft for 70 mph",
+      "source_ref": {"chapter": "3", "section": "3.2.4", "exhibit": "3-7"},
+      "conditions": [{"type": "design_speed", "value": "70"}]
+    },
+    {
+      "parameter_rust_field": "design_speed",
+      "facility_type": "TwoLaneHighway",
+      "name": "Design Speed vs Speed Limit (AASHTO)",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "design_speed >= spl",
+      "description": "Design speed must equal or exceed posted speed limit",
+      "error_message": "Design speed must be at least equal to posted speed limit",
+      "source_ref": {"chapter": "2", "section": "2.3.5"}
+    },
+    {
+      "parameter_rust_field": "design_speed",
+      "facility_type": "BasicFreeway",
+      "name": "Design Speed vs Speed Limit - Freeway (AASHTO)",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "design_speed >= speed_limit",
+      "description": "Design speed must equal or exceed posted speed limit",
+      "error_message": "Design speed must be at least equal to posted speed limit",
+      "source_ref": {"chapter": "2", "section": "2.3.5"}
+    }
+  ]
+}

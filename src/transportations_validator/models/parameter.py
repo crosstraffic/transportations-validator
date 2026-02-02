@@ -1,9 +1,9 @@
 """Parameter and parameter alias models."""
 
 from enum import Enum
-from typing import Optional
 
-from sqlalchemy import String, Text, Float, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import Float, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from transportations_validator.models.base import Base, TimestampMixin
@@ -12,10 +12,19 @@ from transportations_validator.models.base import Base, TimestampMixin
 class FacilityType(str, Enum):
     """Transportation facility types."""
 
+    # Traditional roadway types
     BASIC_FREEWAY = "BasicFreeway"
     TWO_LANE_HIGHWAY = "TwoLaneHighway"
     MULTILANE_HIGHWAY = "MultilaneHighway"
     URBAN_STREET = "UrbanStreet"
+
+    # Digital twin / lane detection types
+    LANE_GEOMETRY = "LaneGeometry"
+    SIDEWALK = "Sidewalk"
+    CROSSWALK = "Crosswalk"
+    TRAFFIC_SIGN = "TrafficSign"
+    TRAFFIC_SIGNAL = "TrafficSignal"
+    PAVEMENT_MARKING = "PavementMarking"
 
 
 class DataType(str, Enum):
@@ -25,6 +34,8 @@ class DataType(str, Enum):
     INTEGER = "integer"
     PERCENTAGE = "percentage"
     ENUM = "enum"
+    BOOLEAN = "boolean"
+    STRING = "string"
 
 
 class Parameter(Base, TimestampMixin):
@@ -36,22 +47,20 @@ class Parameter(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     rust_field: Mapped[str] = mapped_column(String(100), nullable=False)
     facility_type: Mapped[FacilityType] = mapped_column(
-        SQLEnum(FacilityType, values_callable=lambda x: [e.value for e in x]),
-        nullable=False
+        SQLEnum(FacilityType, values_callable=lambda x: [e.value for e in x]), nullable=False
     )
-    unit: Mapped[Optional[str]] = mapped_column(String(50))
+    unit: Mapped[str | None] = mapped_column(String(50))
     data_type: Mapped[DataType] = mapped_column(
-        SQLEnum(DataType, values_callable=lambda x: [e.value for e in x]),
-        default=DataType.FLOAT
+        SQLEnum(DataType, values_callable=lambda x: [e.value for e in x]), default=DataType.FLOAT
     )
-    description: Mapped[Optional[str]] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(Text)
 
     # Typical value range (for display/reference only)
-    typical_min: Mapped[Optional[float]] = mapped_column(Float)
-    typical_max: Mapped[Optional[float]] = mapped_column(Float)
+    typical_min: Mapped[float | None] = mapped_column(Float)
+    typical_max: Mapped[float | None] = mapped_column(Float)
 
     # Allowed enum values (if data_type is ENUM)
-    allowed_values: Mapped[Optional[str]] = mapped_column(Text)
+    allowed_values: Mapped[str | None] = mapped_column(Text)
 
     # Relationships
     aliases: Mapped[list["ParameterAlias"]] = relationship(

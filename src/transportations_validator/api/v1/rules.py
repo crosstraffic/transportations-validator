@@ -1,21 +1,21 @@
 """Design rule CRUD API endpoints."""
 
-from typing import Optional, Any
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from transportations_validator.db.postgres import get_session
-from transportations_validator.db.postgres.repositories import RuleRepository, ParameterRepository
-from transportations_validator.models.validation import RuleResponse, RuleCreate
+from transportations_validator.db.postgres.repositories import ParameterRepository, RuleRepository
 from transportations_validator.models.rule import RuleType, Severity
+from transportations_validator.models.validation import RuleCreate, RuleResponse
 
 router = APIRouter()
 
 
 @router.get("/rules/", response_model=list[RuleResponse])
 async def list_rules(
-    parameter_id: Optional[int] = Query(None, description="Filter by parameter ID"),
+    parameter_id: int | None = Query(None, description="Filter by parameter ID"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     session: AsyncSession = Depends(get_session),
@@ -112,17 +112,19 @@ async def create_rule(
 
     repo = RuleRepository(session)
 
-    rule = await repo.create({
-        "parameter_id": data.parameter_id,
-        "name": data.name,
-        "rule_type": rule_type,
-        "severity": severity,
-        "min_value": data.min_value,
-        "max_value": data.max_value,
-        "allowed_values": data.allowed_values,
-        "description": data.description,
-        "error_message": data.error_message,
-    })
+    rule = await repo.create(
+        {
+            "parameter_id": data.parameter_id,
+            "name": data.name,
+            "rule_type": rule_type,
+            "severity": severity,
+            "min_value": data.min_value,
+            "max_value": data.max_value,
+            "allowed_values": data.allowed_values,
+            "description": data.description,
+            "error_message": data.error_message,
+        }
+    )
 
     return RuleResponse(
         id=rule.id,
@@ -161,16 +163,19 @@ async def update_rule(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    rule = await repo.update(rule_id, {
-        "name": data.name,
-        "rule_type": rule_type,
-        "severity": severity,
-        "min_value": data.min_value,
-        "max_value": data.max_value,
-        "allowed_values": data.allowed_values,
-        "description": data.description,
-        "error_message": data.error_message,
-    })
+    rule = await repo.update(
+        rule_id,
+        {
+            "name": data.name,
+            "rule_type": rule_type,
+            "severity": severity,
+            "min_value": data.min_value,
+            "max_value": data.max_value,
+            "allowed_values": data.allowed_values,
+            "description": data.description,
+            "error_message": data.error_message,
+        },
+    )
 
     return RuleResponse(
         id=rule.id,
@@ -268,9 +273,9 @@ async def add_rule_source(
 @router.get("/rules/for-context/")
 async def get_rules_for_context(
     parameter_id: int = Query(..., description="Parameter ID"),
-    facility_type: Optional[str] = Query(None),
-    terrain_type: Optional[str] = Query(None),
-    city_type: Optional[str] = Query(None),
+    facility_type: str | None = Query(None),
+    terrain_type: str | None = Query(None),
+    city_type: str | None = Query(None),
     session: AsyncSession = Depends(get_session),
 ) -> list[RuleResponse]:
     """

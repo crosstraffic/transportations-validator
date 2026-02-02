@@ -1,0 +1,130 @@
+{
+  "source_doc": {
+    "title": "OpenDRIVE Road Marking Standards",
+    "abbreviation": "OPENDRIVE-MARK",
+    "edition": "1.7",
+    "publisher": "ASAM",
+    "publication_year": 2022,
+    "jurisdiction": "international",
+    "priority": 90
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "mark_soffset",
+      "facility_type": "PavementMarking",
+      "name": "Road Mark S-Offset Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Road mark sOffset must be >= 0",
+      "error_message": "Road mark sOffset cannot be negative",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "mark_width",
+      "facility_type": "PavementMarking",
+      "name": "Road Mark Width Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Road mark width must be >= 0",
+      "error_message": "Road mark width cannot be negative",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "mark_width",
+      "facility_type": "PavementMarking",
+      "name": "Road Mark Width Standard Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.10,
+      "max_value": 0.50,
+      "description": "Standard marking width 0.1-0.5m (4-20 in)",
+      "error_message": "Road mark width outside standard range",
+      "source_ref": {"chapter": "MUTCD", "section": "3A.05"}
+    },
+    {
+      "parameter_rust_field": "mark_height",
+      "facility_type": "PavementMarking",
+      "name": "Road Mark Height Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.0,
+      "max_value": 0.1,
+      "description": "Road mark height/thickness typically 0-0.1m",
+      "error_message": "Road mark height exceeds typical range",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "explicit_length",
+      "facility_type": "PavementMarking",
+      "name": "Explicit Line Length Non-Negative",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.0,
+      "description": "Explicit line length must be >= 0",
+      "error_message": "Explicit line length cannot be negative",
+      "source_ref": {"chapter": "9", "section": "ExplicitLine"}
+    },
+    {
+      "parameter_rust_field": "explicit_length",
+      "facility_type": "PavementMarking",
+      "name": "Explicit Line Length Standard",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 2.5,
+      "max_value": 4.0,
+      "description": "Standard broken line segment 3m (10 ft)",
+      "error_message": "Line segment length outside typical range",
+      "source_ref": {"chapter": "MUTCD", "section": "3A.06"}
+    },
+    {
+      "parameter_rust_field": "explicit_toffset",
+      "facility_type": "PavementMarking",
+      "name": "Explicit Line T-Offset Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": -10.0,
+      "max_value": 10.0,
+      "description": "T-offset should be within lane width range",
+      "error_message": "Explicit line t-offset exceeds typical range",
+      "source_ref": {"chapter": "9", "section": "ExplicitLine"}
+    },
+    {
+      "parameter_rust_field": "material_friction",
+      "facility_type": "PavementMarking",
+      "name": "Material Friction Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "description": "Friction coefficient must be 0-1",
+      "error_message": "Friction coefficient outside valid range [0, 1]",
+      "source_ref": {"chapter": "9", "section": "Material"}
+    },
+    {
+      "parameter_rust_field": "material_friction",
+      "facility_type": "PavementMarking",
+      "name": "Material Friction Typical",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 0.3,
+      "max_value": 0.9,
+      "description": "Typical road friction 0.3-0.9",
+      "error_message": "Friction coefficient outside typical road surface range",
+      "source_ref": {"chapter": "Physical", "section": "Friction"}
+    },
+    {
+      "parameter_rust_field": "material_roughness",
+      "facility_type": "PavementMarking",
+      "name": "Material Roughness Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "description": "Roughness value must be 0-1",
+      "error_message": "Roughness value outside valid range [0, 1]",
+      "source_ref": {"chapter": "9", "section": "Material"}
+    }
+  ]
+}
