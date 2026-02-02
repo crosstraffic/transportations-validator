@@ -1,0 +1,151 @@
+{
+  "source_doc": {
+    "title": "CrossTraffic Semantic Firewall - Core Constraints",
+    "abbreviation": "CT-FIREWALL",
+    "edition": "1.0",
+    "publisher": "CrossTraffic",
+    "publication_year": 2025,
+    "description": "Five hard constraints demonstrating Knowledge Graph validation capability",
+    "paper_reference": "Section 2.2 - The Semantic Validator"
+  },
+  "semantic_firewall_constraints": [
+    {
+      "id": "SF-001",
+      "name": "Lane Width Constraint",
+      "parameter": "lane_width",
+      "facility_type": "TwoLaneHighway",
+      "constraint": "9.0 <= lane_width <= 12.0",
+      "unit": "ft",
+      "sources": [
+        {"document": "HCM 7th Edition", "reference": "Exhibit 15-8"},
+        {"document": "AASHTO Green Book", "reference": "Chapter 4.3"}
+      ],
+      "rationale": "Lane width affects driver comfort, safety, and capacity. Values outside this range are physically implausible or non-compliant.",
+      "error_message": "VALIDATION ERROR: Lane width {value} ft violates constraint. Must be 9-12 ft per HCM Exhibit 15-8.",
+      "adversarial_examples": [
+        {"input": 8.0, "expected": "REJECT", "reason": "Below minimum"},
+        {"input": 14.0, "expected": "REJECT", "reason": "Above maximum"},
+        {"input": 11.0, "expected": "ACCEPT", "reason": "Within range"}
+      ]
+    },
+    {
+      "id": "SF-002",
+      "name": "Shoulder Width Constraint",
+      "parameter": "shoulder_width",
+      "facility_type": "TwoLaneHighway",
+      "constraint": "0.0 <= shoulder_width <= 8.0",
+      "unit": "ft",
+      "sources": [
+        {"document": "HCM 7th Edition", "reference": "Exhibit 15-8"},
+        {"document": "AASHTO Green Book", "reference": "Chapter 4.4.2"}
+      ],
+      "rationale": "Shoulder width provides recovery area and affects FFS adjustment. HCM adjustment factors are defined only for 0-6 ft range.",
+      "error_message": "VALIDATION ERROR: Shoulder width {value} ft violates constraint. Must be 0-8 ft per HCM/Green Book.",
+      "adversarial_examples": [
+        {"input": -1.0, "expected": "REJECT", "reason": "Negative value impossible"},
+        {"input": 12.0, "expected": "REJECT", "reason": "Above maximum"},
+        {"input": 6.0, "expected": "ACCEPT", "reason": "Within range"}
+      ]
+    },
+    {
+      "id": "SF-003",
+      "name": "Horizontal Alignment Class Constraint",
+      "parameter": "hor_class",
+      "facility_type": "TwoLaneHighway",
+      "constraint": "hor_class IN {0, 1, 2, 3, 4, 5}",
+      "unit": null,
+      "sources": [
+        {"document": "HCM 7th Edition", "reference": "Exhibit 15-22"}
+      ],
+      "rationale": "Horizontal class is a discrete classification (0=tangent to 5=severe curve) used in speed-flow calculations. Invalid values break the methodology.",
+      "error_message": "VALIDATION ERROR: Horizontal class {value} is invalid. Must be 0-5 per HCM Exhibit 15-22.",
+      "adversarial_examples": [
+        {"input": -1, "expected": "REJECT", "reason": "Negative invalid"},
+        {"input": 6, "expected": "REJECT", "reason": "Above maximum class"},
+        {"input": 3, "expected": "ACCEPT", "reason": "Valid class (Sharp curve)"}
+      ]
+    },
+    {
+      "id": "SF-004",
+      "name": "Passing Type Constraint",
+      "parameter": "passing_type",
+      "facility_type": "TwoLaneHighway",
+      "constraint": "passing_type IN {0, 1, 2}",
+      "unit": null,
+      "sources": [
+        {"document": "HCM 7th Edition", "reference": "Chapter 15.3"}
+      ],
+      "rationale": "Passing type determines segment capacity: 0=Constrained (no passing), 1=Passing Zone, 2=Passing Lane. These are the only valid configurations.",
+      "error_message": "VALIDATION ERROR: Passing type {value} is invalid. Must be 0 (Constrained), 1 (Zone), or 2 (Lane).",
+      "class_descriptions": {
+        "0": "Passing Constrained - No passing opportunities",
+        "1": "Passing Zone - Passing permitted in designated zones",
+        "2": "Passing Lane - Dedicated passing lane provided"
+      },
+      "adversarial_examples": [
+        {"input": 3, "expected": "REJECT", "reason": "Invalid type"},
+        {"input": -1, "expected": "REJECT", "reason": "Negative invalid"},
+        {"input": 1, "expected": "ACCEPT", "reason": "Valid (Passing Zone)"}
+      ]
+    },
+    {
+      "id": "SF-005",
+      "name": "Speed-Curvature Compatibility Constraint",
+      "parameter": "design_rad",
+      "related_parameter": "spl",
+      "facility_type": "TwoLaneHighway",
+      "constraint": "design_rad >= min_radius_for_speed(spl)",
+      "unit": "ft",
+      "sources": [
+        {"document": "AASHTO Green Book", "reference": "Table 3-7"},
+        {"document": "HCM 7th Edition", "reference": "Chapter 15"}
+      ],
+      "rationale": "Curve radius must be adequate for design speed to prevent vehicle rollover. This is a physics-based safety constraint.",
+      "error_message": "VALIDATION ERROR: Design radius {radius} ft is too small for speed limit {speed} mph. Minimum radius: {min_radius} ft per Green Book Table 3-7.",
+      "min_radius_table": {
+        "25": 170,
+        "30": 230,
+        "35": 340,
+        "40": 430,
+        "45": 560,
+        "50": 710,
+        "55": 835,
+        "60": 1000,
+        "65": 1150,
+        "70": 1310
+      },
+      "adversarial_examples": [
+        {"input": {"spl": 55, "design_rad": 500}, "expected": "REJECT", "reason": "Radius 500 < 835 ft minimum for 55 mph"},
+        {"input": {"spl": 55, "design_rad": 1000}, "expected": "ACCEPT", "reason": "Radius 1000 >= 835 ft minimum"},
+        {"input": {"spl": 45, "design_rad": 400}, "expected": "REJECT", "reason": "Radius 400 < 560 ft minimum for 45 mph"}
+      ]
+    }
+  ],
+  "validation_workflow": {
+    "description": "Pre-flight check before HCM calculations",
+    "steps": [
+      {"step": 1, "action": "Receive input parameters from user/LLM"},
+      {"step": 2, "action": "Query Knowledge Graph for applicable constraints"},
+      {"step": 3, "action": "Evaluate each constraint against input values"},
+      {"step": 4, "action": "If ANY constraint fails → REJECT with error message"},
+      {"step": 5, "action": "If ALL constraints pass → Forward to Rust Computational Core"}
+    ],
+    "trust_model": {
+      "untrusted": ["User Input", "LLM Translation"],
+      "trusted": ["Knowledge Graph Validator", "Rust Computational Core"]
+    }
+  },
+  "experiment_design": {
+    "hypothesis": "The Knowledge Graph catches invalid inputs that a pure RAG/LLM would miss",
+    "method": "Feed 50 adversarial queries (25 valid, 25 invalid) to both systems",
+    "metrics": [
+      "True Positive Rate (correctly reject invalid)",
+      "False Positive Rate (incorrectly reject valid)",
+      "Error Message Quality (actionable vs generic)"
+    ],
+    "expected_result": {
+      "crosstraffic": "100% detection of constraint violations with specific error messages",
+      "baseline_rag": "Hallucination or generic error for many invalid inputs"
+    }
+  }
+}

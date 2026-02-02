@@ -266,6 +266,95 @@
       "source_ref": {"chapter": "15", "section": "15-9"}
     },
     {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Design Radius Range - Two Lane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 100.0,
+      "max_value": 10000.0,
+      "description": "Design radius must be within feasible range",
+      "error_message": "Design radius must be between 100 and 10000 feet",
+      "source_ref": {"document": "Green Book", "section": "3.3"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Speed-Curvature Compatibility - 45 mph",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "spl <= 45 or design_rad >= 560",
+      "description": "Minimum radius for 45 mph design speed (Green Book Table 3-7)",
+      "error_message": "Design radius too small for speed limit >= 45 mph (min 560 ft)",
+      "source_ref": {"document": "Green Book", "section": "Table 3-7"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Speed-Curvature Compatibility - 50 mph",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "spl <= 50 or design_rad >= 710",
+      "description": "Minimum radius for 50 mph design speed (Green Book Table 3-7)",
+      "error_message": "Design radius too small for speed limit >= 50 mph (min 710 ft)",
+      "source_ref": {"document": "Green Book", "section": "Table 3-7"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Speed-Curvature Compatibility - 55 mph",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "spl <= 55 or design_rad >= 835",
+      "description": "Minimum radius for 55 mph design speed (Green Book Table 3-7)",
+      "error_message": "Design radius too small for speed limit >= 55 mph (min 835 ft)",
+      "source_ref": {"document": "Green Book", "section": "Table 3-7"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Speed-Curvature Compatibility - 60 mph",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "spl <= 60 or design_rad >= 1000",
+      "description": "Minimum radius for 60 mph design speed (Green Book Table 3-7)",
+      "error_message": "Design radius too small for speed limit >= 60 mph (min 1000 ft)",
+      "source_ref": {"document": "Green Book", "section": "Table 3-7"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Design Radius vs Horizontal Class - Class 0",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "design_rad >= 2550 implies hor_class == 0",
+      "description": "Tangent alignment (R >= 2550 ft)",
+      "error_message": "Design radius >= 2550 ft should be class 0 (tangent)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Design Radius vs Horizontal Class - Class 1",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad >= 1350 and design_rad < 2550) implies hor_class == 1",
+      "description": "Gentle curve (1350 <= R < 2550 ft)",
+      "error_message": "Design radius 1350-2550 ft should be class 1 (gentle)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "TwoLaneHighway",
+      "name": "Design Radius vs Horizontal Class - Class 2-5",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad < 1350 and design_rad >= 750) implies hor_class == 2",
+      "description": "Moderate to severe curve classification",
+      "error_message": "Design radius should match horizontal class",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
       "parameter_rust_field": "shoulder_width",
       "facility_type": "BasicFreeway",
       "name": "Shoulder Width Range - Basic Freeway",
