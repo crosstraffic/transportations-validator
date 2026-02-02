@@ -1,0 +1,275 @@
+{
+  "source_doc": {
+    "title": "Lane Detection Validation Standards",
+    "abbreviation": "DETECT-VAL",
+    "edition": "1.0",
+    "publisher": "Transportation Validator",
+    "publication_year": 2025,
+    "jurisdiction": "internal",
+    "priority": 100
+  },
+  "confidence_thresholds": {
+    "description": "Minimum confidence scores by parameter type for reliable detection",
+    "thresholds": [
+      {
+        "parameter": "lane_width",
+        "min_confidence": 0.85,
+        "description": "Lane width detection requires high confidence for accurate geometry"
+      },
+      {
+        "parameter": "curvature",
+        "min_confidence": 0.80,
+        "description": "Curvature detection can tolerate slightly lower confidence"
+      },
+      {
+        "parameter": "marking_type",
+        "min_confidence": 0.90,
+        "description": "Marking type classification requires high confidence for safety"
+      },
+      {
+        "parameter": "marking_color",
+        "min_confidence": 0.90,
+        "description": "Marking color classification requires high confidence for safety"
+      },
+      {
+        "parameter": "lane_count",
+        "min_confidence": 0.85,
+        "description": "Lane count must be reliably detected"
+      },
+      {
+        "parameter": "centerline",
+        "min_confidence": 0.80,
+        "description": "Centerline position detection"
+      },
+      {
+        "parameter": "boundary",
+        "min_confidence": 0.80,
+        "description": "Lane boundary position detection"
+      }
+    ]
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "confidence",
+      "facility_type": "LaneGeometry",
+      "name": "Lane Width Detection Confidence",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lane_width != null implies confidence >= 0.85",
+      "description": "Lane width detection requires minimum 85% confidence",
+      "error_message": "Lane width detection confidence below 85% threshold",
+      "source_ref": {"chapter": "Detection", "section": "Confidence"}
+    },
+    {
+      "parameter_rust_field": "confidence",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Detection Confidence",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "curvature != null and curvature != 0 implies confidence >= 0.80",
+      "description": "Curvature detection requires minimum 80% confidence",
+      "error_message": "Curvature detection confidence below 80% threshold",
+      "source_ref": {"chapter": "Detection", "section": "Confidence"}
+    },
+    {
+      "parameter_rust_field": "confidence",
+      "facility_type": "LaneGeometry",
+      "name": "Marking Type Detection Confidence",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "(left_line_type != null or right_line_type != null) implies confidence >= 0.90",
+      "description": "Marking type classification requires minimum 90% confidence for safety",
+      "error_message": "Marking type detection confidence below 90% threshold - safety critical",
+      "source_ref": {"chapter": "Detection", "section": "Confidence"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 25 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 25 or curvature <= 0.0058",
+      "description": "Curvature must be compatible with speed limit (R >= 170 ft for 25 mph)",
+      "error_message": "Curvature too sharp for speed limit 25+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 35 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 35 or curvature <= 0.0030",
+      "description": "Curvature must be compatible with speed limit (R >= 340 ft for 35 mph)",
+      "error_message": "Curvature too sharp for speed limit 35+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 45 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 45 or curvature <= 0.0018",
+      "description": "Curvature must be compatible with speed limit (R >= 560 ft for 45 mph)",
+      "error_message": "Curvature too sharp for speed limit 45+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 55 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 55 or curvature <= 0.0012",
+      "description": "Curvature must be compatible with speed limit (R >= 835 ft for 55 mph)",
+      "error_message": "Curvature too sharp for speed limit 55+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 65 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 65 or curvature <= 0.00087",
+      "description": "Curvature must be compatible with speed limit (R >= 1150 ft for 65 mph)",
+      "error_message": "Curvature too sharp for speed limit 65+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature vs Speed Limit - 75 mph",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "speed_limit <= 75 or curvature <= 0.00064",
+      "description": "Curvature must be compatible with speed limit (R >= 1560 ft for 75 mph)",
+      "error_message": "Curvature too sharp for speed limit 75+ mph",
+      "source_ref": {"document": "Green Book", "section": "3.3.3"}
+    },
+    {
+      "parameter_rust_field": "left_line_type",
+      "facility_type": "LaneGeometry",
+      "name": "Yellow Marking on Left Edge Only",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "left_line_type not in ['solid_yellow', 'broken_yellow', 'double_yellow'] or lane_type in ['travel', 'turn_left']",
+      "description": "Yellow markings should only appear on left side separating opposing traffic",
+      "error_message": "Yellow marking on left edge - verify opposing traffic separation",
+      "source_ref": {"chapter": "MUTCD", "section": "3B.01"}
+    },
+    {
+      "parameter_rust_field": "right_line_type",
+      "facility_type": "LaneGeometry",
+      "name": "White Marking on Right Edge",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "right_line_type not in ['solid_yellow', 'broken_yellow', 'double_yellow']",
+      "description": "Right lane edge should have white markings, not yellow",
+      "error_message": "Yellow marking detected on right edge - verify lane configuration",
+      "source_ref": {"chapter": "MUTCD", "section": "3B.01"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "LaneGeometry",
+      "name": "Lane Width Consistency Check",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "width_variance <= lane_width * 0.1",
+      "description": "Width variance should be less than 10% of lane width",
+      "error_message": "Lane width variance exceeds 10% - possible detection inconsistency",
+      "source_ref": {"chapter": "Detection", "section": "Quality"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "LaneGeometry",
+      "name": "Combined Lane and Shoulder Width",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "shoulder_width == null or lane_width + shoulder_width >= 14",
+      "description": "Combined lane and shoulder width should provide adequate roadway",
+      "error_message": "Combined lane + shoulder width less than 14 ft minimum",
+      "source_ref": {"document": "Green Book", "section": "4.3-4.4"}
+    },
+    {
+      "parameter_rust_field": "continuity_score",
+      "facility_type": "LaneGeometry",
+      "name": "Boundary Continuity for OpenDRIVE Export",
+      "rule_type": "min",
+      "severity": "error",
+      "min_value": 0.70,
+      "description": "Minimum continuity score required for valid OpenDRIVE export",
+      "error_message": "Boundary continuity too low for OpenDRIVE export - gaps in detection",
+      "source_ref": {"chapter": "Detection", "section": "Export"}
+    },
+    {
+      "parameter_rust_field": "hor_class",
+      "facility_type": "LaneGeometry",
+      "name": "Horizontal Class Consistency with Curvature",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "curvature == null or hor_class == classify_curvature(curvature)",
+      "description": "Horizontal class should match detected curvature",
+      "error_message": "Horizontal class inconsistent with detected curvature",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "lane_count",
+      "facility_type": "LaneGeometry",
+      "name": "Lane Count vs Total Width Plausibility",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lane_count * 9 <= lane_width * lane_count <= lane_count * 14",
+      "description": "Total roadway width should be plausible for lane count",
+      "error_message": "Lane count may be inconsistent with detected total width",
+      "source_ref": {"chapter": "Detection", "section": "Plausibility"}
+    }
+  ],
+  "cross_parameter_validations": [
+    {
+      "name": "Speed-Curvature Compatibility",
+      "parameters": ["speed_limit", "curvature"],
+      "description": "Curvature must allow safe operation at posted speed",
+      "lookup_table": {
+        "25": 0.0058,
+        "30": 0.0043,
+        "35": 0.0030,
+        "40": 0.0023,
+        "45": 0.0018,
+        "50": 0.0014,
+        "55": 0.0012,
+        "60": 0.0010,
+        "65": 0.00087,
+        "70": 0.00076,
+        "75": 0.00064
+      },
+      "unit": "1/ft",
+      "source": "Green Book Table 3-7"
+    },
+    {
+      "name": "Marking Color Lane Position",
+      "parameters": ["marking_color", "lane_position"],
+      "description": "Yellow = opposing traffic separation, White = same direction",
+      "rules": {
+        "left_edge_divided": ["yellow", "white"],
+        "left_edge_undivided": ["yellow"],
+        "lane_line": ["white"],
+        "right_edge": ["white"]
+      },
+      "source": "MUTCD 3B.01"
+    },
+    {
+      "name": "Facility Type Geometry Bounds",
+      "parameters": ["facility_type", "lane_width", "shoulder_width"],
+      "description": "Geometry must match facility type standards",
+      "bounds": {
+        "freeway": {"lane_min": 11, "lane_max": 12, "shoulder_min": 10},
+        "multilane": {"lane_min": 10, "lane_max": 12, "shoulder_min": 4},
+        "two_lane": {"lane_min": 9, "lane_max": 12, "shoulder_min": 2},
+        "local": {"lane_min": 9, "lane_max": 12, "shoulder_min": 0}
+      },
+      "source": "Green Book Chapter 4"
+    }
+  ]
+}

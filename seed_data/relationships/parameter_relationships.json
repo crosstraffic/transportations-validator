@@ -189,6 +189,48 @@
       "type": "AFFECTS",
       "facility_type": "PavementMarking",
       "description": "Line weight (standard/bold) affects minimum width"
+    },
+    {
+      "from_field": "speed_limit",
+      "to_field": "curvature",
+      "type": "CONSTRAINS",
+      "facility_type": "LaneGeometry",
+      "description": "Speed limit constrains maximum allowable curvature"
+    },
+    {
+      "from_field": "confidence",
+      "to_field": "lane_width",
+      "type": "VALIDATES",
+      "facility_type": "LaneGeometry",
+      "description": "Detection confidence validates lane width measurement"
+    },
+    {
+      "from_field": "confidence",
+      "to_field": "curvature",
+      "type": "VALIDATES",
+      "facility_type": "LaneGeometry",
+      "description": "Detection confidence validates curvature measurement"
+    },
+    {
+      "from_field": "confidence",
+      "to_field": "left_line_type",
+      "type": "VALIDATES",
+      "facility_type": "LaneGeometry",
+      "description": "Detection confidence validates marking type classification"
+    },
+    {
+      "from_field": "continuity_score",
+      "to_field": "lane_width",
+      "type": "AFFECTS",
+      "facility_type": "LaneGeometry",
+      "description": "Boundary continuity affects lane width measurement reliability"
+    },
+    {
+      "from_field": "width_variance",
+      "to_field": "lane_width",
+      "type": "AFFECTS",
+      "facility_type": "LaneGeometry",
+      "description": "Width variance indicates lane width measurement consistency"
     }
   ]
 }
