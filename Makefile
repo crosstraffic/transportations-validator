@@ -1,26 +1,44 @@
-.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev test test-cov lint fmt clean reset pre-commit
+.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev test test-cov test-firewall lint fmt clean reset pre-commit demo-firewall demo-firewall-api demo-opendrive
 
 # Show available commands
 help:
 	@echo "Available commands:"
+	@echo ""
+	@echo "Database:"
 	@echo "  make db          - Start Postgres + Neo4j"
 	@echo "  make db-stop     - Stop databases"
+	@echo "  make reset       - Reset databases and reseed"
+	@echo ""
+	@echo "Setup:"
 	@echo "  make install     - Install with uv"
 	@echo "  make install-pip - Install with pip"
 	@echo "  make migrate     - Run alembic migrations"
 	@echo "  make seed        - Load seed data into PostgreSQL"
 	@echo "  make sync        - Sync PostgreSQL to Neo4j"
 	@echo "  make setup-data  - Full data setup (migrate + seed + sync)"
+	@echo ""
+	@echo "Development:"
 	@echo "  make serve       - Start dev server :8000"
 	@echo "  make dev         - Full setup (db + migrate + serve)"
-	@echo "  make test        - Run tests"
+	@echo ""
+	@echo "Testing:"
+	@echo "  make test        - Run all tests"
 	@echo "  make test-cov    - Run tests with coverage"
+	@echo "  make test-firewall - Run semantic firewall tests only"
+	@echo ""
+	@echo "Demos (Paper Section 2.2 & 4.2):"
+	@echo "  make demo-firewall     - Run semantic firewall Python demo"
+	@echo "  make demo-firewall-api - Run API demo (requires server running)"
+	@echo "  make demo-opendrive    - Run detection-to-OpenDRIVE pipeline demo"
+	@echo ""
+	@echo "Code Quality:"
 	@echo "  make lint        - Lint code"
 	@echo "  make fmt         - Format code"
 	@echo "  make typecheck   - Type check with mypy"
 	@echo "  make pre-commit  - Install pre-commit hooks"
 	@echo "  make clean       - Remove cache files"
-	@echo "  make reset       - Reset databases and reseed"
+	@echo ""
+	@echo "Docker:"
 	@echo "  make docker-up   - Run full stack in Docker"
 	@echo "  make docker-down - Stop Docker stack"
 
@@ -68,11 +86,46 @@ dev: db migrate serve
 
 # Run tests
 test:
-	pytest tests/ -v
+	uv run python -m pytest tests/ -v
 
 # Run tests with coverage
 test-cov:
-	pytest tests/ -v --cov=src --cov-report=html
+	uv run python -m pytest tests/ -v --cov=src --cov-report=html
+
+# Run semantic firewall tests only
+test-firewall:
+	uv run python -m pytest tests/test_semantic_firewall_api.py -v
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Semantic Firewall Demos (Paper Section 2.2 & 4.2)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Run semantic firewall Python demo
+demo-firewall:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Running Semantic Firewall Demo (Paper Section 2.2)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	uv run python examples/semantic_firewall_demo.py
+
+# Run detection-to-OpenDRIVE pipeline demo
+demo-opendrive:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Running Detection to OpenDRIVE Pipeline Demo (Paper Section 4.3)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	uv run python examples/detection_to_opendrive_demo.py
+
+# Run API demo (requires server running: make serve)
+demo-firewall-api:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Running Semantic Firewall API Demo"
+	@echo "NOTE: Requires server running on localhost:8000 (use 'make serve' first)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@if command -v jq >/dev/null 2>&1; then \
+		./examples/semantic_firewall_api_demo.sh; \
+	else \
+		echo "Error: jq is required. Install with: sudo apt install jq"; \
+		exit 1; \
+	fi
 
 # Lint
 lint:

@@ -170,3 +170,93 @@ class SyncTriggerResponse(BaseModel):
     message: str
     nodes_synced: int = 0
     relationships_synced: int = 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Semantic Firewall Models (Paper Section 2.2)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class SemanticFirewallRequest(BaseModel):
+    """
+    Request to validate Two-Lane Highway inputs against Semantic Firewall constraints.
+
+    This implements the 5 hard constraints from Paper Section 2.2:
+    - SF-001: Lane Width (9-12 ft)
+    - SF-002: Shoulder Width (0-8 ft)
+    - SF-003: Horizontal Class (0-5)
+    - SF-004: Passing Type (0, 1, 2)
+    - SF-005: Speed-Curvature Compatibility
+    """
+
+    lane_width: float | None = Field(
+        default=None,
+        description="Lane width in feet (valid: 9-12 ft)",
+        ge=0,
+        le=50,
+    )
+    shoulder_width: float | None = Field(
+        default=None,
+        description="Shoulder width in feet (valid: 0-8 ft)",
+        ge=-1,
+        le=20,
+    )
+    hor_class: int | None = Field(
+        default=None,
+        description="Horizontal alignment class (valid: 0-5)",
+        ge=-10,
+        le=20,
+    )
+    passing_type: int | None = Field(
+        default=None,
+        description="Passing type: 0=Constrained, 1=Zone, 2=Lane",
+        ge=-10,
+        le=20,
+    )
+    design_rad: float | None = Field(
+        default=None,
+        description="Design radius in feet",
+        ge=0,
+    )
+    speed_limit: int | None = Field(
+        default=None,
+        description="Speed limit in mph (used with design_rad for SF-005)",
+        ge=0,
+        le=100,
+    )
+
+
+class SemanticFirewallError(BaseModel):
+    """
+    Detailed error for a constraint violation.
+
+    Matches the Rust ValidationError struct for cross-platform consistency.
+    """
+
+    constraint_id: str = Field(..., description="Constraint ID (e.g., SF-001)")
+    parameter: str = Field(..., description="Parameter that violated the constraint")
+    value: str = Field(..., description="The invalid value")
+    message: str = Field(..., description="Human-readable error message")
+    source: str = Field(..., description="HCM/AASHTO source reference")
+
+
+class SemanticFirewallResponse(BaseModel):
+    """
+    Response from Semantic Firewall validation.
+
+    Provides deterministic, traceable validation results as described in Paper Section 4.2.
+    """
+
+    is_valid: bool = Field(..., description="True if all constraints pass")
+    errors: list[SemanticFirewallError] = Field(
+        default_factory=list,
+        description="List of constraint violations",
+    )
+    constraints_checked: int = Field(
+        default=0,
+        description="Number of constraints evaluated",
+    )
+    message: str = Field(
+        default="",
+        description="Summary message",
+    )
