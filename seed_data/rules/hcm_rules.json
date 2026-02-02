@@ -376,6 +376,123 @@
       "description": "Combined lane and shoulder width should provide adequate roadway width",
       "error_message": "Lane width plus shoulder width should be at least 14 ft",
       "source_ref": {"document": "Green Book", "section": "4.3-4.4"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "MultilaneHighway",
+      "name": "Lane Width Range - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 10.0,
+      "max_value": 12.0,
+      "description": "Lane width must be between 10 and 12 feet",
+      "error_message": "Lane width must be between 10 and 12 feet",
+      "source_ref": {"document": "Green Book", "section": "4.3"}
+    },
+    {
+      "parameter_rust_field": "shoulder_width",
+      "facility_type": "MultilaneHighway",
+      "name": "Shoulder Width Range - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 4.0,
+      "max_value": 10.0,
+      "description": "Shoulder width must be between 4 and 10 feet per Green Book",
+      "error_message": "Shoulder width must be between 4 and 10 feet",
+      "source_ref": {"document": "Green Book", "section": "4.4.2"}
+    },
+    {
+      "parameter_rust_field": "lc_r",
+      "facility_type": "MultilaneHighway",
+      "name": "Right Lateral Clearance - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0,
+      "max_value": 6,
+      "description": "Right lateral clearance must be between 0 and 6 feet",
+      "error_message": "Right lateral clearance must be 0-6 feet",
+      "source_ref": {"chapter": "12", "section": "12-15"}
+    },
+    {
+      "parameter_rust_field": "lc_l",
+      "facility_type": "MultilaneHighway",
+      "name": "Left Lateral Clearance - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0,
+      "max_value": 6,
+      "description": "Left lateral clearance must be between 0 and 6 feet",
+      "error_message": "Left lateral clearance must be 0-6 feet",
+      "source_ref": {"chapter": "12", "section": "12-15"}
+    },
+    {
+      "parameter_rust_field": "median_width",
+      "facility_type": "MultilaneHighway",
+      "name": "Median Width Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 4.0,
+      "max_value": 60.0,
+      "description": "Median width typical range",
+      "error_message": "Median width outside typical range (4-60 ft)",
+      "source_ref": {"document": "Green Book", "section": "4.5"}
+    },
+    {
+      "parameter_rust_field": "median_type",
+      "facility_type": "MultilaneHighway",
+      "name": "Valid Median Type",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "undivided,twltl,raised,depressed,barrier",
+      "description": "Median type must be valid category",
+      "error_message": "Invalid median type",
+      "source_ref": {"document": "Green Book", "section": "4.5"}
+    },
+    {
+      "parameter_rust_field": "hor_class",
+      "facility_type": "MultilaneHighway",
+      "name": "Horizontal Class Validation - Multilane Highway",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "0,1,2,3,4,5",
+      "description": "Horizontal class must be 0-5",
+      "error_message": "Horizontal class must be between 0 and 5",
+      "source_ref": {"chapter": "15", "section": "15-8"}
+    },
+    {
+      "parameter_rust_field": "ffs",
+      "facility_type": "MultilaneHighway",
+      "name": "Free Flow Speed Range - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 45.0,
+      "max_value": 70.0,
+      "description": "Free flow speed range for multilane highways",
+      "error_message": "FFS must be between 45 and 70 mph",
+      "source_ref": {"chapter": "12", "section": "12-13"}
+    },
+    {
+      "parameter_rust_field": "phf",
+      "facility_type": "MultilaneHighway",
+      "name": "PHF Range - Multilane Highway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.80,
+      "max_value": 1.0,
+      "description": "Peak hour factor must be between 0.80 and 1.0",
+      "error_message": "PHF must be between 0.80 and 1.0",
+      "source_ref": {"chapter": "12", "section": "12-10"}
+    },
+    {
+      "parameter_rust_field": "lane_width",
+      "facility_type": "MultilaneHighway",
+      "name": "Lane Width Plus Shoulder - Multilane",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lane_width + shoulder_width >= 14",
+      "description": "Combined lane and shoulder width should provide adequate roadway width",
+      "error_message": "Lane width plus shoulder width should be at least 14 ft",
+      "source_ref": {"document": "Green Book", "section": "4.3-4.4"}
     }
   ]
 }

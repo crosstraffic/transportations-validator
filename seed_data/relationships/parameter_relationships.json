@@ -140,6 +140,55 @@
       "type": "AFFECTS",
       "facility_type": "LaneGeometry",
       "description": "Curvature affects required superelevation/cross slope"
+    },
+    {
+      "from_field": "lane_width",
+      "to_field": "shoulder_width",
+      "type": "RELATED_TO",
+      "facility_type": "MultilaneHighway",
+      "description": "Lane width and shoulder width combine for effective roadway width"
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "hor_class",
+      "type": "DETERMINES",
+      "facility_type": "MultilaneHighway",
+      "description": "Design radius determines horizontal alignment class"
+    },
+    {
+      "from_field": "hor_class",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "MultilaneHighway",
+      "description": "Horizontal alignment class affects free flow speed"
+    },
+    {
+      "from_field": "median_type",
+      "to_field": "lc_l",
+      "type": "AFFECTS",
+      "facility_type": "MultilaneHighway",
+      "description": "Median type affects left lateral clearance"
+    },
+    {
+      "from_field": "apd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "MultilaneHighway",
+      "description": "Access point density affects free flow speed"
+    },
+    {
+      "from_field": "road_mark_type",
+      "to_field": "lane_change",
+      "type": "DETERMINES",
+      "facility_type": "PavementMarking",
+      "description": "Marking type determines lane change permission"
+    },
+    {
+      "from_field": "mark_weight",
+      "to_field": "mark_width",
+      "type": "AFFECTS",
+      "facility_type": "PavementMarking",
+      "description": "Line weight (standard/bold) affects minimum width"
     }
   ]
 }

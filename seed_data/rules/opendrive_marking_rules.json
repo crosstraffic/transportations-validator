@@ -125,6 +125,152 @@
       "description": "Roughness value must be 0-1",
       "error_message": "Roughness value outside valid range [0, 1]",
       "source_ref": {"chapter": "9", "section": "Material"}
+    },
+    {
+      "parameter_rust_field": "road_mark_type",
+      "facility_type": "PavementMarking",
+      "name": "Valid OpenDRIVE Road Mark Type",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "none,solid,broken,solid_solid,solid_broken,broken_solid,broken_broken,botts_dots,grass,curb,custom,edge",
+      "description": "Road mark type must be valid OpenDRIVE enumeration",
+      "error_message": "Invalid road mark type",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "mark_color",
+      "facility_type": "PavementMarking",
+      "name": "Valid OpenDRIVE Road Mark Color",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "standard,blue,green,red,white,yellow,orange",
+      "description": "Road mark color must be valid OpenDRIVE enumeration",
+      "error_message": "Invalid road mark color",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "lane_change",
+      "facility_type": "PavementMarking",
+      "name": "Valid Lane Change Rule",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "increase,decrease,both,none",
+      "description": "Lane change permission must be valid OpenDRIVE value",
+      "error_message": "Invalid lane change rule",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "mark_weight",
+      "facility_type": "PavementMarking",
+      "name": "Valid Road Mark Weight",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "standard,bold",
+      "description": "Road mark weight must be standard or bold",
+      "error_message": "Invalid road mark weight",
+      "source_ref": {"chapter": "9", "section": "RoadMark"}
+    },
+    {
+      "parameter_rust_field": "mark_width",
+      "facility_type": "PavementMarking",
+      "name": "MUTCD Normal Line Width",
+      "rule_type": "range",
+      "severity": "info",
+      "min_value": 0.10,
+      "max_value": 0.15,
+      "description": "Normal line width is 4-6 in (0.10-0.15 m) per MUTCD",
+      "error_message": "Line width outside MUTCD normal range (4-6 in)",
+      "source_ref": {"chapter": "MUTCD", "section": "3A.05"}
+    },
+    {
+      "parameter_rust_field": "mark_width",
+      "facility_type": "PavementMarking",
+      "name": "MUTCD Wide Line Width",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "mark_weight == 'bold' implies mark_width >= 0.20",
+      "description": "Wide (bold) lines must be at least 8 in (0.20 m) per MUTCD",
+      "error_message": "Bold weight marking should have width >= 8 in (0.20 m)",
+      "source_ref": {"chapter": "MUTCD", "section": "3A.05"}
+    }
+  ],
+  "marking_type_mappings": [
+    {
+      "detection_type": "solid_white",
+      "opendrive_type": "solid",
+      "opendrive_color": "white",
+      "lane_change": "none",
+      "description": "Solid white - discourages lane changes"
+    },
+    {
+      "detection_type": "broken_white",
+      "opendrive_type": "broken",
+      "opendrive_color": "white",
+      "lane_change": "both",
+      "description": "Broken white - lane changes permitted"
+    },
+    {
+      "detection_type": "solid_yellow",
+      "opendrive_type": "solid",
+      "opendrive_color": "yellow",
+      "lane_change": "none",
+      "description": "Solid yellow - left edge or no passing zone"
+    },
+    {
+      "detection_type": "broken_yellow",
+      "opendrive_type": "broken",
+      "opendrive_color": "yellow",
+      "lane_change": "both",
+      "description": "Broken yellow - passing permitted"
+    },
+    {
+      "detection_type": "double_yellow",
+      "opendrive_type": "solid_solid",
+      "opendrive_color": "yellow",
+      "lane_change": "none",
+      "description": "Double yellow - no passing either direction"
+    },
+    {
+      "detection_type": "double_white",
+      "opendrive_type": "solid_solid",
+      "opendrive_color": "white",
+      "lane_change": "none",
+      "description": "Double white - HOV lane boundary"
+    },
+    {
+      "detection_type": "solid_broken_yellow",
+      "opendrive_type": "solid_broken",
+      "opendrive_color": "yellow",
+      "lane_change": "decrease",
+      "description": "Solid+broken yellow - passing permitted from broken side only"
+    },
+    {
+      "detection_type": "broken_solid_yellow",
+      "opendrive_type": "broken_solid",
+      "opendrive_color": "yellow",
+      "lane_change": "increase",
+      "description": "Broken+solid yellow - passing permitted from broken side only"
+    },
+    {
+      "detection_type": "edge_white",
+      "opendrive_type": "edge",
+      "opendrive_color": "white",
+      "lane_change": "none",
+      "description": "Right edge line - white solid"
+    },
+    {
+      "detection_type": "edge_yellow",
+      "opendrive_type": "edge",
+      "opendrive_color": "yellow",
+      "lane_change": "none",
+      "description": "Left edge line on divided highway - yellow solid"
+    },
+    {
+      "detection_type": "none",
+      "opendrive_type": "none",
+      "opendrive_color": "standard",
+      "lane_change": "both",
+      "description": "No marking detected"
     }
   ]
 }
