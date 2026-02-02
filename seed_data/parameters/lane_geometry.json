@@ -177,6 +177,36 @@
       "typical_max": 85,
       "description": "Posted or inferred speed limit",
       "aliases": ["posted_speed", "spl"]
+    },
+    {
+      "name": "Horizontal Class",
+      "rust_field": "hor_class",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 0,
+      "typical_max": 5,
+      "description": "Horizontal alignment class derived from curvature (0=tangent, 5=severe)",
+      "aliases": ["horizontal_class", "curvature_class"]
+    },
+    {
+      "name": "Design Radius",
+      "rust_field": "design_radius",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 100.0,
+      "typical_max": 10000.0,
+      "description": "Horizontal curve radius (1/curvature)",
+      "aliases": ["radius", "curve_radius"]
+    },
+    {
+      "name": "Shoulder Width",
+      "rust_field": "shoulder_width",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 12.0,
+      "description": "Width of adjacent shoulder (if detected)",
+      "aliases": ["shoulder_w", "shoulder"]
     }
   ]
 }

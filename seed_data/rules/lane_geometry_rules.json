@@ -240,6 +240,119 @@
       "description": "Speed limit must be within reasonable range",
       "error_message": "Speed limit outside valid range (5-85 mph)",
       "source_ref": {"chapter": "Physical", "section": "Speed"}
+    },
+    {
+      "parameter_rust_field": "hor_class",
+      "facility_type": "LaneGeometry",
+      "name": "Horizontal Class Valid Range",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "0,1,2,3,4,5",
+      "description": "Horizontal alignment class must be 0-5",
+      "error_message": "Invalid horizontal class (must be 0-5)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 0 - Tangent",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "curvature < 0.000128 implies hor_class == 0",
+      "description": "Near-tangent: curvature < 0.000128/ft (R > 2550 ft)",
+      "error_message": "Curvature suggests tangent alignment (class 0)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 1 - Gentle",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(curvature >= 0.000128 and curvature < 0.000242) implies hor_class == 1",
+      "description": "Gentle curve: 0.000128-0.000242/ft (R = 1350-2550 ft)",
+      "error_message": "Curvature suggests gentle curve (class 1)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 2 - Moderate",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(curvature >= 0.000242 and curvature < 0.000436) implies hor_class == 2",
+      "description": "Moderate curve: 0.000242-0.000436/ft (R = 750-1350 ft)",
+      "error_message": "Curvature suggests moderate curve (class 2)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 3 - Sharp",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(curvature >= 0.000436 and curvature < 0.000727) implies hor_class == 3",
+      "description": "Sharp curve: 0.000436-0.000727/ft (R = 450-750 ft)",
+      "error_message": "Curvature suggests sharp curve (class 3)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 4 - Very Sharp",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(curvature >= 0.000727 and curvature < 0.00109) implies hor_class == 4",
+      "description": "Very sharp curve: 0.000727-0.00109/ft (R = 300-450 ft)",
+      "error_message": "Curvature suggests very sharp curve (class 4)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "curvature",
+      "facility_type": "LaneGeometry",
+      "name": "Curvature Class 5 - Severe",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "curvature >= 0.00109 implies hor_class == 5",
+      "description": "Severe curve: curvature >= 0.00109/ft (R < 300 ft)",
+      "error_message": "Curvature suggests severe curve (class 5)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_radius",
+      "facility_type": "LaneGeometry",
+      "name": "Design Radius Physical Limits",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 50.0,
+      "max_value": 50000.0,
+      "description": "Design radius must be physically plausible",
+      "error_message": "Design radius is physically implausible",
+      "source_ref": {"chapter": "Physical", "section": "Geometry"}
+    },
+    {
+      "parameter_rust_field": "shoulder_width",
+      "facility_type": "LaneGeometry",
+      "name": "Shoulder Width Physical Limits",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 14.0,
+      "description": "Detected shoulder width must be plausible",
+      "error_message": "Shoulder width is physically implausible",
+      "source_ref": {"chapter": "Physical", "section": "Geometry"}
+    },
+    {
+      "parameter_rust_field": "shoulder_width",
+      "facility_type": "LaneGeometry",
+      "name": "Shoulder Width AASHTO Typical",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 4.0,
+      "max_value": 12.0,
+      "description": "Shoulder width per AASHTO typical range",
+      "error_message": "Shoulder width outside AASHTO typical range (4-12 ft)",
+      "source_ref": {"document": "Green Book", "section": "4.4.2"}
     }
   ]
 }

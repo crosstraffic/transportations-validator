@@ -98,6 +98,48 @@
       "type": "RELATED_TO",
       "facility_type": "TwoLaneHighway",
       "description": "Superelevation relates to horizontal curvature"
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "hor_class",
+      "type": "DETERMINES",
+      "facility_type": "BasicFreeway",
+      "description": "Design radius determines horizontal alignment class"
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "hor_class",
+      "type": "DETERMINES",
+      "facility_type": "TwoLaneHighway",
+      "description": "Design radius determines horizontal alignment class"
+    },
+    {
+      "from_field": "curvature",
+      "to_field": "hor_class",
+      "type": "DETERMINES",
+      "facility_type": "LaneGeometry",
+      "description": "Lane curvature (1/radius) determines horizontal class"
+    },
+    {
+      "from_field": "lw",
+      "to_field": "shoulder_width",
+      "type": "RELATED_TO",
+      "facility_type": "BasicFreeway",
+      "description": "Lane width and shoulder width combine for effective roadway width"
+    },
+    {
+      "from_field": "hor_class",
+      "to_field": "speed_limit",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Horizontal alignment class affects safe operating speed"
+    },
+    {
+      "from_field": "curvature",
+      "to_field": "cross_slope",
+      "type": "AFFECTS",
+      "facility_type": "LaneGeometry",
+      "description": "Curvature affects required superelevation/cross slope"
     }
   ]
 }

@@ -264,6 +264,118 @@
       "description": "Vertical class should be consistent with grade steepness",
       "error_message": "Vertical class may not match reported grade",
       "source_ref": {"chapter": "15", "section": "15-9"}
+    },
+    {
+      "parameter_rust_field": "shoulder_width",
+      "facility_type": "BasicFreeway",
+      "name": "Shoulder Width Range - Basic Freeway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 4.0,
+      "max_value": 12.0,
+      "description": "Shoulder width must be between 4 and 12 feet per Green Book",
+      "error_message": "Shoulder width must be between 4 and 12 feet",
+      "source_ref": {"document": "Green Book", "section": "4.4.2"}
+    },
+    {
+      "parameter_rust_field": "hor_class",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class Validation - Basic Freeway",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "0,1,2,3,4,5",
+      "description": "Horizontal class must be 0-5",
+      "error_message": "Horizontal class must be between 0 and 5",
+      "source_ref": {"chapter": "15", "section": "15-8"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Design Radius Range - Basic Freeway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 300.0,
+      "max_value": 10000.0,
+      "description": "Design radius range for freeway curves",
+      "error_message": "Design radius must be between 300 and 10000 feet",
+      "source_ref": {"document": "Green Book", "section": "3.3"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 0 - Tangent",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "design_rad >= 2550 implies hor_class == 0",
+      "description": "Tangent/near-tangent alignment (R >= 2550 ft)",
+      "error_message": "Design radius >= 2550 ft should be class 0 (tangent)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 1 - Gentle",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad >= 1350 and design_rad < 2550) implies hor_class == 1",
+      "description": "Gentle curve alignment (1350 <= R < 2550 ft)",
+      "error_message": "Design radius 1350-2550 ft should be class 1 (gentle)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 2 - Moderate",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad >= 750 and design_rad < 1350) implies hor_class == 2",
+      "description": "Moderate curve alignment (750 <= R < 1350 ft)",
+      "error_message": "Design radius 750-1350 ft should be class 2 (moderate)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 3 - Sharp",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad >= 450 and design_rad < 750) implies hor_class == 3",
+      "description": "Sharp curve alignment (450 <= R < 750 ft)",
+      "error_message": "Design radius 450-750 ft should be class 3 (sharp)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 4 - Very Sharp",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "(design_rad >= 300 and design_rad < 450) implies hor_class == 4",
+      "description": "Very sharp curve alignment (300 <= R < 450 ft)",
+      "error_message": "Design radius 300-450 ft should be class 4 (very sharp)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "design_rad",
+      "facility_type": "BasicFreeway",
+      "name": "Horizontal Class 5 - Severe",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "design_rad < 300 implies hor_class == 5",
+      "description": "Severe curve alignment (R < 300 ft)",
+      "error_message": "Design radius < 300 ft should be class 5 (severe)",
+      "source_ref": {"chapter": "15", "section": "Exhibit 15-22"}
+    },
+    {
+      "parameter_rust_field": "lw",
+      "facility_type": "BasicFreeway",
+      "name": "Lane Width Plus Shoulder",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "lw + shoulder_width >= 14",
+      "description": "Combined lane and shoulder width should provide adequate roadway width",
+      "error_message": "Lane width plus shoulder width should be at least 14 ft",
+      "source_ref": {"document": "Green Book", "section": "4.3-4.4"}
     }
   ]
 }
