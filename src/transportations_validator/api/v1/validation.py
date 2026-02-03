@@ -141,8 +141,19 @@ async def get_validatable_parameters(
 
 # Minimum radius (ft) for design speed (AASHTO Green Book Table 3-7)
 MIN_RADIUS_FOR_SPEED = {
-    15: 50, 20: 90, 25: 170, 30: 230, 35: 340, 40: 430,
-    45: 560, 50: 710, 55: 835, 60: 1000, 65: 1150, 70: 1310, 75: 1560
+    15: 50,
+    20: 90,
+    25: 170,
+    30: 230,
+    35: 340,
+    40: 430,
+    45: 560,
+    50: 710,
+    55: 835,
+    60: 1000,
+    65: 1150,
+    70: 1310,
+    75: 1560,
 }
 
 
@@ -189,67 +200,79 @@ async def validate_semantic_firewall(
     if request.lane_width is not None:
         constraints_checked += 1
         if request.lane_width < 9.0 or request.lane_width > 12.0:
-            errors.append(SemanticFirewallError(
-                constraint_id="SF-001",
-                parameter="lane_width",
-                value=f"{request.lane_width:.1f}",
-                message=f"Lane width {request.lane_width:.1f} ft violates constraint. Must be 9-12 ft per HCM Exhibit 15-8.",
-                source="HCM 7th Edition, Exhibit 15-8",
-            ))
+            errors.append(
+                SemanticFirewallError(
+                    constraint_id="SF-001",
+                    parameter="lane_width",
+                    value=f"{request.lane_width:.1f}",
+                    message=f"Lane width {request.lane_width:.1f} ft violates constraint. Must be 9-12 ft per HCM Exhibit 15-8.",
+                    source="HCM 7th Edition, Exhibit 15-8",
+                )
+            )
 
     # SF-002: Shoulder Width (0-8 ft)
     if request.shoulder_width is not None:
         constraints_checked += 1
         if request.shoulder_width < 0.0 or request.shoulder_width > 8.0:
-            errors.append(SemanticFirewallError(
-                constraint_id="SF-002",
-                parameter="shoulder_width",
-                value=f"{request.shoulder_width:.1f}",
-                message=f"Shoulder width {request.shoulder_width:.1f} ft violates constraint. Must be 0-8 ft per HCM/Green Book.",
-                source="HCM 7th Edition, Exhibit 15-8",
-            ))
+            errors.append(
+                SemanticFirewallError(
+                    constraint_id="SF-002",
+                    parameter="shoulder_width",
+                    value=f"{request.shoulder_width:.1f}",
+                    message=f"Shoulder width {request.shoulder_width:.1f} ft violates constraint. Must be 0-8 ft per HCM/Green Book.",
+                    source="HCM 7th Edition, Exhibit 15-8",
+                )
+            )
 
     # SF-003: Horizontal Class (0-5)
     if request.hor_class is not None:
         constraints_checked += 1
         if request.hor_class not in [0, 1, 2, 3, 4, 5]:
-            errors.append(SemanticFirewallError(
-                constraint_id="SF-003",
-                parameter="hor_class",
-                value=str(request.hor_class),
-                message=f"Horizontal class {request.hor_class} is invalid. Must be 0-5 per HCM Exhibit 15-22.",
-                source="HCM 7th Edition, Exhibit 15-22",
-            ))
+            errors.append(
+                SemanticFirewallError(
+                    constraint_id="SF-003",
+                    parameter="hor_class",
+                    value=str(request.hor_class),
+                    message=f"Horizontal class {request.hor_class} is invalid. Must be 0-5 per HCM Exhibit 15-22.",
+                    source="HCM 7th Edition, Exhibit 15-22",
+                )
+            )
 
     # SF-004: Passing Type (0, 1, 2)
     if request.passing_type is not None:
         constraints_checked += 1
         if request.passing_type not in [0, 1, 2]:
-            errors.append(SemanticFirewallError(
-                constraint_id="SF-004",
-                parameter="passing_type",
-                value=str(request.passing_type),
-                message=f"Passing type {request.passing_type} is invalid. Must be 0 (Constrained), 1 (Zone), or 2 (Lane).",
-                source="HCM 7th Edition, Chapter 15.3",
-            ))
+            errors.append(
+                SemanticFirewallError(
+                    constraint_id="SF-004",
+                    parameter="passing_type",
+                    value=str(request.passing_type),
+                    message=f"Passing type {request.passing_type} is invalid. Must be 0 (Constrained), 1 (Zone), or 2 (Lane).",
+                    source="HCM 7th Edition, Chapter 15.3",
+                )
+            )
 
     # SF-005: Speed-Curvature Compatibility
     if request.design_rad is not None and request.speed_limit is not None:
         constraints_checked += 1
         min_radius = _get_min_radius(request.speed_limit)
         if min_radius and request.design_rad < min_radius:
-            errors.append(SemanticFirewallError(
-                constraint_id="SF-005",
-                parameter="design_rad",
-                value=f"{request.design_rad:.0f}",
-                message=f"Design radius {request.design_rad:.0f} ft is too small for speed limit {request.speed_limit} mph. Minimum: {min_radius} ft per Green Book Table 3-7.",
-                source="AASHTO Green Book, Table 3-7",
-            ))
+            errors.append(
+                SemanticFirewallError(
+                    constraint_id="SF-005",
+                    parameter="design_rad",
+                    value=f"{request.design_rad:.0f}",
+                    message=f"Design radius {request.design_rad:.0f} ft is too small for speed limit {request.speed_limit} mph. Minimum: {min_radius} ft per Green Book Table 3-7.",
+                    source="AASHTO Green Book, Table 3-7",
+                )
+            )
 
     is_valid = len(errors) == 0
 
     if is_valid:
-        message = f"All {constraints_checked} constraints passed - inputs forwarded to computational core"
+        message = (
+            f"All {constraints_checked} constraints passed - inputs forwarded to computational core"
+        )
     else:
         message = f"Validation FAILED: {len(errors)} constraint(s) violated"
 

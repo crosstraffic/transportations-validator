@@ -46,24 +46,24 @@ class ValidationQueries:
                 if not self._matches_context(conditions, context):
                     continue
 
-            rules.append({
-                "id": rule_node["id"],
-                "name": rule_node["name"],
-                "rule_type": rule_node["rule_type"],
-                "severity": rule_node["severity"],
-                "min_value": rule_node["min_value"],
-                "max_value": rule_node["max_value"],
-                "allowed_values": rule_node["allowed_values"],
-                "error_message": rule_node["error_message"],
-                "conditions": conditions,
-                "sources": sources,
-            })
+            rules.append(
+                {
+                    "id": rule_node["id"],
+                    "name": rule_node["name"],
+                    "rule_type": rule_node["rule_type"],
+                    "severity": rule_node["severity"],
+                    "min_value": rule_node["min_value"],
+                    "max_value": rule_node["max_value"],
+                    "allowed_values": rule_node["allowed_values"],
+                    "error_message": rule_node["error_message"],
+                    "conditions": conditions,
+                    "sources": sources,
+                }
+            )
 
         return rules
 
-    def _matches_context(
-        self, conditions: list[dict[str, str]], context: dict[str, Any]
-    ) -> bool:
+    def _matches_context(self, conditions: list[dict[str, str]], context: dict[str, Any]) -> bool:
         """Check if conditions match the provided context."""
         for cond in conditions:
             cond_type = cond["type"]
@@ -74,9 +74,7 @@ class ValidationQueries:
                     return False
         return True
 
-    async def get_parameters_for_facility(
-        self, facility_type: str
-    ) -> list[dict[str, Any]]:
+    async def get_parameters_for_facility(self, facility_type: str) -> list[dict[str, Any]]:
         """Get all parameters for a facility type."""
         query = """
         MATCH (p:Parameter)
@@ -90,15 +88,17 @@ class ValidationQueries:
         params = []
         async for record in result:
             node = record["p"]
-            params.append({
-                "id": node["id"],
-                "name": node["name"],
-                "rust_field": node["rust_field"],
-                "unit": node["unit"],
-                "data_type": node["data_type"],
-                "typical_min": node["typical_min"],
-                "typical_max": node["typical_max"],
-            })
+            params.append(
+                {
+                    "id": node["id"],
+                    "name": node["name"],
+                    "rust_field": node["rust_field"],
+                    "unit": node["unit"],
+                    "data_type": node["data_type"],
+                    "typical_min": node["typical_min"],
+                    "typical_max": node["typical_max"],
+                }
+            )
 
         return params
 
@@ -143,9 +143,7 @@ class ValidationQueries:
             "citations": citations,
         }
 
-    async def find_conflicting_rules(
-        self, parameter_id: int
-    ) -> list[dict[str, Any]]:
+    async def find_conflicting_rules(self, parameter_id: int) -> list[dict[str, Any]]:
         """Find rules that might conflict with each other."""
         query = """
         MATCH (r1:DesignRule)-[:VALIDATES]->(p:Parameter {id: $param_id})<-[:VALIDATES]-(r2:DesignRule)
@@ -162,9 +160,11 @@ class ValidationQueries:
 
         conflicts = []
         async for record in result:
-            conflicts.append({
-                "rule1": dict(record["r1"]),
-                "rule2": dict(record["r2"]),
-            })
+            conflicts.append(
+                {
+                    "rule1": dict(record["r1"]),
+                    "rule2": dict(record["r2"]),
+                }
+            )
 
         return conflicts

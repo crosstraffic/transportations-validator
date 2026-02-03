@@ -1,6 +1,7 @@
 """Integration tests for database repositories."""
 
 import pytest
+
 from transportations_validator.db.postgres.repositories import (
     ConditionRepository,
     ParameterRepository,

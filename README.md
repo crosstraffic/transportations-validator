@@ -419,7 +419,6 @@ make typecheck  # Run type checker
 | [docs/setup.md](docs/setup.md) | Detailed setup instructions |
 | [docs/api.md](docs/api.md) | Full API reference |
 | [docs/architecture.md](docs/architecture.md) | System architecture overview |
-| [docs/plans/llm-integration.md](docs/plans/llm-integration.md) | Future LLM integration plan |
 
 ## License
 

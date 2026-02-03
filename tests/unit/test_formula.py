@@ -1,6 +1,7 @@
 """Tests for the formula evaluator."""
 
 import pytest
+
 from transportations_validator.validators.formula import FormulaError, FormulaEvaluator
 
 

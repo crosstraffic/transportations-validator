@@ -3,14 +3,13 @@
 import asyncio
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from alembic import context
-
-from transportations_validator.models import Base
 from transportations_validator.config import get_settings
+from transportations_validator.models import Base
 
 config = context.config
 

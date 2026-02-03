@@ -14,23 +14,22 @@ Usage:
     python detection_to_opendrive_demo.py
 """
 
-import json
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Any
-from xml.etree import ElementTree as ET
 from xml.dom import minidom
+from xml.etree import ElementTree as ET
 
 
 @dataclass
 class DetectionOutput:
     """Simulated lane detection output from ML model."""
-    lane_width: float          # Estimated width in ft
-    centerline_offset: float   # Offset from expected position in ft
-    curvature: float          # Horizontal curvature (1/ft)
-    left_marking_type: str    # e.g., "solid_yellow", "broken_white"
+
+    lane_width: float  # Estimated width in ft
+    centerline_offset: float  # Offset from expected position in ft
+    curvature: float  # Horizontal curvature (1/ft)
+    left_marking_type: str  # e.g., "solid_yellow", "broken_white"
     right_marking_type: str
-    confidence: float         # ML model confidence (0-1)
-    speed_limit: Optional[int] = None  # If detected from signs
+    confidence: float  # ML model confidence (0-1)
+    speed_limit: int | None = None  # If detected from signs
 
 
 # Marking type mapping: Detection → OpenDRIVE
@@ -54,7 +53,7 @@ class DetectionValidator:
         "marking_type": 0.90,
     }
 
-    def validate(self, detection: DetectionOutput) -> Dict:
+    def validate(self, detection: DetectionOutput) -> dict:
         """Validate detection output and return validation result."""
         errors = []
         warnings = []
@@ -84,17 +83,21 @@ class DetectionValidator:
         if detection.right_marking_type not in MARKING_TYPE_MAPPING:
             errors.append(f"Unknown right marking type: {detection.right_marking_type}")
 
-        return {
-            "is_valid": len(errors) == 0,
-            "errors": errors,
-            "warnings": warnings
-        }
+        return {"is_valid": len(errors) == 0, "errors": errors, "warnings": warnings}
 
-    def _get_min_radius(self, speed_mph: int) -> Optional[int]:
+    def _get_min_radius(self, speed_mph: int) -> int | None:
         """Get minimum radius for speed from Green Book Table 3-7."""
         table = {
-            25: 170, 30: 230, 35: 340, 40: 430, 45: 560,
-            50: 710, 55: 835, 60: 1000, 65: 1150, 70: 1310
+            25: 170,
+            30: 230,
+            35: 340,
+            40: 430,
+            45: 560,
+            50: 710,
+            55: 835,
+            60: 1000,
+            65: 1150,
+            70: 1310,
         }
         return table.get(speed_mph)
 
@@ -102,7 +105,9 @@ class DetectionValidator:
 class OpenDRIVEGenerator:
     """Generates OpenDRIVE XML from validated detection outputs."""
 
-    def generate_lane_section(self, detection: DetectionOutput, s_offset: float = 0.0) -> ET.Element:
+    def generate_lane_section(
+        self, detection: DetectionOutput, s_offset: float = 0.0
+    ) -> ET.Element:
         """Generate OpenDRIVE laneSection element from detection."""
 
         # Convert lane width from ft to meters
@@ -116,12 +121,16 @@ class OpenDRIVEGenerator:
         center_lane = ET.SubElement(center, "lane", id="0", type="none", level="false")
 
         # Left marking (center line)
-        left_mark_info = MARKING_TYPE_MAPPING.get(detection.left_marking_type, MARKING_TYPE_MAPPING["none"])
-        left_road_mark = ET.SubElement(center_lane, "roadMark",
+        left_mark_info = MARKING_TYPE_MAPPING.get(
+            detection.left_marking_type, MARKING_TYPE_MAPPING["none"]
+        )
+        ET.SubElement(
+            center_lane,
+            "roadMark",
             sOffset="0.0",
             type=left_mark_info["type"],
             color=left_mark_info["color"],
-            laneChange=left_mark_info["lane_change"]
+            laneChange=left_mark_info["lane_change"],
         )
 
         # Right lanes (driving direction)
@@ -129,19 +138,27 @@ class OpenDRIVEGenerator:
         right_lane = ET.SubElement(right, "lane", id="-1", type="driving", level="false")
 
         # Lane width
-        width = ET.SubElement(right_lane, "width",
+        ET.SubElement(
+            right_lane,
+            "width",
             sOffset="0.0",
             a=f"{lane_width_m:.3f}",  # Constant width
-            b="0.0", c="0.0", d="0.0"
+            b="0.0",
+            c="0.0",
+            d="0.0",
         )
 
         # Right marking (edge line)
-        right_mark_info = MARKING_TYPE_MAPPING.get(detection.right_marking_type, MARKING_TYPE_MAPPING["none"])
-        right_road_mark = ET.SubElement(right_lane, "roadMark",
+        right_mark_info = MARKING_TYPE_MAPPING.get(
+            detection.right_marking_type, MARKING_TYPE_MAPPING["none"]
+        )
+        ET.SubElement(
+            right_lane,
+            "roadMark",
             sOffset="0.0",
             type=right_mark_info["type"],
             color=right_mark_info["color"],
-            laneChange=right_mark_info["lane_change"]
+            laneChange=right_mark_info["lane_change"],
         )
 
         return lane_section
@@ -149,12 +166,8 @@ class OpenDRIVEGenerator:
     def generate_geometry(self, detection: DetectionOutput, length: float = 100.0) -> ET.Element:
         """Generate OpenDRIVE geometry element from detection."""
 
-        geometry = ET.Element("geometry",
-            s="0.0",
-            x="0.0",
-            y="0.0",
-            hdg="0.0",
-            length=f"{length:.3f}"
+        geometry = ET.Element(
+            "geometry", s="0.0", x="0.0", y="0.0", hdg="0.0", length=f"{length:.3f}"
         )
 
         if abs(detection.curvature) < 0.0001:
@@ -169,7 +182,7 @@ class OpenDRIVEGenerator:
 
     def to_xml_string(self, element: ET.Element) -> str:
         """Convert element to formatted XML string."""
-        rough_string = ET.tostring(element, encoding='unicode')
+        rough_string = ET.tostring(element, encoding="unicode")
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
 
@@ -188,12 +201,14 @@ def demo_valid_detection():
         left_marking_type="solid_yellow",
         right_marking_type="solid_white",
         confidence=0.92,
-        speed_limit=55
+        speed_limit=55,
     )
 
     print("\nDetection Output (from ML model):")
     print(f"  Lane Width: {detection.lane_width} ft")
-    print(f"  Curvature: {detection.curvature:.6f} (1/ft) → Radius: {1/detection.curvature:.0f} ft")
+    print(
+        f"  Curvature: {detection.curvature:.6f} (1/ft) → Radius: {1 / detection.curvature:.0f} ft"
+    )
     print(f"  Left Marking: {detection.left_marking_type}")
     print(f"  Right Marking: {detection.right_marking_type}")
     print(f"  Confidence: {detection.confidence:.2%}")
@@ -204,10 +219,10 @@ def demo_valid_detection():
     result = validator.validate(detection)
 
     print(f"\nValidation: {'PASS' if result['is_valid'] else 'FAIL'}")
-    for warning in result['warnings']:
+    for warning in result["warnings"]:
         print(f"  Warning: {warning}")
 
-    if result['is_valid']:
+    if result["is_valid"]:
         # Generate OpenDRIVE
         generator = OpenDRIVEGenerator()
 
@@ -234,12 +249,14 @@ def demo_invalid_detection():
         left_marking_type="unknown_type",  # Invalid!
         right_marking_type="solid_white",
         confidence=0.75,  # Low confidence
-        speed_limit=55
+        speed_limit=55,
     )
 
     print("\nDetection Output (problematic):")
     print(f"  Lane Width: {detection.lane_width} ft  [TOO WIDE]")
-    print(f"  Curvature: {detection.curvature:.6f} → Radius: {1/detection.curvature:.0f} ft  [TOO SHARP]")
+    print(
+        f"  Curvature: {detection.curvature:.6f} → Radius: {1 / detection.curvature:.0f} ft  [TOO SHARP]"
+    )
     print(f"  Left Marking: {detection.left_marking_type}  [UNKNOWN]")
     print(f"  Confidence: {detection.confidence:.2%}  [LOW]")
 
@@ -248,9 +265,9 @@ def demo_invalid_detection():
     result = validator.validate(detection)
 
     print(f"\nValidation: {'PASS' if result['is_valid'] else 'FAIL'}")
-    for error in result['errors']:
+    for error in result["errors"]:
         print(f"  ERROR: {error}")
-    for warning in result['warnings']:
+    for warning in result["warnings"]:
         print(f"  WARNING: {warning}")
 
     print("\n  → OpenDRIVE generation BLOCKED by Semantic Firewall")

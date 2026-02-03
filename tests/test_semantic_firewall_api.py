@@ -5,7 +5,6 @@ These tests verify the FastAPI integration of the Semantic Firewall
 described in Paper Section 2.2 and Section 4.2.
 """
 
-import pytest
 from fastapi.testclient import TestClient
 
 from transportations_validator.main import app

@@ -1,6 +1,5 @@
 """Unit tests for extractors."""
 
-
 from transportations_validator.extractors import (
     JSONExtractor,
     LLMResponseExtractor,

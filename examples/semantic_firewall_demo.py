@@ -13,15 +13,14 @@ Usage:
     python semantic_firewall_demo.py
 """
 
-import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class ValidationError:
     """Represents a validation constraint violation."""
+
     constraint_id: str
     parameter: str
     value: str
@@ -32,8 +31,9 @@ class ValidationError:
 @dataclass
 class ValidationResult:
     """Result of semantic firewall validation."""
+
     is_valid: bool
-    errors: List[ValidationError]
+    errors: list[ValidationError]
 
 
 class SemanticFirewall:
@@ -50,55 +50,64 @@ class SemanticFirewall:
 
     # Minimum radius (ft) for design speed (Green Book Table 3-7)
     MIN_RADIUS_FOR_SPEED = {
-        15: 50, 20: 90, 25: 170, 30: 230, 35: 340, 40: 430,
-        45: 560, 50: 710, 55: 835, 60: 1000, 65: 1150, 70: 1310, 75: 1560
+        15: 50,
+        20: 90,
+        25: 170,
+        30: 230,
+        35: 340,
+        40: 430,
+        45: 560,
+        50: 710,
+        55: 835,
+        60: 1000,
+        65: 1150,
+        70: 1310,
+        75: 1560,
     }
 
     def __init__(self):
         self.constraints = self._load_constraints()
 
-    def _load_constraints(self) -> Dict:
+    def _load_constraints(self) -> dict:
         """Load constraint definitions from JSON (or use embedded defaults)."""
         return {
             "SF-001": {
                 "name": "Lane Width",
                 "parameter": "lane_width",
-                "min": 9.0, "max": 12.0,
+                "min": 9.0,
+                "max": 12.0,
                 "unit": "ft",
-                "source": "HCM 7th Edition, Exhibit 15-8"
+                "source": "HCM 7th Edition, Exhibit 15-8",
             },
             "SF-002": {
                 "name": "Shoulder Width",
                 "parameter": "shoulder_width",
-                "min": 0.0, "max": 8.0,
+                "min": 0.0,
+                "max": 8.0,
                 "unit": "ft",
-                "source": "HCM 7th Edition, Exhibit 15-8"
+                "source": "HCM 7th Edition, Exhibit 15-8",
             },
             "SF-003": {
                 "name": "Horizontal Class",
                 "parameter": "hor_class",
                 "allowed": [0, 1, 2, 3, 4, 5],
-                "source": "HCM 7th Edition, Exhibit 15-22"
+                "source": "HCM 7th Edition, Exhibit 15-22",
             },
             "SF-004": {
                 "name": "Passing Type",
                 "parameter": "passing_type",
                 "allowed": [0, 1, 2],
-                "descriptions": {
-                    0: "Passing Constrained",
-                    1: "Passing Zone",
-                    2: "Passing Lane"
-                },
-                "source": "HCM 7th Edition, Chapter 15.3"
+                "descriptions": {0: "Passing Constrained", 1: "Passing Zone", 2: "Passing Lane"},
+                "source": "HCM 7th Edition, Chapter 15.3",
             },
             "SF-005": {
                 "name": "Speed-Curvature Compatibility",
                 "parameters": ["design_rad", "speed_limit"],
-                "source": "AASHTO Green Book, Table 3-7"
-            }
+                "source": "AASHTO Green Book, Table 3-7",
+            },
         }
 
-    def validate(self, inputs: Dict[str, Any]) -> ValidationResult:
+    def validate(self, inputs: dict[str, Any]) -> ValidationResult:
         """
         Validate all inputs against semantic firewall constraints.
 
@@ -111,74 +120,85 @@ class SemanticFirewall:
         errors = []
 
         # SF-001: Lane Width
-        if 'lane_width' in inputs and inputs['lane_width'] is not None:
-            lw = inputs['lane_width']
+        if "lane_width" in inputs and inputs["lane_width"] is not None:
+            lw = inputs["lane_width"]
             if lw < 9.0 or lw > 12.0:
-                errors.append(ValidationError(
-                    constraint_id="SF-001",
-                    parameter="lane_width",
-                    value=f"{lw:.1f}",
-                    message=f"Lane width {lw} ft violates constraint. Must be 9-12 ft per HCM Exhibit 15-8.",
-                    source="HCM 7th Edition, Exhibit 15-8"
-                ))
+                errors.append(
+                    ValidationError(
+                        constraint_id="SF-001",
+                        parameter="lane_width",
+                        value=f"{lw:.1f}",
+                        message=f"Lane width {lw} ft violates constraint. Must be 9-12 ft per HCM Exhibit 15-8.",
+                        source="HCM 7th Edition, Exhibit 15-8",
+                    )
+                )
 
         # SF-002: Shoulder Width
-        if 'shoulder_width' in inputs and inputs['shoulder_width'] is not None:
-            sw = inputs['shoulder_width']
+        if "shoulder_width" in inputs and inputs["shoulder_width"] is not None:
+            sw = inputs["shoulder_width"]
             if sw < 0.0 or sw > 8.0:
-                errors.append(ValidationError(
-                    constraint_id="SF-002",
-                    parameter="shoulder_width",
-                    value=f"{sw:.1f}",
-                    message=f"Shoulder width {sw} ft violates constraint. Must be 0-8 ft per HCM/Green Book.",
-                    source="HCM 7th Edition, Exhibit 15-8"
-                ))
+                errors.append(
+                    ValidationError(
+                        constraint_id="SF-002",
+                        parameter="shoulder_width",
+                        value=f"{sw:.1f}",
+                        message=f"Shoulder width {sw} ft violates constraint. Must be 0-8 ft per HCM/Green Book.",
+                        source="HCM 7th Edition, Exhibit 15-8",
+                    )
+                )
 
         # SF-003: Horizontal Class
-        if 'hor_class' in inputs and inputs['hor_class'] is not None:
-            hc = inputs['hor_class']
+        if "hor_class" in inputs and inputs["hor_class"] is not None:
+            hc = inputs["hor_class"]
             if hc not in [0, 1, 2, 3, 4, 5]:
-                errors.append(ValidationError(
-                    constraint_id="SF-003",
-                    parameter="hor_class",
-                    value=str(hc),
-                    message=f"Horizontal class {hc} is invalid. Must be 0-5 per HCM Exhibit 15-22.",
-                    source="HCM 7th Edition, Exhibit 15-22"
-                ))
+                errors.append(
+                    ValidationError(
+                        constraint_id="SF-003",
+                        parameter="hor_class",
+                        value=str(hc),
+                        message=f"Horizontal class {hc} is invalid. Must be 0-5 per HCM Exhibit 15-22.",
+                        source="HCM 7th Edition, Exhibit 15-22",
+                    )
+                )
 
         # SF-004: Passing Type
-        if 'passing_type' in inputs and inputs['passing_type'] is not None:
-            pt = inputs['passing_type']
+        if "passing_type" in inputs and inputs["passing_type"] is not None:
+            pt = inputs["passing_type"]
             if pt not in [0, 1, 2]:
-                errors.append(ValidationError(
-                    constraint_id="SF-004",
-                    parameter="passing_type",
-                    value=str(pt),
-                    message=f"Passing type {pt} is invalid. Must be 0 (Constrained), 1 (Zone), or 2 (Lane).",
-                    source="HCM 7th Edition, Chapter 15.3"
-                ))
+                errors.append(
+                    ValidationError(
+                        constraint_id="SF-004",
+                        parameter="passing_type",
+                        value=str(pt),
+                        message=f"Passing type {pt} is invalid. Must be 0 (Constrained), 1 (Zone), or 2 (Lane).",
+                        source="HCM 7th Edition, Chapter 15.3",
+                    )
+                )
 
         # SF-005: Speed-Curvature Compatibility
-        if ('design_rad' in inputs and 'speed_limit' in inputs and
-            inputs['design_rad'] is not None and inputs['speed_limit'] is not None):
-            rad = inputs['design_rad']
-            spl = int(inputs['speed_limit'])
+        if (
+            "design_rad" in inputs
+            and "speed_limit" in inputs
+            and inputs["design_rad"] is not None
+            and inputs["speed_limit"] is not None
+        ):
+            rad = inputs["design_rad"]
+            spl = int(inputs["speed_limit"])
             min_rad = self._get_min_radius(spl)
             if min_rad and rad < min_rad:
-                errors.append(ValidationError(
-                    constraint_id="SF-005",
-                    parameter="design_rad",
-                    value=f"{rad:.0f}",
-                    message=f"Design radius {rad} ft is too small for speed limit {spl} mph. Minimum: {min_rad} ft per Green Book Table 3-7.",
-                    source="AASHTO Green Book, Table 3-7"
-                ))
+                errors.append(
+                    ValidationError(
+                        constraint_id="SF-005",
+                        parameter="design_rad",
+                        value=f"{rad:.0f}",
+                        message=f"Design radius {rad} ft is too small for speed limit {spl} mph. Minimum: {min_rad} ft per Green Book Table 3-7.",
+                        source="AASHTO Green Book, Table 3-7",
+                    )
+                )
 
-        return ValidationResult(
-            is_valid=len(errors) == 0,
-            errors=errors
-        )
+        return ValidationResult(is_valid=len(errors) == 0, errors=errors)
 
-    def _get_min_radius(self, speed_mph: int) -> Optional[int]:
+    def _get_min_radius(self, speed_mph: int) -> int | None:
         """Get minimum radius for a speed, with interpolation."""
         if speed_mph in self.MIN_RADIUS_FOR_SPEED:
             return self.MIN_RADIUS_FOR_SPEED[speed_mph]
@@ -186,8 +206,8 @@ class SemanticFirewall:
         # Interpolate for speeds not in table
         speeds = sorted(self.MIN_RADIUS_FOR_SPEED.keys())
         for i, s in enumerate(speeds[:-1]):
-            if s < speed_mph < speeds[i+1]:
-                s1, s2 = s, speeds[i+1]
+            if s < speed_mph < speeds[i + 1]:
+                s1, s2 = s, speeds[i + 1]
                 r1, r2 = self.MIN_RADIUS_FOR_SPEED[s1], self.MIN_RADIUS_FOR_SPEED[s2]
                 ratio = (speed_mph - s1) / (s2 - s1)
                 return int(r1 + ratio * (r2 - r1))
@@ -209,10 +229,10 @@ def demo_valid_inputs():
         "hor_class": 2,
         "passing_type": 1,
         "design_rad": 1000.0,
-        "speed_limit": 55
+        "speed_limit": 55,
     }
 
-    print(f"\nInput parameters:")
+    print("\nInput parameters:")
     for k, v in valid_inputs.items():
         print(f"  {k}: {v}")
 
@@ -232,15 +252,15 @@ def demo_invalid_inputs():
     firewall = SemanticFirewall()
 
     invalid_inputs = {
-        "lane_width": 14.0,      # INVALID: > 12 ft
+        "lane_width": 14.0,  # INVALID: > 12 ft
         "shoulder_width": 12.0,  # INVALID: > 8 ft
-        "hor_class": 7,          # INVALID: > 5
-        "passing_type": 3,       # INVALID: not in {0,1,2}
-        "design_rad": 400.0,     # INVALID: too small for 55 mph
-        "speed_limit": 55
+        "hor_class": 7,  # INVALID: > 5
+        "passing_type": 3,  # INVALID: not in {0,1,2}
+        "design_rad": 400.0,  # INVALID: too small for 55 mph
+        "speed_limit": 55,
     }
 
-    print(f"\nInput parameters:")
+    print("\nInput parameters:")
     for k, v in invalid_inputs.items():
         print(f"  {k}: {v}")
 
@@ -269,26 +289,26 @@ def demo_adversarial_inputs():
             "name": "Boundary case: lane_width = 8.99 ft",
             "inputs": {"lane_width": 8.99},
             "expected": "REJECT",
-            "llm_might_say": "LLM might round to 9 and accept"
+            "llm_might_say": "LLM might round to 9 and accept",
         },
         {
             "name": "Physically impossible: negative shoulder width",
             "inputs": {"shoulder_width": -2.0},
             "expected": "REJECT",
-            "llm_might_say": "LLM might not check for negative values"
+            "llm_might_say": "LLM might not check for negative values",
         },
         {
             "name": "Speed-curvature mismatch: R=500 at 55mph",
             "inputs": {"design_rad": 500.0, "speed_limit": 55},
             "expected": "REJECT",
-            "llm_might_say": "LLM lacks physics knowledge to catch this"
+            "llm_might_say": "LLM lacks physics knowledge to catch this",
         },
         {
             "name": "Valid edge case: minimum valid values",
             "inputs": {"lane_width": 9.0, "shoulder_width": 0.0, "hor_class": 0},
             "expected": "ACCEPT",
-            "llm_might_say": "LLM might incorrectly reject edge cases"
-        }
+            "llm_might_say": "LLM might incorrectly reject edge cases",
+        },
     ]
 
     for tc in test_cases:
@@ -316,13 +336,13 @@ def demo_comparison_table():
 
     # Adversarial query set
     queries = [
-        {"lane_width": 8.0},      # Below min
-        {"lane_width": 14.0},     # Above max
-        {"shoulder_width": -1.0}, # Negative
-        {"shoulder_width": 12.0}, # Above max
-        {"hor_class": -1},        # Negative
-        {"hor_class": 6},         # Above max
-        {"passing_type": 3},      # Invalid type
+        {"lane_width": 8.0},  # Below min
+        {"lane_width": 14.0},  # Above max
+        {"shoulder_width": -1.0},  # Negative
+        {"shoulder_width": 12.0},  # Above max
+        {"hor_class": -1},  # Negative
+        {"hor_class": 6},  # Above max
+        {"passing_type": 3},  # Invalid type
         {"design_rad": 300, "speed_limit": 55},  # Unsafe curve
         {"design_rad": 500, "speed_limit": 65},  # Unsafe curve
         {"lane_width": 11.0, "shoulder_width": 6.0},  # Valid
