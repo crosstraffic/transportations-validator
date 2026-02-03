@@ -1,4 +1,4 @@
-.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev up test test-cov test-firewall lint fmt clean reset pre-commit demo-firewall demo-firewall-api demo-opendrive graph
+.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev up test test-cov test-firewall lint fmt clean reset pre-commit demo-firewall demo-firewall-api demo-opendrive graph graph-pyvis graph-citespace
 
 # Use uv to run commands in the virtual environment
 # Try common uv locations if not in PATH
@@ -36,7 +36,9 @@ help:
 	@echo "  make demo-firewall     - Run semantic firewall Python demo"
 	@echo "  make demo-firewall-api - Run API demo (requires server running)"
 	@echo "  make demo-opendrive    - Run detection-to-OpenDRIVE pipeline demo"
-	@echo "  make graph             - Open knowledge graph visualization in browser"
+	@echo "  make graph             - Open D3.js graph visualization in browser"
+	@echo "  make graph-pyvis       - Generate PyVis interactive graph (requires db)"
+	@echo "  make graph-citespace   - Generate CiteSpace-style PNG visualization"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint        - Lint code"
@@ -164,10 +166,10 @@ demo-firewall-api:
 		exit 1; \
 	fi
 
-# Open knowledge graph visualization in browser
+# Open D3.js knowledge graph visualization in browser
 graph:
 	@echo "═══════════════════════════════════════════════════════════════════════════════"
-	@echo "Opening Knowledge Graph Visualization"
+	@echo "Opening D3.js Knowledge Graph Visualization"
 	@echo ""
 	@echo "Prerequisites:"
 	@echo "  1. make db      - Start Neo4j database"
@@ -181,6 +183,25 @@ graph:
 	else \
 		echo "Open in browser: http://localhost:8000/static/graph.html"; \
 	fi
+
+# Generate PyVis interactive network graph
+graph-pyvis:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Generating PyVis Knowledge Graph Visualization"
+	@echo ""
+	@echo "Prerequisites: make db (PostgreSQL must be running)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	$(RUN) python -m scripts.generate_graph_viz --open
+
+# Generate CiteSpace-style publication-quality visualization
+graph-citespace:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Generating CiteSpace-style Knowledge Distribution Visualization"
+	@echo ""
+	@echo "Prerequisites: make db (PostgreSQL must be running)"
+	@echo "Output: static/knowledge_citespace.png, static/knowledge_clustered.png"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	$(RUN) python -m scripts.generate_citespace_viz --style both --open
 
 # Lint
 lint:
