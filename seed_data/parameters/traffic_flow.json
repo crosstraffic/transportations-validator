@@ -1,0 +1,124 @@
+{
+  "facility_type": "TrafficFlow",
+  "parameters": [
+    {
+      "name": "Volume",
+      "rust_field": "volume",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 8000.0,
+      "description": "Traffic volume in vehicles per hour",
+      "aliases": ["flow", "traffic_volume", "hourly_volume", "v"]
+    },
+    {
+      "name": "Speed",
+      "rust_field": "speed",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 5.0,
+      "typical_max": 85.0,
+      "description": "Traffic stream speed in miles per hour",
+      "aliases": ["average_speed", "travel_speed", "s"]
+    },
+    {
+      "name": "Density",
+      "rust_field": "density",
+      "unit": "veh/mi/ln",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 200.0,
+      "description": "Traffic density in vehicles per mile per lane",
+      "aliases": ["traffic_density", "d", "k"]
+    },
+    {
+      "name": "Capacity",
+      "rust_field": "capacity",
+      "unit": "pc/hr/ln",
+      "data_type": "float",
+      "typical_min": 1200.0,
+      "typical_max": 2400.0,
+      "description": "Roadway capacity in passenger cars per hour per lane",
+      "aliases": ["cap", "lane_capacity", "c"]
+    },
+    {
+      "name": "Volume-to-Capacity Ratio",
+      "rust_field": "vc_ratio",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 2.0,
+      "description": "Ratio of demand volume to capacity (v/c)",
+      "aliases": ["v_c", "v/c", "vc", "degree_of_saturation"]
+    },
+    {
+      "name": "Flow Rate",
+      "rust_field": "flow_rate",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 10000.0,
+      "description": "Peak 15-minute flow rate expanded to hourly",
+      "aliases": ["peak_flow_rate", "demand_flow_rate", "vp"]
+    },
+    {
+      "name": "Peak Hour Factor",
+      "rust_field": "phf",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.70,
+      "typical_max": 1.00,
+      "description": "Ratio of hourly volume to peak 15-minute volume times 4",
+      "aliases": ["PHF", "peak_hour_factor"]
+    },
+    {
+      "name": "Free Flow Speed",
+      "rust_field": "ffs",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 45.0,
+      "typical_max": 80.0,
+      "description": "Speed at low-volume conditions",
+      "aliases": ["free_flow_speed", "FFS", "free_speed"]
+    },
+    {
+      "name": "Level of Service",
+      "rust_field": "los",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "A,B,C,D,E,F",
+      "description": "Level of Service rating based on HCM methodology",
+      "aliases": ["LOS", "service_level"]
+    },
+    {
+      "name": "Heavy Vehicle Percentage",
+      "rust_field": "hv_percent",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 50.0,
+      "description": "Percentage of heavy vehicles in traffic stream",
+      "aliases": ["truck_percent", "hv_pct", "phv", "pt"]
+    },
+    {
+      "name": "Jam Density",
+      "rust_field": "jam_density",
+      "unit": "veh/mi/ln",
+      "data_type": "float",
+      "typical_min": 150.0,
+      "typical_max": 250.0,
+      "description": "Maximum density when traffic is at standstill",
+      "aliases": ["kj", "max_density"]
+    },
+    {
+      "name": "Critical Density",
+      "rust_field": "critical_density",
+      "unit": "veh/mi/ln",
+      "data_type": "float",
+      "typical_min": 30.0,
+      "typical_max": 60.0,
+      "description": "Density at which capacity flow occurs",
+      "aliases": ["kc", "optimal_density"]
+    }
+  ]
+}

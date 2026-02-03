@@ -1,0 +1,123 @@
+{
+  "description": "Traffic flow fundamental relationships for agent reasoning",
+  "relationships": [
+    {
+      "from_field": "volume",
+      "to_field": "density",
+      "type": "DETERMINES",
+      "facility_type": "TrafficFlow",
+      "description": "Volume and speed together determine density (D = V/S)",
+      "equation": "density = volume / speed"
+    },
+    {
+      "from_field": "speed",
+      "to_field": "density",
+      "type": "DETERMINES",
+      "facility_type": "TrafficFlow",
+      "description": "Speed and volume together determine density (D = V/S)",
+      "equation": "density = volume / speed"
+    },
+    {
+      "from_field": "volume",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Volume directly affects v/c ratio",
+      "equation": "vc_ratio = volume / capacity"
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Capacity directly affects v/c ratio",
+      "equation": "vc_ratio = volume / capacity"
+    },
+    {
+      "from_field": "vc_ratio",
+      "to_field": "los",
+      "type": "DETERMINES",
+      "facility_type": "TrafficFlow",
+      "description": "V/C ratio (with density) determines Level of Service"
+    },
+    {
+      "from_field": "density",
+      "to_field": "los",
+      "type": "DETERMINES",
+      "facility_type": "TrafficFlow",
+      "description": "Density (with v/c) determines Level of Service"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Free-flow speed affects roadway capacity"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "speed",
+      "type": "CONSTRAINS",
+      "facility_type": "TrafficFlow",
+      "description": "Free-flow speed is upper bound on traffic speed"
+    },
+    {
+      "from_field": "density",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Higher density leads to lower speed"
+    },
+    {
+      "from_field": "hv_percent",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Heavy vehicle percentage reduces effective capacity"
+    },
+    {
+      "from_field": "phf",
+      "to_field": "flow_rate",
+      "type": "DETERMINES",
+      "facility_type": "TrafficFlow",
+      "description": "PHF converts hourly volume to peak flow rate",
+      "equation": "flow_rate = volume / phf"
+    },
+    {
+      "from_field": "volume",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Volume is scaled by PHF to get flow rate",
+      "equation": "flow_rate = volume / phf"
+    },
+    {
+      "from_field": "jam_density",
+      "to_field": "density",
+      "type": "CONSTRAINS",
+      "facility_type": "TrafficFlow",
+      "description": "Jam density is upper bound on traffic density"
+    },
+    {
+      "from_field": "critical_density",
+      "to_field": "capacity",
+      "type": "RELATED_TO",
+      "facility_type": "TrafficFlow",
+      "description": "Capacity occurs at critical density"
+    },
+    {
+      "from_field": "lane_count",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "More lanes increases total roadway capacity"
+    },
+    {
+      "from_field": "grade",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TrafficFlow",
+      "description": "Steeper grades reduce capacity due to heavy vehicle effects"
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "source_doc": {
+    "title": "Highway Capacity Manual - Traffic Flow Fundamentals",
+    "abbreviation": "HCM",
+    "edition": "7th Edition",
+    "publisher": "Transportation Research Board",
+    "publication_year": 2022,
+    "jurisdiction": "federal",
+    "priority": 100
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "density",
+      "facility_type": "TrafficFlow",
+      "name": "Fundamental Equation Validation",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "abs(density - volume / speed) < 0.1",
+      "description": "Density must satisfy fundamental equation: D = V / S",
+      "error_message": "Density does not match V/S (fundamental traffic flow equation)",
+      "source_ref": {"chapter": "2", "section": "Basic Concepts"}
+    },
+    {
+      "parameter_rust_field": "vc_ratio",
+      "facility_type": "TrafficFlow",
+      "name": "V/C Ratio Calculation Validation",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "abs(vc_ratio - volume / capacity) < 0.01",
+      "description": "V/C ratio must match volume divided by capacity",
+      "error_message": "V/C ratio does not match volume/capacity",
+      "source_ref": {"chapter": "2", "section": "Basic Concepts"}
+    },
+    {
+      "parameter_rust_field": "vc_ratio",
+      "facility_type": "TrafficFlow",
+      "name": "Oversaturated Warning",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "description": "V/C ratio > 1.0 indicates oversaturated conditions (LOS F)",
+      "error_message": "V/C ratio > 1.0 indicates oversaturated conditions",
+      "source_ref": {"chapter": "2", "section": "Level of Service"}
+    },
+    {
+      "parameter_rust_field": "phf",
+      "facility_type": "TrafficFlow",
+      "name": "PHF Valid Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.70,
+      "max_value": 1.00,
+      "description": "Peak hour factor must be between 0.70 and 1.00",
+      "error_message": "PHF must be between 0.70 and 1.00",
+      "source_ref": {"chapter": "2", "section": "2-10"}
+    },
+    {
+      "parameter_rust_field": "phf",
+      "facility_type": "TrafficFlow",
+      "name": "PHF Typical Range",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 0.80,
+      "max_value": 0.98,
+      "description": "PHF typically ranges from 0.80 to 0.98",
+      "error_message": "PHF outside typical range (0.80-0.98)",
+      "source_ref": {"chapter": "2", "section": "2-10"}
+    },
+    {
+      "parameter_rust_field": "speed",
+      "facility_type": "TrafficFlow",
+      "name": "Speed vs FFS Constraint",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "speed <= ffs or ffs == null",
+      "description": "Traffic speed cannot exceed free-flow speed",
+      "error_message": "Speed cannot exceed free-flow speed",
+      "source_ref": {"chapter": "2", "section": "Speed-Flow Relationships"}
+    },
+    {
+      "parameter_rust_field": "volume",
+      "facility_type": "TrafficFlow",
+      "name": "Volume Positive",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 20000.0,
+      "description": "Volume must be non-negative",
+      "error_message": "Volume cannot be negative",
+      "source_ref": {"chapter": "2", "section": "Basic Concepts"}
+    },
+    {
+      "parameter_rust_field": "speed",
+      "facility_type": "TrafficFlow",
+      "name": "Speed Positive",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.1,
+      "max_value": 100.0,
+      "description": "Speed must be positive for meaningful analysis",
+      "error_message": "Speed must be positive",
+      "source_ref": {"chapter": "2", "section": "Basic Concepts"}
+    },
+    {
+      "parameter_rust_field": "density",
+      "facility_type": "TrafficFlow",
+      "name": "Density Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 250.0,
+      "description": "Density cannot exceed jam density (typically ~190-250 veh/mi/ln)",
+      "error_message": "Density exceeds maximum jam density",
+      "source_ref": {"chapter": "2", "section": "Speed-Density Relationships"}
+    },
+    {
+      "parameter_rust_field": "capacity",
+      "facility_type": "TrafficFlow",
+      "name": "Capacity Range - Freeway",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 1800.0,
+      "max_value": 2400.0,
+      "description": "Freeway capacity typically ranges from 1800-2400 pc/hr/ln",
+      "error_message": "Capacity outside typical freeway range (1800-2400 pc/hr/ln)",
+      "source_ref": {"chapter": "12", "section": "Exhibit 12-6"}
+    },
+    {
+      "parameter_rust_field": "ffs",
+      "facility_type": "TrafficFlow",
+      "name": "FFS Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 30.0,
+      "max_value": 85.0,
+      "description": "Free-flow speed typically ranges from 30-85 mph",
+      "error_message": "FFS outside typical range (30-85 mph)",
+      "source_ref": {"chapter": "12", "section": "12-13"}
+    },
+    {
+      "parameter_rust_field": "los",
+      "facility_type": "TrafficFlow",
+      "name": "Valid LOS",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "A,B,C,D,E,F",
+      "description": "Level of Service must be A through F",
+      "error_message": "Invalid Level of Service",
+      "source_ref": {"chapter": "2", "section": "Level of Service"}
+    },
+    {
+      "parameter_rust_field": "hv_percent",
+      "facility_type": "TrafficFlow",
+      "name": "Heavy Vehicle Percentage Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "description": "Heavy vehicle percentage must be 0-100%",
+      "error_message": "Heavy vehicle percentage must be 0-100%",
+      "source_ref": {"chapter": "12", "section": "12-11"}
+    },
+    {
+      "parameter_rust_field": "density",
+      "facility_type": "TrafficFlow",
+      "name": "LOS A Density Threshold - Freeway",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "los != 'A' or density <= 11",
+      "description": "LOS A requires density <= 11 pc/mi/ln for basic freeway",
+      "error_message": "LOS A requires density <= 11 pc/mi/ln",
+      "source_ref": {"chapter": "12", "section": "Exhibit 12-15"}
+    },
+    {
+      "parameter_rust_field": "density",
+      "facility_type": "TrafficFlow",
+      "name": "LOS E Density Threshold - Freeway",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "los != 'E' or (density > 35 and density <= 45)",
+      "description": "LOS E corresponds to density 35-45 pc/mi/ln for basic freeway",
+      "error_message": "LOS E requires density 35-45 pc/mi/ln",
+      "source_ref": {"chapter": "12", "section": "Exhibit 12-15"}
+    },
+    {
+      "parameter_rust_field": "vc_ratio",
+      "facility_type": "TrafficFlow",
+      "name": "LOS F Oversaturation Check",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "los != 'F' or vc_ratio > 1.0 or density > 45",
+      "description": "LOS F requires v/c > 1.0 or density > 45 for freeway",
+      "error_message": "LOS F conditions not met",
+      "source_ref": {"chapter": "12", "section": "Exhibit 12-15"}
+    },
+    {
+      "parameter_rust_field": "flow_rate",
+      "facility_type": "TrafficFlow",
+      "name": "Flow Rate vs Volume/PHF",
+      "rule_type": "formula",
+      "severity": "warning",
+      "formula": "abs(flow_rate - volume / phf) < 10 or phf == null or flow_rate == null",
+      "description": "Flow rate should equal volume / PHF",
+      "error_message": "Flow rate doesn't match volume/PHF",
+      "source_ref": {"chapter": "2", "section": "2-10"}
+    }
+  ]
+}

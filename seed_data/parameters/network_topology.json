@@ -1,0 +1,118 @@
+{
+  "facility_type": "NetworkTopology",
+  "parameters": [
+    {
+      "name": "Node X Coordinate",
+      "rust_field": "node_x",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -1000000.0,
+      "typical_max": 1000000.0,
+      "description": "X coordinate in meters (OpenDRIVE inertial frame)",
+      "aliases": ["x", "x_coordinate", "x_coord", "easting"]
+    },
+    {
+      "name": "Node Y Coordinate",
+      "rust_field": "node_y",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -1000000.0,
+      "typical_max": 1000000.0,
+      "description": "Y coordinate in meters (OpenDRIVE inertial frame)",
+      "aliases": ["y", "y_coordinate", "y_coord", "northing"]
+    },
+    {
+      "name": "Elevation",
+      "rust_field": "elevation",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": -500.0,
+      "typical_max": 5000.0,
+      "description": "Elevation in meters above reference datum",
+      "aliases": ["elev", "z", "z_coordinate", "altitude"]
+    },
+    {
+      "name": "Connection Count",
+      "rust_field": "connection_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 1,
+      "typical_max": 8,
+      "description": "Number of road segments connected to this node",
+      "aliases": ["num_connections", "connections", "leg_count"]
+    },
+    {
+      "name": "Node Type",
+      "rust_field": "node_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "intersection,terminus,transition,ramp_junction,merge,diverge",
+      "description": "Classification of network node type",
+      "aliases": ["junction_type", "type"]
+    },
+    {
+      "name": "Segment Length",
+      "rust_field": "segment_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 50000.0,
+      "description": "Length of road segment in meters",
+      "aliases": ["length", "link_length", "road_length"]
+    },
+    {
+      "name": "Direction",
+      "rust_field": "direction",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "forward,backward,both",
+      "description": "Travel direction(s) allowed on segment",
+      "aliases": ["travel_direction", "flow_direction"]
+    },
+    {
+      "name": "Approach Count",
+      "rust_field": "approach_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 2,
+      "typical_max": 6,
+      "description": "Number of approach legs at intersection",
+      "aliases": ["num_approaches", "legs", "approaches"]
+    },
+    {
+      "name": "Control Type",
+      "rust_field": "control_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "uncontrolled,stop_two_way,stop_all_way,yield,signal,roundabout",
+      "description": "Type of traffic control at intersection",
+      "aliases": ["intersection_control", "traffic_control", "control"]
+    },
+    {
+      "name": "Start Node ID",
+      "rust_field": "start_node_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Identifier of segment start node",
+      "aliases": ["from_node", "origin_node", "start_junction"]
+    },
+    {
+      "name": "End Node ID",
+      "rust_field": "end_node_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Identifier of segment end node",
+      "aliases": ["to_node", "destination_node", "end_junction"]
+    },
+    {
+      "name": "Segment Lane Count",
+      "rust_field": "segment_lane_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 1,
+      "typical_max": 12,
+      "description": "Total number of lanes on segment (both directions if bidirectional)",
+      "aliases": ["lanes", "num_lanes", "lane_count"]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "source_doc": {
+    "title": "Network Topology Standards",
+    "abbreviation": "OpenDRIVE/HCM",
+    "edition": "OpenDRIVE 1.7 / HCM 7th Edition",
+    "publisher": "ASAM / Transportation Research Board",
+    "publication_year": 2022,
+    "jurisdiction": "federal",
+    "priority": 90
+  },
+  "rules": [
+    {
+      "parameter_rust_field": "connection_count",
+      "facility_type": "NetworkTopology",
+      "name": "Connection Count Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 1,
+      "max_value": 8,
+      "description": "Connection count must be between 1 and 8",
+      "error_message": "Connection count must be 1-8 for valid network topology",
+      "source_ref": {"document": "OpenDRIVE", "section": "Junction"}
+    },
+    {
+      "parameter_rust_field": "approach_count",
+      "facility_type": "NetworkTopology",
+      "name": "Approach Count Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 2,
+      "max_value": 6,
+      "description": "Intersection approach count must be between 2 and 6",
+      "error_message": "Approach count must be 2-6 for intersection analysis",
+      "source_ref": {"chapter": "19-22", "section": "Intersection Analysis"}
+    },
+    {
+      "parameter_rust_field": "segment_length",
+      "facility_type": "NetworkTopology",
+      "name": "Minimum Segment Length Warning",
+      "rule_type": "range",
+      "severity": "warning",
+      "min_value": 10.0,
+      "max_value": 50000.0,
+      "description": "Segment length should be at least 10 meters for meaningful analysis",
+      "error_message": "Segment length < 10m may be too short for meaningful analysis",
+      "source_ref": {"document": "OpenDRIVE", "section": "Road"}
+    },
+    {
+      "parameter_rust_field": "segment_length",
+      "facility_type": "NetworkTopology",
+      "name": "Positive Segment Length",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 0.001,
+      "max_value": 100000.0,
+      "description": "Segment length must be positive",
+      "error_message": "Segment length must be positive",
+      "source_ref": {"document": "OpenDRIVE", "section": "Road"}
+    },
+    {
+      "parameter_rust_field": "node_type",
+      "facility_type": "NetworkTopology",
+      "name": "Valid Node Type",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "intersection,terminus,transition,ramp_junction,merge,diverge",
+      "description": "Node type must be a valid classification",
+      "error_message": "Invalid node type",
+      "source_ref": {"document": "OpenDRIVE", "section": "Junction"}
+    },
+    {
+      "parameter_rust_field": "control_type",
+      "facility_type": "NetworkTopology",
+      "name": "Valid Control Type",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "uncontrolled,stop_two_way,stop_all_way,yield,signal,roundabout",
+      "description": "Control type must be a valid classification",
+      "error_message": "Invalid control type",
+      "source_ref": {"chapter": "19-22", "section": "Intersection Control"}
+    },
+    {
+      "parameter_rust_field": "direction",
+      "facility_type": "NetworkTopology",
+      "name": "Valid Direction",
+      "rule_type": "enum",
+      "severity": "error",
+      "allowed_values": "forward,backward,both",
+      "description": "Direction must be forward, backward, or both",
+      "error_message": "Invalid direction",
+      "source_ref": {"document": "OpenDRIVE", "section": "Road"}
+    },
+    {
+      "parameter_rust_field": "segment_lane_count",
+      "facility_type": "NetworkTopology",
+      "name": "Segment Lane Count Range",
+      "rule_type": "range",
+      "severity": "error",
+      "min_value": 1,
+      "max_value": 12,
+      "description": "Segment must have at least 1 lane and typically no more than 12",
+      "error_message": "Lane count must be 1-12",
+      "source_ref": {"document": "OpenDRIVE", "section": "Lane Section"}
+    },
+    {
+      "parameter_rust_field": "connection_count",
+      "facility_type": "NetworkTopology",
+      "name": "Terminus Single Connection",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "node_type != 'terminus' or connection_count == 1",
+      "description": "Terminus nodes must have exactly 1 connection",
+      "error_message": "Terminus node must have exactly 1 connection",
+      "source_ref": {"document": "OpenDRIVE", "section": "Junction"}
+    },
+    {
+      "parameter_rust_field": "connection_count",
+      "facility_type": "NetworkTopology",
+      "name": "Intersection Minimum Connections",
+      "rule_type": "formula",
+      "severity": "error",
+      "formula": "node_type != 'intersection' or connection_count >= 3",
+      "description": "Intersection nodes must have at least 3 connections",
+      "error_message": "Intersection node must have at least 3 connections",
+      "source_ref": {"chapter": "19", "section": "Intersection Definition"}
+    },
+    {
+      "parameter_rust_field": "approach_count",
+      "facility_type": "NetworkTopology",
+      "name": "Four-Leg Intersection Typical",
+      "rule_type": "formula",
+      "severity": "info",
+      "formula": "approach_count != 5 and approach_count != 6",
+      "description": "5 and 6-leg intersections are uncommon and may require special analysis",
+      "error_message": "Multi-leg intersection (>4 legs) may require special analysis",
+      "source_ref": {"chapter": "19", "section": "Intersection Analysis"}
+    }
+  ]
+}

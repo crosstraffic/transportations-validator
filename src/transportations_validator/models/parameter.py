@@ -26,6 +26,11 @@ class FacilityType(str, Enum):
     TRAFFIC_SIGNAL = "TrafficSignal"
     PAVEMENT_MARKING = "PavementMarking"
 
+    # Core transportation fundamentals
+    NETWORK_TOPOLOGY = "NetworkTopology"
+    TRAFFIC_FLOW = "TrafficFlow"
+    GEOMETRIC_DESIGN = "GeometricDesign"
+
 
 class DataType(str, Enum):
     """Parameter data types."""
