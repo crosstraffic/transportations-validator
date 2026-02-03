@@ -4,8 +4,10 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from transportations_validator.db.neo4j.connection import get_neo4j_session
+from transportations_validator.db.postgres import get_session as get_pg_session
 
 router = APIRouter(prefix="/graph", tags=["graph"])
 
@@ -462,3 +464,188 @@ async def suggest_related_checks(
             SuggestedParameter(rust_field=r["suggestion"], name=r["name"]) for r in records
         ],
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PyVis Network Visualization
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class PyVisGenerateResponse(BaseModel):
+    """Response from PyVis graph generation."""
+
+    success: bool
+    message: str
+    url: str | None = None
+    nodes_count: int = 0
+    edges_count: int = 0
+
+
+@router.post("/visualize/pyvis", response_model=PyVisGenerateResponse)
+async def generate_pyvis_graph(
+    include_rules: bool = Query(default=True, description="Include design rules in visualization"),
+    pg_session: AsyncSession = Depends(get_pg_session),
+) -> PyVisGenerateResponse:
+    """
+    Generate an interactive PyVis network visualization of the Knowledge Graph.
+
+    The generated HTML file is saved to /static/knowledge_graph.html and can be
+    accessed at http://localhost:8000/static/knowledge_graph.html
+
+    - **include_rules**: If true, include design rules as nodes. If false, show only parameters.
+    """
+    from pathlib import Path
+
+    from pyvis.network import Network
+
+    from transportations_validator.db.postgres.repositories import (
+        ParameterRepository,
+        RuleRepository,
+    )
+
+    try:
+        # Fetch data
+        param_repo = ParameterRepository(pg_session)
+        rule_repo = RuleRepository(pg_session)
+
+        parameters = await param_repo.get_all()
+        rules = await rule_repo.get_all() if include_rules else []
+
+        # Create network (disable select/filter menus to avoid TomSelect dependency)
+        net = Network(
+            height="800px",
+            width="100%",
+            bgcolor="#1a1a2e",
+            font_color="#ffffff",
+            directed=True,
+            select_menu=False,
+            filter_menu=False,
+            cdn_resources="remote",
+        )
+
+        net.barnes_hut(
+            gravity=-8000,
+            central_gravity=0.3,
+            spring_length=200,
+            spring_strength=0.05,
+            damping=0.09,
+        )
+
+        # Color scheme
+        facility_colors = {
+            "BasicFreeway": "#4ecdc4",
+            "MultilaneHighway": "#ff6b6b",
+            "TwoLaneHighway": "#ffe66d",
+            "UrbanStreet": "#95e1d3",
+        }
+
+        severity_colors = {
+            "error": "#ff4757",
+            "warning": "#ffa502",
+            "info": "#2ed573",
+        }
+
+        edges_count = 0
+        param_ids: set[int] = set()
+
+        # Add parameter nodes
+        for param in parameters:
+            facility = param.facility_type.value if param.facility_type else "Unknown"
+            node_id = f"param_{param.id}"
+            param_ids.add(param.id)
+
+            tooltip = f"""
+            <b>{param.name}</b><br>
+            Field: {param.rust_field}<br>
+            Facility: {facility}<br>
+            Unit: {param.unit or "N/A"}<br>
+            Range: {param.typical_min or "?"} - {param.typical_max or "?"}
+            """
+
+            net.add_node(
+                node_id,
+                label=param.rust_field,
+                title=tooltip,
+                color=facility_colors.get(facility, "#888888"),
+                shape="dot",
+                size=25,
+                group=facility,
+            )
+
+        # Add rule nodes
+        for rule in rules:
+            node_id = f"rule_{rule.id}"
+            severity = rule.severity.value if rule.severity else "info"
+            rule_color = severity_colors.get(severity, "#ff6b6b")
+
+            tooltip = f"""
+            <b>{rule.name}</b><br>
+            Type: {rule.rule_type.value if rule.rule_type else "N/A"}<br>
+            Severity: {severity}<br>
+            Min: {rule.min_value or "N/A"}<br>
+            Max: {rule.max_value or "N/A"}
+            """
+
+            label = rule.name[:20] + "..." if len(rule.name) > 20 else rule.name
+
+            net.add_node(
+                node_id,
+                label=label,
+                title=tooltip,
+                color=rule_color,
+                shape="diamond",
+                size=15,
+            )
+
+            # Add edge to parameter (only if parameter exists)
+            if rule.parameter_id and rule.parameter_id in param_ids:
+                net.add_edge(
+                    node_id,
+                    f"param_{rule.parameter_id}",
+                    title="VALIDATES",
+                    color="#666666",
+                    arrows="to",
+                )
+                edges_count += 1
+
+        # Save to static directory
+        static_dir = Path(__file__).parent.parent.parent.parent.parent / "static"
+        static_dir.mkdir(parents=True, exist_ok=True)
+
+        filename = "knowledge_graph.html" if include_rules else "parameters_graph.html"
+        output_path = static_dir / filename
+
+        # Add header
+        html_header = f"""
+        <h2 style="color: #fff; font-family: sans-serif; text-align: center; margin: 10px;">
+            CrossTraffic Knowledge Graph
+        </h2>
+        <p style="color: #888; font-family: sans-serif; text-align: center; margin: 5px;">
+            {len(parameters)} Parameters | {len(rules)} Rules | Click and drag nodes to explore
+        </p>
+        """
+
+        net.save_graph(str(output_path))
+
+        # Inject header
+        with open(output_path) as f:
+            html_content = f.read()
+
+        html_content = html_content.replace("<body>", f"<body>{html_header}")
+
+        with open(output_path, "w") as f:
+            f.write(html_content)
+
+        return PyVisGenerateResponse(
+            success=True,
+            message=f"Generated PyVis visualization with {len(parameters)} parameters and {len(rules)} rules",
+            url=f"/static/{filename}",
+            nodes_count=len(parameters) + len(rules),
+            edges_count=edges_count,
+        )
+
+    except Exception as e:
+        return PyVisGenerateResponse(
+            success=False,
+            message=f"Failed to generate visualization: {str(e)}",
+        )
