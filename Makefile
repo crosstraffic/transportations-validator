@@ -1,4 +1,9 @@
-.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev test test-cov test-firewall lint fmt clean reset pre-commit demo-firewall demo-firewall-api demo-opendrive
+.PHONY: help db db-stop install install-pip migrate seed sync setup-data serve dev up test test-cov test-firewall lint fmt clean reset pre-commit demo-firewall demo-firewall-api demo-opendrive graph
+
+# Use uv to run commands in the virtual environment
+# Try common uv locations if not in PATH
+UV := $(shell which uv 2>/dev/null || echo "$(HOME)/.local/bin/uv")
+RUN := $(UV) run
 
 # Show available commands
 help:
@@ -18,6 +23,7 @@ help:
 	@echo "  make setup-data  - Full data setup (migrate + seed + sync)"
 	@echo ""
 	@echo "Development:"
+	@echo "  make up          - ALL-IN-ONE: db + migrate + seed + sync + serve"
 	@echo "  make serve       - Start dev server :8000"
 	@echo "  make dev         - Full setup (db + migrate + serve)"
 	@echo ""
@@ -26,10 +32,11 @@ help:
 	@echo "  make test-cov    - Run tests with coverage"
 	@echo "  make test-firewall - Run semantic firewall tests only"
 	@echo ""
-	@echo "Demos (Paper Section 2.2 & 4.2):"
+	@echo "Demos & Visualization:"
 	@echo "  make demo-firewall     - Run semantic firewall Python demo"
 	@echo "  make demo-firewall-api - Run API demo (requires server running)"
 	@echo "  make demo-opendrive    - Run detection-to-OpenDRIVE pipeline demo"
+	@echo "  make graph             - Open knowledge graph visualization in browser"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint        - Lint code"
@@ -63,15 +70,15 @@ install-pip:
 
 # Run migrations
 migrate:
-	alembic upgrade head
+	$(RUN) alembic upgrade head
 
 # Load seed data into PostgreSQL
 seed:
-	python -m scripts.load_seed_data
+	$(RUN) python -m scripts.load_seed_data
 
 # Sync PostgreSQL to Neo4j
 sync:
-	python -m scripts.sync_neo4j
+	$(RUN) python -m scripts.sync_neo4j
 
 # Full data setup: migrate + seed + sync
 setup-data: migrate seed sync
@@ -79,22 +86,52 @@ setup-data: migrate seed sync
 
 # Start dev server
 serve:
-	uvicorn transportations_validator.main:app --reload --port 8000
+	$(RUN) uvicorn transportations_validator.main:app --reload --port 8000
 
-# Full dev setup
+# Full dev setup (legacy)
 dev: db migrate serve
+
+# ALL-IN-ONE: Start everything and open graph visualization
+up:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Starting CrossTraffic Validator (all-in-one)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo ""
+	@echo "Step 1/5: Starting databases..."
+	docker compose up -d postgres neo4j
+	@echo "Waiting for databases to be ready..."
+	@sleep 8
+	@echo ""
+	@echo "Step 2/5: Running migrations..."
+	$(RUN) alembic upgrade head
+	@echo ""
+	@echo "Step 3/5: Loading seed data..."
+	$(RUN) python -m scripts.load_seed_data
+	@echo ""
+	@echo "Step 4/5: Syncing to Neo4j..."
+	$(RUN) python -m scripts.sync_neo4j
+	@echo ""
+	@echo "Step 5/5: Starting server..."
+	@echo ""
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Ready! Open in browser:"
+	@echo "  API Docs:    http://localhost:8000/docs"
+	@echo "  Graph:       http://localhost:8000/static/graph.html"
+	@echo "  Neo4j:       http://localhost:7474"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	$(RUN) uvicorn transportations_validator.main:app --reload --port 8000
 
 # Run tests
 test:
-	uv run python -m pytest tests/ -v
+	$(RUN) pytest tests/ -v
 
 # Run tests with coverage
 test-cov:
-	uv run python -m pytest tests/ -v --cov=src --cov-report=html
+	$(RUN) pytest tests/ -v --cov=src --cov-report=html
 
 # Run semantic firewall tests only
 test-firewall:
-	uv run python -m pytest tests/test_semantic_firewall_api.py -v
+	$(RUN) pytest tests/test_semantic_firewall_api.py -v
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Semantic Firewall Demos (Paper Section 2.2 & 4.2)
@@ -105,14 +142,14 @@ demo-firewall:
 	@echo "═══════════════════════════════════════════════════════════════════════════════"
 	@echo "Running Semantic Firewall Demo (Paper Section 2.2)"
 	@echo "═══════════════════════════════════════════════════════════════════════════════"
-	uv run python examples/semantic_firewall_demo.py
+	$(RUN) python examples/semantic_firewall_demo.py
 
 # Run detection-to-OpenDRIVE pipeline demo
 demo-opendrive:
 	@echo "═══════════════════════════════════════════════════════════════════════════════"
 	@echo "Running Detection to OpenDRIVE Pipeline Demo (Paper Section 4.3)"
 	@echo "═══════════════════════════════════════════════════════════════════════════════"
-	uv run python examples/detection_to_opendrive_demo.py
+	$(RUN) python examples/detection_to_opendrive_demo.py
 
 # Run API demo (requires server running: make serve)
 demo-firewall-api:
@@ -127,22 +164,40 @@ demo-firewall-api:
 		exit 1; \
 	fi
 
+# Open knowledge graph visualization in browser
+graph:
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@echo "Opening Knowledge Graph Visualization"
+	@echo ""
+	@echo "Prerequisites:"
+	@echo "  1. make db      - Start Neo4j database"
+	@echo "  2. make sync    - Sync data to Neo4j"
+	@echo "  3. make serve   - Start FastAPI server (in another terminal)"
+	@echo "═══════════════════════════════════════════════════════════════════════════════"
+	@if command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open http://localhost:8000/static/graph.html; \
+	elif command -v open >/dev/null 2>&1; then \
+		open http://localhost:8000/static/graph.html; \
+	else \
+		echo "Open in browser: http://localhost:8000/static/graph.html"; \
+	fi
+
 # Lint
 lint:
-	ruff check src/ tests/
+	$(RUN) ruff check src/ tests/
 
 # Format
 fmt:
-	ruff format src/ tests/
+	$(RUN) ruff format src/ tests/
 
 # Type check
 typecheck:
-	mypy src/
+	$(RUN) mypy src/
 
 # Install pre-commit hooks
 pre-commit:
-	uv pip install pre-commit
-	pre-commit install
+	$(RUN) pip install pre-commit
+	$(RUN) pre-commit install
 
 # Clean
 clean:
