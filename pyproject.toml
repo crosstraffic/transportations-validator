@@ -4,22 +4,41 @@ build-backend = "hatchling.build"
 
 [project]
 name = "transportations-validator"
-version = "0.1.0"
-description = "Validates ML-generated roads, LLM responses, and software outputs against a knowledge graph of transportation design rules"
+version = "0.1.1"
+description = "Lightweight validator for transportation engineering inputs against HCM/AASHTO standards"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 license = "Apache-2.0"
 authors = [
     { name = "CrossTraffic Team" }
 ]
+keywords = [
+    "transportation",
+    "validation",
+    "hcm",
+    "highway-capacity-manual",
+    "aashto",
+    "traffic-engineering",
+    "two-lane-highway",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
 ]
-dependencies = [
+
+# Core dependencies - minimal for lightweight usage
+dependencies = []
+
+[project.optional-dependencies]
+# Full API server with database support
+api = [
     "fastapi>=0.100.0",
     "uvicorn[standard]>=0.23.0",
     "pydantic>=2.0.0",
@@ -32,11 +51,10 @@ dependencies = [
     "python-multipart>=0.0.6",
     "simpleeval>=1.0.0",
     "pyvis>=0.3.2",
-    "matplotlib>=3.10.8",
-    "scipy>=1.17.0",
+    "matplotlib>=3.10.0",
+    "scipy>=1.14.0",
 ]
 
-[project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
@@ -46,6 +64,17 @@ dev = [
     "mypy>=1.5.0",
     "pre-commit>=3.6.0",
 ]
+
+# All optional dependencies
+all = [
+    "transportations-validator[api,dev]",
+]
+
+[project.urls]
+Homepage = "https://github.com/crosstraffic/transportations-validator"
+Documentation = "https://github.com/crosstraffic/transportations-validator#readme"
+Repository = "https://github.com/crosstraffic/transportations-validator"
+"Bug Tracker" = "https://github.com/crosstraffic/transportations-validator/issues"
 
 [project.scripts]
 transportations-validator = "transportations_validator.main:run"

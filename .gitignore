@@ -72,6 +72,7 @@ logs/
 # Database
 *.db
 *.sqlite3
+data/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -90,3 +91,6 @@ credentials/
 .claude/
 docs/plans/
 uv.lock
+
+# Large OpenDRIVE files (download separately)
+data/opendrive/*.xodr

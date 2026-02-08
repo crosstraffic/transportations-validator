@@ -1,0 +1,930 @@
+{
+  "experiment": "digital_twin_mapping",
+  "timestamp": "2026-02-03T21:36:05.470236",
+  "config": {
+    "input_file": "data/opendrive/Town01.xodr",
+    "used_sample_data": false
+  },
+  "parsing": {
+    "total_roads": 98,
+    "roads_parsed": 98,
+    "parse_errors": 0,
+    "header": {
+      "revMajor": "1",
+      "revMinor": "4",
+      "name": "",
+      "version": "1",
+      "date": "2019-04-06T10:38:28",
+      "geoReference": "+lat_0=4.9000000000000000e+1 +lon_0=8.0000000000000000e+0"
+    }
+  },
+  "mapping": {
+    "roads_total": 98,
+    "roads_with_geometry": 98,
+    "roads_with_lanes": 98,
+    "roads_with_elevation": 98,
+    "geometries_total": 352,
+    "geometries_arc": 112,
+    "geometries_line": 240,
+    "geometries_spiral": 0,
+    "lane_sections_total": 176,
+    "lanes_driving": 202,
+    "elevations_total": 401,
+    "superelevations_total": 0,
+    "signals_total": 0,
+    "errors": 0,
+    "warnings": 0,
+    "mapping_success_rate": 1.0,
+    "traceability_score": 1.0
+  },
+  "validation": {
+    "parameters_total": 715,
+    "parameters_valid": 409,
+    "parameters_invalid": 306,
+    "validation_pass_rate": 0.5720279720279721
+  },
+  "road_results": [
+    {
+      "road_id": "0",
+      "road_name": "Road 0",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "1",
+      "road_name": "Road 1",
+      "parameters_checked": 6,
+      "parameters_valid": 4,
+      "parameters_invalid": 2,
+      "validity_rate": 0.6666666666666666,
+      "validations": []
+    },
+    {
+      "road_id": "2",
+      "road_name": "Road 2",
+      "parameters_checked": 5,
+      "parameters_valid": 3,
+      "parameters_invalid": 2,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "3",
+      "road_name": "Road 3",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "4",
+      "road_name": "Road 4",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "5",
+      "road_name": "Road 5",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "6",
+      "road_name": "Road 6",
+      "parameters_checked": 9,
+      "parameters_valid": 7,
+      "parameters_invalid": 2,
+      "validity_rate": 0.7777777777777778,
+      "validations": []
+    },
+    {
+      "road_id": "7",
+      "road_name": "Road 7",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "8",
+      "road_name": "Road 8",
+      "parameters_checked": 9,
+      "parameters_valid": 7,
+      "parameters_invalid": 2,
+      "validity_rate": 0.7777777777777778,
+      "validations": []
+    },
+    {
+      "road_id": "9",
+      "road_name": "Road 9",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "10",
+      "road_name": "Road 10",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "11",
+      "road_name": "Road 11",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "12",
+      "road_name": "Road 12",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "13",
+      "road_name": "Road 13",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "14",
+      "road_name": "Road 14",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "15",
+      "road_name": "Road 15",
+      "parameters_checked": 9,
+      "parameters_valid": 7,
+      "parameters_invalid": 2,
+      "validity_rate": 0.7777777777777778,
+      "validations": []
+    },
+    {
+      "road_id": "16",
+      "road_name": "Road 16",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "17",
+      "road_name": "Road 17",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "18",
+      "road_name": "Road 18",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "19",
+      "road_name": "Road 19",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "20",
+      "road_name": "Road 20",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "21",
+      "road_name": "Road 21",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "22",
+      "road_name": "Road 22",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "23",
+      "road_name": "Road 23",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "24",
+      "road_name": "Road 24",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "25",
+      "road_name": "Road 25",
+      "parameters_checked": 3,
+      "parameters_valid": 1,
+      "parameters_invalid": 2,
+      "validity_rate": 0.3333333333333333,
+      "validations": []
+    },
+    {
+      "road_id": "27",
+      "road_name": "Road 27",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "29",
+      "road_name": "Road 29",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "31",
+      "road_name": "Road 31",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "32",
+      "road_name": "Road 32",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "37",
+      "road_name": "Road 37",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "38",
+      "road_name": "Road 38",
+      "parameters_checked": 9,
+      "parameters_valid": 5,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5555555555555556,
+      "validations": []
+    },
+    {
+      "road_id": "44",
+      "road_name": "Road 44",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "45",
+      "road_name": "Road 45",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "50",
+      "road_name": "Road 50",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "51",
+      "road_name": "Road 51",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "56",
+      "road_name": "Road 56",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "58",
+      "road_name": "Road 58",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "61",
+      "road_name": "Road 61",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "62",
+      "road_name": "Road 62",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "67",
+      "road_name": "Road 67",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "68",
+      "road_name": "Road 68",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "73",
+      "road_name": "Road 73",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "75",
+      "road_name": "Road 75",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "82",
+      "road_name": "Road 82",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "83",
+      "road_name": "Road 83",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "88",
+      "road_name": "Road 88",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "90",
+      "road_name": "Road 90",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "92",
+      "road_name": "Road 92",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "93",
+      "road_name": "Road 93",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "95",
+      "road_name": "Road 95",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "97",
+      "road_name": "Road 97",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "99",
+      "road_name": "Road 99",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "100",
+      "road_name": "Road 100",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "107",
+      "road_name": "Road 107",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "108",
+      "road_name": "Road 108",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "112",
+      "road_name": "Road 112",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "114",
+      "road_name": "Road 114",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "122",
+      "road_name": "Road 122",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "123",
+      "road_name": "Road 123",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "126",
+      "road_name": "Road 126",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "127",
+      "road_name": "Road 127",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "129",
+      "road_name": "Road 129",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "130",
+      "road_name": "Road 130",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "135",
+      "road_name": "Road 135",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "136",
+      "road_name": "Road 136",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "137",
+      "road_name": "Road 137",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "138",
+      "road_name": "Road 138",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "140",
+      "road_name": "Road 140",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "141",
+      "road_name": "Road 141",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "150",
+      "road_name": "Road 150",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "151",
+      "road_name": "Road 151",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "152",
+      "road_name": "Road 152",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "154",
+      "road_name": "Road 154",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "157",
+      "road_name": "Road 157",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "158",
+      "road_name": "Road 158",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "159",
+      "road_name": "Road 159",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "160",
+      "road_name": "Road 160",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "165",
+      "road_name": "Road 165",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "166",
+      "road_name": "Road 166",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "168",
+      "road_name": "Road 168",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "169",
+      "road_name": "Road 169",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "170",
+      "road_name": "Road 170",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "172",
+      "road_name": "Road 172",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "178",
+      "road_name": "Road 178",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "179",
+      "road_name": "Road 179",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "188",
+      "road_name": "Road 188",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "189",
+      "road_name": "Road 189",
+      "parameters_checked": 4,
+      "parameters_valid": 2,
+      "parameters_invalid": 2,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "191",
+      "road_name": "Road 191",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "192",
+      "road_name": "Road 192",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "193",
+      "road_name": "Road 193",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "194",
+      "road_name": "Road 194",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "196",
+      "road_name": "Road 196",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "197",
+      "road_name": "Road 197",
+      "parameters_checked": 8,
+      "parameters_valid": 5,
+      "parameters_invalid": 3,
+      "validity_rate": 0.625,
+      "validations": []
+    },
+    {
+      "road_id": "198",
+      "road_name": "Road 198",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "200",
+      "road_name": "Road 200",
+      "parameters_checked": 10,
+      "parameters_valid": 6,
+      "parameters_invalid": 4,
+      "validity_rate": 0.6,
+      "validations": []
+    },
+    {
+      "road_id": "206",
+      "road_name": "Road 206",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    },
+    {
+      "road_id": "207",
+      "road_name": "Road 207",
+      "parameters_checked": 8,
+      "parameters_valid": 4,
+      "parameters_invalid": 4,
+      "validity_rate": 0.5,
+      "validations": []
+    }
+  ]
+}

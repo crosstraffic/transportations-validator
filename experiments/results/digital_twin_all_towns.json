@@ -1,0 +1,75 @@
+{
+  "experiment": "digital_twin_all_carla_towns",
+  "timestamp": "2026-02-03T21:38:37.038009",
+  "summary": {
+    "towns_processed": 7,
+    "roads_parsed": 1347,
+    "geometries_total": 6460,
+    "geometries_arc": 1915,
+    "geometries_line": 4545,
+    "lanes_driving": 5881,
+    "elevations_total": 7052,
+    "parameters_total": 14846,
+    "parameters_valid": 12731,
+    "parameters_invalid": 2115,
+    "validation_pass_rate": 0.8575373838070861
+  },
+  "per_town_results": [
+    {
+      "town": "Town01",
+      "roads": 98,
+      "parameters_total": 715,
+      "parameters_valid": 409,
+      "parameters_invalid": 306,
+      "validation_pass_rate": 0.5720279720279721
+    },
+    {
+      "town": "Town02",
+      "roads": 68,
+      "parameters_total": 824,
+      "parameters_valid": 452,
+      "parameters_invalid": 372,
+      "validation_pass_rate": 0.5485436893203883
+    },
+    {
+      "town": "Town03",
+      "roads": 279,
+      "parameters_total": 2440,
+      "parameters_valid": 2094,
+      "parameters_invalid": 346,
+      "validation_pass_rate": 0.8581967213114754
+    },
+    {
+      "town": "Town04",
+      "roads": 242,
+      "parameters_total": 2708,
+      "parameters_valid": 2433,
+      "parameters_invalid": 275,
+      "validation_pass_rate": 0.8984490398818316
+    },
+    {
+      "town": "Town05",
+      "roads": 259,
+      "parameters_total": 3734,
+      "parameters_valid": 3407,
+      "parameters_invalid": 327,
+      "validation_pass_rate": 0.9124263524370648
+    },
+    {
+      "town": "Town06",
+      "roads": 167,
+      "parameters_total": 2093,
+      "parameters_valid": 1927,
+      "parameters_invalid": 166,
+      "validation_pass_rate": 0.9206880076445294
+    },
+    {
+      "town": "Town07",
+      "roads": 234,
+      "parameters_total": 2332,
+      "parameters_valid": 2009,
+      "parameters_invalid": 323,
+      "validation_pass_rate": 0.861492281303602
+    }
+  ]
+}

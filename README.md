@@ -6,10 +6,58 @@
 
 A Python project that validates ML-generated roads, LLM responses, and software outputs against a knowledge graph of transportation design rules.
 
+## Lightweight Usage (No Database Required)
+
+For simple validation without databases, use the semantic validator directly:
+
+```bash
+# Install lightweight (zero dependencies)
+pip install transportations-validator
+
+# Optional: Install transportations-library for dynamic constraints
+pip install transportations-library
+```
+
+```python
+from transportations_validator.validators.semantic import (
+    validate_highway,
+    CONSTRAINTS_SOURCE,
+)
+
+# Check where constraints come from
+print(f"Constraints: {CONSTRAINTS_SOURCE}")
+# With library installed: "transportations-library v0.1.11"
+# Without library: "embedded fallback"
+
+# Validate highway input
+result = validate_highway({
+    "lane_width": 11,
+    "shoulder_width": 6,
+    "segments": [{"passing_type": 0, "spl": 55}]
+})
+
+if result.is_valid:
+    print("Input is valid!")
+else:
+    for v in result.violations:
+        print(f"[{v.rule_id}] {v.parameter}: {v.constraint}")
+        print(f"  Source: {v.citation}")
+```
+
+When `transportations-library` is installed, constraints are loaded dynamically from the library (single source of truth). Otherwise, embedded fallback constraints are used.
+
 ## Architecture
 
 ```
-PostgreSQL (source of truth) → Neo4j (graph queries) → Validation Engine → REST API
+transportations-library (Rust)     ← Single source of truth for constraints
+         ↓
+transportations-validator (Python) ← Loads constraints, validates inputs
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+REST API   hcm-mcp-server (MCP)   ← Integration points
+    ↓
+PostgreSQL → Neo4j (Knowledge Graph)
 ```
 
 ## Prerequisites
@@ -220,17 +268,22 @@ curl -X POST http://localhost:8000/api/v1/validate/text \
   }'
 ```
 
-### Semantic Firewall (Two-Lane Highway)
+### Semantic Validator (Two-Lane Highway)
 
-The Semantic Firewall validates inputs against 5 HCM/AASHTO constraints before they reach the computational core:
+The Semantic Validator validates inputs against HCM/AASHTO constraints before they reach the computational core. Constraints are loaded from `transportations-library` when available:
 
 | ID | Parameter | Constraint | Source |
 |----|-----------|------------|--------|
-| SF-001 | lane_width | 9-12 ft | HCM Exhibit 15-8 |
-| SF-002 | shoulder_width | 0-8 ft | HCM Exhibit 15-8 |
-| SF-003 | hor_class | 0-5 | HCM Exhibit 15-22 |
-| SF-004 | passing_type | 0, 1, 2 | HCM Chapter 15.3 |
-| SF-005 | design_rad + speed_limit | Radius ≥ min for speed | Green Book Table 3-7 |
+| SV-001 | lane_width | 9-12 ft | HCM Exhibit 15-8 |
+| SV-002 | shoulder_width | 0-8 ft | HCM Exhibit 15-8 |
+| SV-003 | hor_class | 0-5 | HCM Exhibit 15-22 |
+| SV-004 | passing_type | 0, 1, 2 | HCM Chapter 15.3 |
+| SV-005 | design_rad + speed_limit | Radius ≥ min for speed | Green Book Table 3-7 |
+| SV-006 | vertical_class | 1-5 | HCM Exhibit 15-11 |
+| SV-007 | grade | -10% to +10% | AASHTO Chapter 3 |
+| SV-008 | phf | 0.5-1.0 | HCM Chapter 15 |
+| SV-009 | phv | 0-100% | HCM Chapter 15 |
+| SV-010 | speed_limit | 15-80 mph | AASHTO Chapter 2 |
 
 ```bash
 # Valid input - all constraints pass

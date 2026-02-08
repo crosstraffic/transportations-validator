@@ -1,0 +1,39 @@
+{
+  "experiment": "semantic_firewall_stress_test",
+  "timestamp": "2026-02-03T19:09:30.556519",
+  "config": {
+    "samples": 1000,
+    "use_api": false,
+    "seed": 42
+  },
+  "metrics": {
+    "total_tests": 1000,
+    "expected_valid": 258,
+    "expected_invalid": 742,
+    "actual_valid": 258,
+    "actual_invalid": 742,
+    "true_positives": 742,
+    "true_negatives": 258,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "rejection_rate": 1.0,
+    "false_positive_rate": 0.0,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "constraint_violations": {
+      "SF-001": 431,
+      "SF-002": 350,
+      "SF-003": 263,
+      "SF-004": 319,
+      "SF-005": 214
+    },
+    "execution_time": {
+      "avg_ms": 0.0031267090889741667,
+      "median_ms": 0.0022669992176815867,
+      "p95_ms": 0.005661000614054501
+    }
+  },
+  "misclassified_tests": []
+}

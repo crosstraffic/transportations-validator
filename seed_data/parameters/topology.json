@@ -1,0 +1,281 @@
+{
+  "facility_type": "NetworkTopology",
+  "description": "Road segment and curve topology parameters for Knowledge Graph extension. Supports Paper Section 2.2 (Neuro-Symbolic Framework).",
+  "parameters": [
+    {
+      "name": "Segment ID",
+      "rust_field": "segment_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Unique identifier for road segment",
+      "aliases": ["seg_id", "id"]
+    },
+    {
+      "name": "Segment Length",
+      "rust_field": "segment_length",
+      "unit": "m",
+      "data_type": "float",
+      "typical_min": 1.0,
+      "typical_max": 10000.0,
+      "description": "Length of road segment in meters",
+      "aliases": ["length", "seg_length"]
+    },
+    {
+      "name": "Start Node ID",
+      "rust_field": "start_node_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "ID of the node at segment start",
+      "aliases": ["from_node", "start_node"]
+    },
+    {
+      "name": "End Node ID",
+      "rust_field": "end_node_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "ID of the node at segment end",
+      "aliases": ["to_node", "end_node"]
+    },
+    {
+      "name": "Segment Grade",
+      "rust_field": "segment_grade",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 10.0,
+      "description": "Average grade of segment as percentage",
+      "aliases": ["grade", "slope"]
+    },
+    {
+      "name": "Segment Lane Count",
+      "rust_field": "segment_lane_count",
+      "unit": null,
+      "data_type": "integer",
+      "typical_min": 1,
+      "typical_max": 8,
+      "description": "Number of driving lanes in segment",
+      "aliases": ["lanes", "lane_count", "num_lanes"]
+    },
+    {
+      "name": "Segment Passing Type",
+      "rust_field": "segment_passing_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "0,1,2",
+      "description": "Passing configuration (0=Constrained, 1=Zone, 2=Lane)",
+      "aliases": ["passing_type", "passing"]
+    },
+    {
+      "name": "Horizontal Curve ID",
+      "rust_field": "h_curve_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Unique identifier for horizontal curve",
+      "aliases": ["curve_id", "hc_id"]
+    },
+    {
+      "name": "Horizontal Curve Segment ID",
+      "rust_field": "h_curve_segment_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "ID of segment containing this horizontal curve",
+      "aliases": ["parent_segment"]
+    },
+    {
+      "name": "Horizontal Curve Radius",
+      "rust_field": "h_curve_radius",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 5000.0,
+      "description": "Radius of horizontal curve in feet",
+      "aliases": ["radius", "design_rad", "curve_radius"]
+    },
+    {
+      "name": "Horizontal Curve Central Angle",
+      "rust_field": "h_curve_central_angle",
+      "unit": "deg",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 180.0,
+      "description": "Central angle of horizontal curve in degrees",
+      "aliases": ["central_angle", "delta"]
+    },
+    {
+      "name": "Horizontal Curve Superelevation",
+      "rust_field": "h_curve_superelevation",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 12.0,
+      "description": "Superelevation rate of horizontal curve",
+      "aliases": ["superelevation", "super", "banking"]
+    },
+    {
+      "name": "Horizontal Curve Class",
+      "rust_field": "h_curve_class",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "0,1,2,3,4,5",
+      "description": "Horizontal alignment class per HCM Exhibit 15-22",
+      "aliases": ["hor_class", "alignment_class"]
+    },
+    {
+      "name": "Horizontal Curve Length",
+      "rust_field": "h_curve_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 3000.0,
+      "description": "Arc length of horizontal curve",
+      "aliases": ["curve_length", "arc_length"]
+    },
+    {
+      "name": "Vertical Curve ID",
+      "rust_field": "v_curve_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Unique identifier for vertical curve",
+      "aliases": ["vc_id"]
+    },
+    {
+      "name": "Vertical Curve Segment ID",
+      "rust_field": "v_curve_segment_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "ID of segment containing this vertical curve",
+      "aliases": ["parent_segment"]
+    },
+    {
+      "name": "Vertical Curve Grade In",
+      "rust_field": "v_curve_grade_in",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 10.0,
+      "description": "Approaching grade (G1) as percentage",
+      "aliases": ["g1", "grade_in", "entry_grade"]
+    },
+    {
+      "name": "Vertical Curve Grade Out",
+      "rust_field": "v_curve_grade_out",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": -10.0,
+      "typical_max": 10.0,
+      "description": "Departing grade (G2) as percentage",
+      "aliases": ["g2", "grade_out", "exit_grade"]
+    },
+    {
+      "name": "Vertical Curve Length",
+      "rust_field": "v_curve_length",
+      "unit": "ft",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 2000.0,
+      "description": "Length of vertical curve",
+      "aliases": ["vc_length", "curve_length"]
+    },
+    {
+      "name": "Vertical Curve Class",
+      "rust_field": "v_curve_class",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "1,2,3,4,5",
+      "description": "Vertical alignment class",
+      "aliases": ["vertical_class", "vc_class"]
+    },
+    {
+      "name": "Vertical Curve Type",
+      "rust_field": "v_curve_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "crest,sag",
+      "description": "Type of vertical curve (crest or sag)",
+      "aliases": ["curve_type", "vc_type"]
+    },
+    {
+      "name": "Vertical Curve K Value",
+      "rust_field": "v_curve_k",
+      "unit": "ft/%",
+      "data_type": "float",
+      "typical_min": 10.0,
+      "typical_max": 500.0,
+      "description": "Rate of vertical curvature (L/A)",
+      "aliases": ["k_value", "k"]
+    },
+    {
+      "name": "Node ID",
+      "rust_field": "node_id",
+      "unit": null,
+      "data_type": "string",
+      "description": "Unique identifier for network node",
+      "aliases": ["id", "intersection_id"]
+    },
+    {
+      "name": "Node X Coordinate",
+      "rust_field": "node_x",
+      "unit": "m",
+      "data_type": "float",
+      "description": "X coordinate of node in reference system",
+      "aliases": ["x", "easting"]
+    },
+    {
+      "name": "Node Y Coordinate",
+      "rust_field": "node_y",
+      "unit": "m",
+      "data_type": "float",
+      "description": "Y coordinate of node in reference system",
+      "aliases": ["y", "northing"]
+    },
+    {
+      "name": "Node Z Coordinate",
+      "rust_field": "node_z",
+      "unit": "m",
+      "data_type": "float",
+      "description": "Z coordinate (elevation) of node",
+      "aliases": ["z", "elevation"]
+    },
+    {
+      "name": "Node Type",
+      "rust_field": "node_type",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "intersection,endpoint,merge,diverge,crossing",
+      "description": "Type of network node",
+      "aliases": ["type", "junction_type"]
+    }
+  ],
+  "relationships": [
+    {
+      "source": "Segment",
+      "target": "Road",
+      "type": "COMPOSED_OF",
+      "description": "Road is composed of segments"
+    },
+    {
+      "source": "Segment",
+      "target": "HorizontalCurve",
+      "type": "CONTAINS",
+      "description": "Segment contains horizontal curves"
+    },
+    {
+      "source": "Segment",
+      "target": "VerticalCurve",
+      "type": "CONTAINS",
+      "description": "Segment contains vertical curves"
+    },
+    {
+      "source": "Segment",
+      "target": "Segment",
+      "type": "CONNECTED_TO",
+      "description": "Segments connect to each other at nodes"
+    },
+    {
+      "source": "Node",
+      "target": "Segment",
+      "type": "CONNECTS",
+      "description": "Node connects multiple segments"
+    }
+  ]
+}

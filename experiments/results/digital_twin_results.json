@@ -1,0 +1,75 @@
+{
+  "experiment": "digital_twin_mapping",
+  "timestamp": "2026-02-03T21:38:14.797165",
+  "config": {
+    "input_file": null,
+    "used_sample_data": true
+  },
+  "parsing": {
+    "total_roads": 3,
+    "roads_parsed": 3,
+    "parse_errors": 0,
+    "header": {
+      "revMajor": "1",
+      "revMinor": "7",
+      "name": "Sample Two-Lane Highway",
+      "version": "1.00",
+      "date": null,
+      "geoReference": "+proj=tmerc +lat_0=0 +lon_0=0"
+    }
+  },
+  "mapping": {
+    "roads_total": 3,
+    "roads_with_geometry": 3,
+    "roads_with_lanes": 3,
+    "roads_with_elevation": 2,
+    "geometries_total": 5,
+    "geometries_arc": 2,
+    "geometries_line": 3,
+    "geometries_spiral": 0,
+    "lane_sections_total": 3,
+    "lanes_driving": 5,
+    "elevations_total": 3,
+    "superelevations_total": 1,
+    "signals_total": 1,
+    "errors": 0,
+    "warnings": 0,
+    "mapping_success_rate": 1.0,
+    "traceability_score": 1.0
+  },
+  "validation": {
+    "parameters_total": 10,
+    "parameters_valid": 8,
+    "parameters_invalid": 2,
+    "validation_pass_rate": 0.8
+  },
+  "road_results": [
+    {
+      "road_id": "1",
+      "road_name": "Highway Segment 1",
+      "parameters_checked": 5,
+      "parameters_valid": 5,
+      "parameters_invalid": 0,
+      "validity_rate": 1.0,
+      "validations": []
+    },
+    {
+      "road_id": "2",
+      "road_name": "Highway Segment 2 - Sharp Curve",
+      "parameters_checked": 4,
+      "parameters_valid": 3,
+      "parameters_invalid": 1,
+      "validity_rate": 0.75,
+      "validations": []
+    },
+    {
+      "road_id": "3",
+      "road_name": "Highway Segment 3 - Invalid Lane Width",
+      "parameters_checked": 1,
+      "parameters_valid": 0,
+      "parameters_invalid": 1,
+      "validity_rate": 0.0,
+      "validations": []
+    }
+  ]
+}

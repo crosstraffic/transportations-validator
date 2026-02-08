@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class SourceType(str, Enum):
@@ -18,6 +18,8 @@ class SourceType(str, Enum):
 class ValidationContext(BaseModel):
     """Context for validation (conditions that apply)."""
 
+    model_config = ConfigDict(extra="allow")
+
     facility_type: str | None = None
     city_type: str | None = None
     terrain_type: str | None = None
@@ -27,9 +29,6 @@ class ValidationContext(BaseModel):
     vertical_class: int | None = None
     horizontal_class: int | None = None
     jurisdiction: str | None = None
-
-    class Config:
-        extra = "allow"
 
 
 class ValidationRequest(BaseModel):
@@ -104,6 +103,8 @@ class ValidationResponse(BaseModel):
 class ParameterResponse(BaseModel):
     """Parameter response model."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     rust_field: str
@@ -113,9 +114,6 @@ class ParameterResponse(BaseModel):
     description: str | None = None
     typical_min: float | None = None
     typical_max: float | None = None
-
-    class Config:
-        from_attributes = True
 
 
 class ParameterCreate(BaseModel):
@@ -134,6 +132,8 @@ class ParameterCreate(BaseModel):
 class RuleResponse(BaseModel):
     """Design rule response model."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     parameter_id: int
     name: str
@@ -144,9 +144,6 @@ class RuleResponse(BaseModel):
     allowed_values: str | None = None
     description: str | None = None
     is_active: bool
-
-    class Config:
-        from_attributes = True
 
 
 class RuleCreate(BaseModel):
