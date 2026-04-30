@@ -8,6 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from transportations_validator.db.neo4j import Neo4jSyncService
 from transportations_validator.db.postgres import get_session
 from transportations_validator.models.validation import (
+    Clarification,
+    ClarificationType,
     SemanticFirewallError,
     SemanticFirewallRequest,
     SemanticFirewallResponse,
@@ -17,7 +19,7 @@ from transportations_validator.models.validation import (
     ValidationRequest,
     ValidationResponse,
 )
-from transportations_validator.validators import ValidationEngine
+from transportations_validator.validators.engine import ValidationEngine
 
 router = APIRouter()
 
@@ -176,7 +178,28 @@ async def validate_semantic_firewall(
     if request.speed_limit is not None:
         data["spl"] = request.speed_limit
 
-    # Use the pure semantic validator
+    # Empty input: agent provided nothing to analyze. Return early with a
+    # MISSING_PARAMETER clarification asking which parameters to validate.
+    if not data:
+        return SemanticFirewallResponse(
+            is_valid=True,
+            errors=[],
+            constraints_checked=0,
+            clarifications=[
+                Clarification(
+                    type=ClarificationType.MISSING_PARAMETER,
+                    message="No parameters were provided for validation.",
+                    suggested_question=(
+                        "Which Two-Lane Highway parameters would you like to validate? "
+                        "Available: lane_width, shoulder_width, hor_class, passing_type, "
+                        "design_rad, speed_limit (HCM Chapter 15)."
+                    ),
+                )
+            ],
+            message="No input provided; clarification needed",
+        )
+
+    # Run the semantic validator (loads constraints from transportations-library)
     result = semantic.validate(data)
 
     # Convert to API response format
@@ -191,15 +214,93 @@ async def validate_semantic_firewall(
         for v in result.errors  # Only include errors, not warnings
     ]
 
-    if result.is_valid:
-        message = f"All {result.constraints_checked} constraints passed - inputs forwarded to computational core"
-    else:
+    clarifications: list[Clarification] = []
+
+    # UNIT_CONFLICT heuristic on lane_width: 2.5-4.5 ft is implausibly narrow as feet
+    # but matches common metric lane widths (3.0 m, 3.25 m, 3.5 m, 3.65 m, 3.75 m).
+    # Emit a clarification alongside the SV-001 error so the agent can ask the user
+    # to confirm units.
+    if request.lane_width is not None and 2.5 <= request.lane_width <= 4.5:
+        metric_equiv_ft = request.lane_width * 3.28084
+        clarifications.append(
+            Clarification(
+                type=ClarificationType.UNIT_CONFLICT,
+                parameter="lane_width",
+                message=(
+                    f"lane_width={request.lane_width} is implausibly narrow as feet "
+                    f"(real lanes are >=9 ft) but matches common metric lane widths. "
+                    f"If meters were intended, the equivalent is {metric_equiv_ft:.2f} ft."
+                ),
+                suggested_question=(
+                    f"Did you mean {request.lane_width} meters? CrossTraffic expects "
+                    f"lane_width in feet (HCM convention). The metric equivalent would be "
+                    f"{metric_equiv_ft:.2f} ft."
+                ),
+            )
+        )
+
+    # SV-005 partial input: exactly one of (design_rad, speed_limit) provided.
+    # The agent should ask the user for the missing value rather than silently skipping
+    # the speed-curvature compatibility check.
+    if (request.design_rad is None) != (request.speed_limit is None):
+        if request.design_rad is not None:
+            clarifications.append(
+                Clarification(
+                    type=ClarificationType.MISSING_PARAMETER,
+                    parameter="speed_limit",
+                    message=(
+                        "SV-005 (Speed-Curvature Compatibility) requires both design_rad and "
+                        "speed_limit, but speed_limit was not provided."
+                    ),
+                    suggested_question=(
+                        "What is the speed limit (mph) for this segment? Required to verify the "
+                        "design radius is adequate per AASHTO Green Book Table 3-7."
+                    ),
+                    related_parameters=["design_rad", "speed_limit"],
+                )
+            )
+        else:
+            clarifications.append(
+                Clarification(
+                    type=ClarificationType.MISSING_PARAMETER,
+                    parameter="design_rad",
+                    message=(
+                        "SV-005 (Speed-Curvature Compatibility) requires both design_rad and "
+                        "speed_limit, but design_rad was not provided."
+                    ),
+                    suggested_question=(
+                        "What is the horizontal curve design radius (ft) for this segment? "
+                        "Required to verify it is adequate for the speed limit per AASHTO "
+                        "Green Book Table 3-7."
+                    ),
+                    related_parameters=["design_rad", "speed_limit"],
+                )
+            )
+
+    # Build response message based on errors and clarifications.
+    if errors and clarifications:
+        message = (
+            f"Validation FAILED: {len(errors)} constraint(s) violated; "
+            f"{len(clarifications)} clarification(s) needed for complete validation"
+        )
+    elif errors:
         message = f"Validation FAILED: {len(errors)} constraint(s) violated"
+    elif clarifications:
+        message = (
+            f"Partial validation passed: {result.constraints_checked} constraint(s) checked; "
+            f"{len(clarifications)} clarification(s) needed for complete validation"
+        )
+    else:
+        message = (
+            f"All {result.constraints_checked} constraints passed - inputs forwarded to "
+            f"computational core"
+        )
 
     return SemanticFirewallResponse(
         is_valid=result.is_valid,
         errors=errors,
         constraints_checked=result.constraints_checked,
+        clarifications=clarifications,
         message=message,
     )
 

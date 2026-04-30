@@ -269,3 +269,133 @@ class TestSemanticFirewallAdversarial:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
+
+
+class TestSemanticFirewallClarifications:
+    """Tests for clarification dialogue when input is incomplete (ESWA Task #1, sub-step 1B)."""
+
+    def test_sf005_missing_speed_limit_emits_clarification(self):
+        """Providing design_rad without speed_limit should emit MISSING_PARAMETER clarification."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"design_rad": 1000.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        # No errors among what was checked
+        assert data["is_valid"] is True
+        assert len(data["errors"]) == 0
+        # But a clarification is emitted asking for speed_limit
+        assert len(data["clarifications"]) == 1
+        clar = data["clarifications"][0]
+        assert clar["type"] == "missing_parameter"
+        assert clar["parameter"] == "speed_limit"
+        assert clar["related_parameters"] == ["design_rad", "speed_limit"]
+        assert clar["suggested_question"] is not None
+        assert "speed limit" in clar["suggested_question"].lower()
+
+    def test_sf005_missing_design_rad_emits_clarification(self):
+        """Providing speed_limit without design_rad should emit MISSING_PARAMETER clarification."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"speed_limit": 55, "lane_width": 11.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["is_valid"] is True
+        assert len(data["clarifications"]) == 1
+        clar = data["clarifications"][0]
+        assert clar["type"] == "missing_parameter"
+        assert clar["parameter"] == "design_rad"
+        assert "design radius" in clar["suggested_question"].lower()
+
+    def test_sf005_both_provided_no_clarification(self):
+        """When both design_rad and speed_limit are provided, no SF-005 clarification."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"design_rad": 1000.0, "speed_limit": 55},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["clarifications"]) == 0
+
+    def test_sf005_both_omitted_no_clarification(self):
+        """When neither design_rad nor speed_limit is provided, no SF-005 clarification."""
+        # Sub-step 1C will handle the all-None case separately
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"lane_width": 11.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["clarifications"]) == 0
+
+    def test_clarification_message_reflects_partial_validation(self):
+        """When clarifications are present without errors, message should indicate partial validation."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"lane_width": 11.0, "design_rad": 1000.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "partial validation" in data["message"].lower()
+        assert "clarification" in data["message"].lower()
+
+    # ─── Sub-step 1C: empty input + unit-conflict heuristic ──────────────────
+
+    def test_all_none_input_emits_clarification(self):
+        """Posting with no parameters should emit a MISSING_PARAMETER clarification asking what to analyze."""
+        response = client.post("/api/v1/validate/firewall", json={})
+        assert response.status_code == 200
+        data = response.json()
+        assert data["is_valid"] is True
+        assert data["constraints_checked"] == 0
+        assert len(data["errors"]) == 0
+        assert len(data["clarifications"]) == 1
+        clar = data["clarifications"][0]
+        assert clar["type"] == "missing_parameter"
+        assert clar["parameter"] is None
+        assert "no parameters" in clar["message"].lower()
+        assert clar["suggested_question"] is not None
+
+    def test_lane_width_metric_value_emits_unit_conflict(self):
+        """lane_width=3.5 (likely meters) should emit UNIT_CONFLICT clarification AND fail SV-001."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"lane_width": 3.5},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        # SV-001 still fires (3.5 ft is invalid)
+        assert data["is_valid"] is False
+        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
+        # AND a UNIT_CONFLICT clarification is emitted
+        unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
+        assert len(unit_clars) == 1
+        clar = unit_clars[0]
+        assert clar["parameter"] == "lane_width"
+        # 3.5 m ≈ 11.48 ft
+        assert "11.48" in clar["message"] or "11.48" in clar["suggested_question"]
+
+    def test_lane_width_normal_value_no_unit_conflict(self):
+        """A normal feet value (lane_width=11) should NOT trigger UNIT_CONFLICT."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"lane_width": 11.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
+        assert len(unit_clars) == 0
+
+    def test_lane_width_above_metric_range_no_unit_conflict(self):
+        """lane_width=5 is invalid feet but outside metric heuristic range; SV-001 fires, no UNIT_CONFLICT."""
+        response = client.post(
+            "/api/v1/validate/firewall",
+            json={"lane_width": 5.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
+        unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
+        assert len(unit_clars) == 0
