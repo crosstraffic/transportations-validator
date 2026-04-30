@@ -86,6 +86,46 @@ class ValidationResult(BaseModel):
     parameters: list[ParameterValidation] = Field(default_factory=list)
 
 
+class ClarificationType(str, Enum):
+    """Type of clarification the validator needs from the user/agent.
+
+    Unlike a RuleViolation (input was wrong), a Clarification means the system
+    cannot proceed without additional information. The MCP layer surfaces
+    these as follow-up questions the agent should ask the user.
+    """
+
+    MISSING_PARAMETER = "missing_parameter"
+    AMBIGUOUS_CONTEXT = "ambiguous_context"
+    UNIT_CONFLICT = "unit_conflict"
+
+
+class Clarification(BaseModel):
+    """A structured clarification request emitted alongside (or instead of)
+    validation errors when input is incomplete, ambiguous, or unit-inconsistent."""
+
+    type: ClarificationType
+    parameter: str | None = Field(
+        default=None,
+        description="Parameter name the clarification concerns (if applicable)",
+    )
+    message: str = Field(
+        ...,
+        description="Human-readable explanation of what is needed and why",
+    )
+    suggested_question: str | None = Field(
+        default=None,
+        description="Ready-to-ask phrasing for the agent to surface to the user",
+    )
+    options: list[str] | None = Field(
+        default=None,
+        description="Finite-choice options when the clarification has known alternatives",
+    )
+    related_parameters: list[str] | None = Field(
+        default=None,
+        description="Other parameters involved (e.g., SF-005 needs both design_rad and speed_limit)",
+    )
+
+
 class ValidationResponse(BaseModel):
     """Response from validation endpoint."""
 
@@ -94,6 +134,10 @@ class ValidationResponse(BaseModel):
     facility_type: str | None = None
     result: ValidationResult
     extracted_context: ValidationContext | None = None
+    clarifications: list[Clarification] = Field(
+        default_factory=list,
+        description="Conversational clarifications the agent should resolve before retrying",
+    )
     message: str | None = None
 
 
@@ -252,6 +296,10 @@ class SemanticFirewallResponse(BaseModel):
     constraints_checked: int = Field(
         default=0,
         description="Number of constraints evaluated",
+    )
+    clarifications: list[Clarification] = Field(
+        default_factory=list,
+        description="Conversational clarifications the agent should resolve before retrying",
     )
     message: str = Field(
         default="",
