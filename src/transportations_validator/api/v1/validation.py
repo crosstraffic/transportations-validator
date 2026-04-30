@@ -165,6 +165,35 @@ async def validate_semantic_firewall(
     """
     # Build input dict from request
     data = {}
+    # Detect empty input — agent provided nothing to analyze.
+    # Return early with a clarification asking what to validate.
+    if all(
+        getattr(request, field) is None
+        for field in ("lane_width", "shoulder_width", "hor_class",
+                      "passing_type", "design_rad", "speed_limit")
+    ):
+        return SemanticFirewallResponse(
+            is_valid=True,
+            errors=[],
+            constraints_checked=0,
+            clarifications=[
+                Clarification(
+                    type=ClarificationType.MISSING_PARAMETER,
+                    message="No parameters were provided for validation.",
+                    suggested_question=(
+                        "Which Two-Lane Highway parameters would you like to validate? "
+                        "Available: lane_width, shoulder_width, hor_class, passing_type, "
+                        "design_rad, speed_limit (HCM Chapter 15)."
+                    ),
+                )
+            ],
+            message="No input provided; clarification needed",
+        )
+
+    errors: list[SemanticFirewallError] = []
+    constraints_checked = 0
+
+    # SF-001: Lane Width (9-12 ft)
     if request.lane_width is not None:
         data["lane_width"] = request.lane_width
     if request.shoulder_width is not None:
@@ -220,6 +249,12 @@ async def validate_semantic_firewall(
     # but matches common metric lane widths (3.0 m, 3.25 m, 3.5 m, 3.65 m, 3.75 m).
     # Emit a clarification alongside the SV-001 error so the agent can ask the user
     # to confirm units.
+    clarifications: list[Clarification] = []
+
+    # UNIT_CONFLICT heuristic: lane_width in plausible-metric range (2.5-4.5).
+    # A real lane is >=9 ft; the 2.5-4.5 range matches common metric lane widths
+    # (3.0 m, 3.25 m, 3.5 m, 3.65 m, 3.75 m). The agent should confirm units before
+    # treating this as a hard rejection.
     if request.lane_width is not None and 2.5 <= request.lane_width <= 4.5:
         metric_equiv_ft = request.lane_width * 3.28084
         clarifications.append(
@@ -240,6 +275,7 @@ async def validate_semantic_firewall(
         )
 
     # SV-005 partial input: exactly one of (design_rad, speed_limit) provided.
+    # Detect partial SF-005 input: exactly one of (design_rad, speed_limit) provided.
     # The agent should ask the user for the missing value rather than silently skipping
     # the speed-curvature compatibility check.
     if (request.design_rad is None) != (request.speed_limit is None):

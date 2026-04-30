@@ -355,20 +355,21 @@ class TestSemanticFirewallClarifications:
         clar = data["clarifications"][0]
         assert clar["type"] == "missing_parameter"
         assert clar["parameter"] is None
+        assert clar["parameter"] is None  # not parameter-specific
         assert "no parameters" in clar["message"].lower()
         assert clar["suggested_question"] is not None
 
     def test_lane_width_metric_value_emits_unit_conflict(self):
-        """lane_width=3.5 (likely meters) should emit UNIT_CONFLICT clarification AND fail SV-001."""
+        """lane_width=3.5 (likely meters) should emit UNIT_CONFLICT clarification AND fail SF-001."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 3.5},
         )
         assert response.status_code == 200
         data = response.json()
-        # SV-001 still fires (3.5 ft is invalid)
+        # SF-001 still fires (3.5 ft is invalid)
         assert data["is_valid"] is False
-        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
+        assert any(e["constraint_id"] == "SF-001" for e in data["errors"])
         # AND a UNIT_CONFLICT clarification is emitted
         unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
         assert len(unit_clars) == 1
@@ -389,13 +390,13 @@ class TestSemanticFirewallClarifications:
         assert len(unit_clars) == 0
 
     def test_lane_width_above_metric_range_no_unit_conflict(self):
-        """lane_width=5 is invalid feet but outside metric heuristic range; SV-001 fires, no UNIT_CONFLICT."""
+        """lane_width=5 is invalid feet but outside metric heuristic range; SF-001 fires, no UNIT_CONFLICT."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 5.0},
         )
         assert response.status_code == 200
         data = response.json()
-        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
+        assert any(e["constraint_id"] == "SF-001" for e in data["errors"])
         unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
         assert len(unit_clars) == 0
