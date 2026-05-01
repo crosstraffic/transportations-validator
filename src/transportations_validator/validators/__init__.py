@@ -14,7 +14,17 @@ Full validation engine (requires [api] extras):
 
 # Always available - semantic validation with zero dependencies
 # Re-export semantic module for convenient access
-from transportations_validator.validators import forward_chain, semantic
+from transportations_validator.validators import derivation, forward_chain, semantic
+from transportations_validator.validators.derivation import (
+    DerivationClosureResult,
+    DerivationStep,
+    GateVerdict,
+    LLMClient,
+    ProposedDerivation,
+    StubLLMClient,
+    derive_downstream_values,
+    verify_proposal,
+)
 from transportations_validator.validators.forward_chain import (
     BackwardChainResult,
     ChainStep,
@@ -46,6 +56,8 @@ __all__ = [
     "semantic",
     # Forward-chaining reasoning module
     "forward_chain",
+    # LLM-mediated derivation closure module
+    "derivation",
     # Core types
     "Severity",
     "Violation",
@@ -70,6 +82,15 @@ __all__ = [
     # Chain-reasoning helpers
     "backward_chain",
     "load_relationships_from_seed",
+    # Derivation closure types and helpers
+    "ProposedDerivation",
+    "GateVerdict",
+    "DerivationStep",
+    "DerivationClosureResult",
+    "LLMClient",
+    "StubLLMClient",
+    "verify_proposal",
+    "derive_downstream_values",
     # Constants
     "SPEED_RADIUS_TABLE",
 ]
