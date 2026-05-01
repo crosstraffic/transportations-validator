@@ -8,7 +8,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from transportations_validator.api.v1 import graph, parameters, rules, validation
+from transportations_validator.api.v1 import (
+    graph,
+    parameters,
+    reasoning,
+    rules,
+    validation,
+)
 from transportations_validator.config import get_settings
 from transportations_validator.db.neo4j.auto_sync import register_sync_events, sync_manager
 from transportations_validator.db.neo4j.connection import (
@@ -72,6 +78,7 @@ app.include_router(validation.router, prefix=settings.api_prefix, tags=["validat
 app.include_router(parameters.router, prefix=settings.api_prefix, tags=["parameters"])
 app.include_router(rules.router, prefix=settings.api_prefix, tags=["rules"])
 app.include_router(graph.router, prefix=settings.api_prefix, tags=["graph"])
+app.include_router(reasoning.router, prefix=settings.api_prefix, tags=["reasoning"])
 
 # Mount static files for graph visualization
 static_path = Path(__file__).parent.parent.parent / "static"
