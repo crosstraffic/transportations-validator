@@ -114,7 +114,13 @@ class TestForwardChainEndpoint:
         data = response.json()
         assert len(data["chain"]) > 0
         for entry in data["chain"]:
-            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+            assert set(entry.keys()) == {
+                "parameter",
+                "depth",
+                "via_path",
+                "reason",
+                "derived_confidence",
+            }
             assert isinstance(entry["depth"], int)
             assert isinstance(entry["via_path"], list)
 
@@ -199,6 +205,12 @@ class TestBackwardChainEndpoint:
         data = response.json()
         assert len(data["chain"]) > 0
         for entry in data["chain"]:
-            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+            assert set(entry.keys()) == {
+                "parameter",
+                "depth",
+                "via_path",
+                "reason",
+                "derived_confidence",
+            }
             assert isinstance(entry["depth"], int)
             assert isinstance(entry["via_path"], list)

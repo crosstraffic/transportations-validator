@@ -36,14 +36,51 @@ from pathlib import Path
 from typing import Any
 
 
+# ─── Provenance weighting ──────────────────────────────────────────────────
+#
+# Each AFFECTS edge can carry an optional ``source`` field naming the
+# authority that backs the rule. When provenance weighting is enabled, the
+# BFS multiplies edge weights along the path so each downstream parameter
+# carries a ``derived_confidence`` score in [0, 1]. A path that traverses
+# only HCM-backed edges keeps confidence 1.0; a path that includes a
+# state-DOT supplement decays toward 0.7; an unknown-source edge uses the
+# default weight below.
+#
+# These weights are deliberately conservative defaults for the ESWA paper.
+# Domain experts can tune the table without touching traversal code.
+SOURCE_AUTHORITY_WEIGHTS: dict[str, float] = {
+    "HCM": 1.0,
+    "AASHTO": 0.95,
+    "MUTCD": 0.95,
+    "FHWA": 0.9,
+    "state_DOT": 0.7,
+    "county_supplement": 0.5,
+    "derived": 0.5,
+}
+DEFAULT_AUTHORITY_WEIGHT: float = 0.5
+
+
+def _edge_weight(rel: dict[str, Any], enabled: bool) -> float:
+    """Authority weight for a single AFFECTS edge.
+
+    When ``enabled`` is False, every edge weighs 1.0 (used for the
+    weighting-disabled ablation row).
+    """
+    if not enabled:
+        return 1.0
+    source = rel.get("source", "unknown")
+    return SOURCE_AUTHORITY_WEIGHTS.get(source, DEFAULT_AUTHORITY_WEIGHT)
+
+
 @dataclass(frozen=True)
 class ChainStep:
-    """One downstream parameter reached by forward chaining."""
+    """One downstream (or upstream) parameter reached by chaining."""
 
-    parameter: str          # name of the downstream parameter
-    depth: int              # 1 = direct, 2 = grandchild, etc.
-    via_path: list[str]     # edges traversed: ["hor_class -> speed_limit", ...]
-    reason: str             # description from the seed relationship
+    parameter: str               # name of the parameter
+    depth: int                   # 1 = direct, 2 = grandchild, etc.
+    via_path: list[str]          # edges traversed: ["hor_class -> speed_limit", ...]
+    reason: str                  # description from the seed relationship
+    derived_confidence: float = 1.0  # product of edge authority weights along the path
 
 
 @dataclass
@@ -75,6 +112,7 @@ class ForwardChainResult:
                     "depth": s.depth,
                     "via_path": s.via_path,
                     "reason": s.reason,
+                    "derived_confidence": s.derived_confidence,
                 }
                 for s in self.chain
             ],
@@ -88,6 +126,7 @@ def forward_chain(
     root: str,
     facility_type: str | None = None,
     max_depth: int = 10,
+    enable_provenance_weighting: bool = True,
 ) -> ForwardChainResult:
     """Traverse AFFECTS edges from ``root`` to find downstream parameters.
 
@@ -108,8 +147,9 @@ def forward_chain(
         A :class:`ForwardChainResult` listing every downstream parameter with
         its depth, the edge path that reached it, and the seed description.
     """
-    # Build adjacency restricted to AFFECTS edges and (optionally) facility type.
-    affects_edges: dict[str, list[tuple[str, str]]] = {}
+    # Build adjacency restricted to AFFECTS edges and (optionally) facility
+    # type. Each edge entry is (to_field, description, weight).
+    affects_edges: dict[str, list[tuple[str, str, float]]] = {}
     for rel in relationships:
         if rel.get("type") != "AFFECTS":
             continue
@@ -118,30 +158,34 @@ def forward_chain(
         from_f = rel["from_field"]
         to_f = rel["to_field"]
         desc = rel.get("description", "")
-        affects_edges.setdefault(from_f, []).append((to_f, desc))
+        weight = _edge_weight(rel, enable_provenance_weighting)
+        affects_edges.setdefault(from_f, []).append((to_f, desc, weight))
 
     result = ForwardChainResult(root=root, facility_type=facility_type)
     visited: set[str] = {root}
-    queue: list[tuple[str, int, list[str]]] = [(root, 0, [])]
+    # Queue entries: (current_node, depth, path_so_far, accumulated_confidence).
+    queue: list[tuple[str, int, list[str], float]] = [(root, 0, [], 1.0)]
 
     while queue:
-        current, depth, path = queue.pop(0)
+        current, depth, path, conf = queue.pop(0)
         if depth >= max_depth:
             continue
-        for next_param, desc in affects_edges.get(current, []):
+        for next_param, desc, weight in affects_edges.get(current, []):
             if next_param in visited:
                 continue
             visited.add(next_param)
             new_path = path + [f"{current} -> {next_param}"]
+            new_conf = conf * weight
             result.chain.append(
                 ChainStep(
                     parameter=next_param,
                     depth=depth + 1,
                     via_path=new_path,
                     reason=desc,
+                    derived_confidence=new_conf,
                 )
             )
-            queue.append((next_param, depth + 1, new_path))
+            queue.append((next_param, depth + 1, new_path, new_conf))
 
     return result
 
@@ -180,6 +224,7 @@ class BackwardChainResult:
                     "depth": s.depth,
                     "via_path": s.via_path,
                     "reason": s.reason,
+                    "derived_confidence": s.derived_confidence,
                 }
                 for s in self.chain
             ],
@@ -193,6 +238,7 @@ def backward_chain(
     target: str,
     facility_type: str | None = None,
     max_depth: int = 10,
+    enable_provenance_weighting: bool = True,
 ) -> BackwardChainResult:
     """Traverse AFFECTS edges in reverse from ``target`` to find upstream causes.
 
@@ -219,8 +265,8 @@ def backward_chain(
         its depth, the causal edge path that links it to the target, and the
         seed description of the connecting AFFECTS rule.
     """
-    # Reverse adjacency: to_field -> [(from_field, desc)].
-    reverse_edges: dict[str, list[tuple[str, str]]] = {}
+    # Reverse adjacency: to_field -> [(from_field, desc, weight)].
+    reverse_edges: dict[str, list[tuple[str, str, float]]] = {}
     for rel in relationships:
         if rel.get("type") != "AFFECTS":
             continue
@@ -229,31 +275,35 @@ def backward_chain(
         from_f = rel["from_field"]
         to_f = rel["to_field"]
         desc = rel.get("description", "")
-        reverse_edges.setdefault(to_f, []).append((from_f, desc))
+        weight = _edge_weight(rel, enable_provenance_weighting)
+        reverse_edges.setdefault(to_f, []).append((from_f, desc, weight))
 
     result = BackwardChainResult(target=target, facility_type=facility_type)
     visited: set[str] = {target}
-    queue: list[tuple[str, int, list[str]]] = [(target, 0, [])]
+    # Queue entries: (current_node, depth, path_so_far, accumulated_confidence).
+    queue: list[tuple[str, int, list[str], float]] = [(target, 0, [], 1.0)]
 
     while queue:
-        current, depth, path = queue.pop(0)
+        current, depth, path, conf = queue.pop(0)
         if depth >= max_depth:
             continue
-        for prev_param, desc in reverse_edges.get(current, []):
+        for prev_param, desc, weight in reverse_edges.get(current, []):
             if prev_param in visited:
                 continue
             visited.add(prev_param)
             # Prepend the new edge so via_path always reads root-cause -> symptom.
             new_path = [f"{prev_param} -> {current}", *path]
+            new_conf = conf * weight
             result.chain.append(
                 ChainStep(
                     parameter=prev_param,
                     depth=depth + 1,
                     via_path=new_path,
                     reason=desc,
+                    derived_confidence=new_conf,
                 )
             )
-            queue.append((prev_param, depth + 1, new_path))
+            queue.append((prev_param, depth + 1, new_path, new_conf))
 
     return result
 

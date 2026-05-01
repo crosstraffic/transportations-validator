@@ -1,6 +1,10 @@
 """Tests for bidirectional chaining over AFFECTS edges (ESWA Task #2)."""
 
+import math
+
 from transportations_validator.validators.forward_chain import (
+    DEFAULT_AUTHORITY_WEIGHT,
+    SOURCE_AUTHORITY_WEIGHTS,
     backward_chain,
     forward_chain,
     load_relationships_from_seed,
@@ -139,7 +143,13 @@ class TestForwardChain:
         assert len(d["chain"]) == 2
         # Each chain entry has the expected keys
         for entry in d["chain"]:
-            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+            assert set(entry.keys()) == {
+                "parameter",
+                "depth",
+                "via_path",
+                "reason",
+                "derived_confidence",
+            }
 
 
 class TestBackwardChain:
@@ -228,7 +238,13 @@ class TestBackwardChain:
         assert d["max_depth"] == 2
         assert len(d["chain"]) == 3
         for entry in d["chain"]:
-            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+            assert set(entry.keys()) == {
+                "parameter",
+                "depth",
+                "via_path",
+                "reason",
+                "derived_confidence",
+            }
 
     def test_paper_worked_example_runs_against_real_seed(self):
         """bffs <- speed_limit <- hor_class must be present in the seed."""
@@ -237,6 +253,99 @@ class TestBackwardChain:
         assert "speed_limit" in result.upstream_parameters
         assert "hor_class" in result.upstream_parameters
         assert result.max_depth >= 2
+
+
+class TestProvenanceWeighting:
+    """Confidence is the product of edge authority weights along the path."""
+
+    # Same topology as SYNTHETIC_RELS but with explicit ``source`` annotations
+    # so the multiplicative confidence math is observable.
+    WEIGHTED_RELS = [
+        {
+            "type": "AFFECTS",
+            "from_field": "hor_class",
+            "to_field": "speed_limit",
+            "facility_type": "BasicFreeway",
+            "description": "HCM-backed edge",
+            "source": "HCM",
+        },
+        {
+            "type": "AFFECTS",
+            "from_field": "speed_limit",
+            "to_field": "bffs",
+            "facility_type": "BasicFreeway",
+            "description": "State-DOT-backed edge (lower authority)",
+            "source": "state_DOT",
+        },
+    ]
+
+    def test_top_tier_only_keeps_confidence_one(self):
+        """A single HCM-backed hop yields derived_confidence == 1.0."""
+        result = forward_chain(
+            self.WEIGHTED_RELS, root="hor_class", facility_type="BasicFreeway"
+        )
+        speed_step = next(s for s in result.chain if s.parameter == "speed_limit")
+        assert math.isclose(speed_step.derived_confidence, SOURCE_AUTHORITY_WEIGHTS["HCM"])
+
+    def test_lower_authority_decays_confidence(self):
+        """Crossing a state-DOT edge multiplies confidence by 0.7."""
+        result = forward_chain(
+            self.WEIGHTED_RELS, root="hor_class", facility_type="BasicFreeway"
+        )
+        bffs_step = next(s for s in result.chain if s.parameter == "bffs")
+        expected = SOURCE_AUTHORITY_WEIGHTS["HCM"] * SOURCE_AUTHORITY_WEIGHTS["state_DOT"]
+        assert math.isclose(bffs_step.derived_confidence, expected)
+
+    def test_unannotated_edges_use_default_weight(self):
+        """Edges without a ``source`` field fall back to DEFAULT_AUTHORITY_WEIGHT."""
+        # SYNTHETIC_RELS has no source field on any edge.
+        result = forward_chain(
+            SYNTHETIC_RELS, root="hor_class", facility_type="BasicFreeway"
+        )
+        speed_step = next(s for s in result.chain if s.parameter == "speed_limit")
+        assert math.isclose(speed_step.derived_confidence, DEFAULT_AUTHORITY_WEIGHT)
+        bffs_step = next(s for s in result.chain if s.parameter == "bffs")
+        assert math.isclose(bffs_step.derived_confidence, DEFAULT_AUTHORITY_WEIGHT ** 2)
+
+    def test_disabled_weighting_keeps_confidence_one(self):
+        """enable_provenance_weighting=False is the ablation row: every step gets 1.0."""
+        result = forward_chain(
+            self.WEIGHTED_RELS,
+            root="hor_class",
+            facility_type="BasicFreeway",
+            enable_provenance_weighting=False,
+        )
+        for step in result.chain:
+            assert step.derived_confidence == 1.0
+
+    def test_backward_chain_propagates_confidence(self):
+        """Backward chaining decays confidence the same way as forward."""
+        result = backward_chain(
+            self.WEIGHTED_RELS, target="bffs", facility_type="BasicFreeway"
+        )
+        # speed_limit is one hop upstream via the state_DOT edge.
+        speed_step = next(s for s in result.chain if s.parameter == "speed_limit")
+        assert math.isclose(speed_step.derived_confidence, SOURCE_AUTHORITY_WEIGHTS["state_DOT"])
+        # hor_class is two hops upstream: state_DOT * HCM.
+        hor_step = next(s for s in result.chain if s.parameter == "hor_class")
+        expected = SOURCE_AUTHORITY_WEIGHTS["state_DOT"] * SOURCE_AUTHORITY_WEIGHTS["HCM"]
+        assert math.isclose(hor_step.derived_confidence, expected)
+
+    def test_unknown_source_uses_default_weight(self):
+        """A ``source`` value not in the weights table falls back to DEFAULT_AUTHORITY_WEIGHT."""
+        rels = [
+            {
+                "type": "AFFECTS",
+                "from_field": "x",
+                "to_field": "y",
+                "facility_type": "BasicFreeway",
+                "description": "edge from a fictional authority",
+                "source": "Some_Other_Standard",
+            }
+        ]
+        result = forward_chain(rels, root="x", facility_type="BasicFreeway")
+        y_step = next(s for s in result.chain if s.parameter == "y")
+        assert math.isclose(y_step.derived_confidence, DEFAULT_AUTHORITY_WEIGHT)
 
 
 class TestLoadRelationshipsFromSeed:

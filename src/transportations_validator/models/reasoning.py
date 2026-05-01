@@ -24,6 +24,18 @@ class ChainStepModel(BaseModel):
         default="",
         description="Description from the seed AFFECTS edge",
     )
+    derived_confidence: float = Field(
+        default=1.0,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Product of edge authority weights along the path; 1.0 means "
+            "every edge traces to a top-tier source (HCM/AASHTO/MUTCD), "
+            "lower values indicate the chain crossed less-authoritative "
+            "sources (state DOT supplements, derived rules, or unannotated "
+            "edges)."
+        ),
+    )
 
 
 class ForwardChainRequest(BaseModel):
