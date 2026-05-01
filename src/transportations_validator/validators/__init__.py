@@ -16,8 +16,10 @@ Full validation engine (requires [api] extras):
 # Re-export semantic module for convenient access
 from transportations_validator.validators import forward_chain, semantic
 from transportations_validator.validators.forward_chain import (
+    BackwardChainResult,
     ChainStep,
     ForwardChainResult,
+    backward_chain,
     load_relationships_from_seed,
 )
 from transportations_validator.validators.semantic import (
@@ -50,6 +52,7 @@ __all__ = [
     "ValidationResult",
     "ChainStep",
     "ForwardChainResult",
+    "BackwardChainResult",
     # High-level validators
     "validate",
     "validate_highway",
@@ -64,7 +67,8 @@ __all__ = [
     "validate_phf",
     "validate_phv",
     "validate_speed_limit",
-    # Forward-chaining helpers
+    # Chain-reasoning helpers
+    "backward_chain",
     "load_relationships_from_seed",
     # Constants
     "SPEED_RADIUS_TABLE",

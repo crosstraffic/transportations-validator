@@ -1,6 +1,7 @@
-"""Tests for forward-chaining over AFFECTS edges (ESWA Task #2)."""
+"""Tests for bidirectional chaining over AFFECTS edges (ESWA Task #2)."""
 
 from transportations_validator.validators.forward_chain import (
+    backward_chain,
     forward_chain,
     load_relationships_from_seed,
 )
@@ -139,6 +140,103 @@ class TestForwardChain:
         # Each chain entry has the expected keys
         for entry in d["chain"]:
             assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+
+
+class TestBackwardChain:
+    """Unit tests for the reverse traversal (root-cause diagnosis)."""
+
+    def test_two_hop_reverse_paper_example(self):
+        """Walking back from bffs surfaces speed_limit (depth 1) and hor_class (depth 2)."""
+        result = backward_chain(SYNTHETIC_RELS, target="bffs", facility_type="BasicFreeway")
+
+        assert result.target == "bffs"
+        assert result.facility_type == "BasicFreeway"
+        # Both speed_limit -> bffs and trd -> bffs are direct upstreams.
+        # hor_class is reached via speed_limit at depth 2.
+        assert result.upstream_parameters == {"speed_limit", "trd", "hor_class"}
+        assert result.max_depth == 2
+
+        # speed_limit is depth 1, path reads in causal order.
+        speed_step = next(s for s in result.chain if s.parameter == "speed_limit")
+        assert speed_step.depth == 1
+        assert speed_step.via_path == ["speed_limit -> bffs"]
+
+        # hor_class is depth 2; full causal narrative ends at the symptom.
+        hor_step = next(s for s in result.chain if s.parameter == "hor_class")
+        assert hor_step.depth == 2
+        assert hor_step.via_path == [
+            "hor_class -> speed_limit",
+            "speed_limit -> bffs",
+        ]
+
+    def test_single_hop_reverse(self):
+        """Walking back from speed_limit yields exactly one upstream."""
+        result = backward_chain(
+            SYNTHETIC_RELS, target="speed_limit", facility_type="BasicFreeway"
+        )
+        assert result.upstream_parameters == {"hor_class"}
+        assert result.max_depth == 1
+
+    def test_graph_root_returns_empty_chain(self):
+        """A node with no inbound AFFECTS edges has no upstream candidates."""
+        result = backward_chain(
+            SYNTHETIC_RELS, target="hor_class", facility_type="BasicFreeway"
+        )
+        assert result.chain == []
+        assert result.upstream_parameters == set()
+        assert result.max_depth == 0
+
+    def test_related_to_edges_are_not_followed(self):
+        """Backward chaining ignores RELATED_TO; only AFFECTS counts."""
+        # shoulder_width is connected to lane_width only via RELATED_TO.
+        result = backward_chain(
+            SYNTHETIC_RELS, target="shoulder_width", facility_type="BasicFreeway"
+        )
+        assert result.chain == []
+
+    def test_facility_type_filter_excludes_other_facilities(self):
+        """Reverse edges from other facility types are not traversed."""
+        # spl <- hor_class exists only for TwoLaneHighway; should not appear here.
+        result = backward_chain(SYNTHETIC_RELS, target="spl", facility_type="BasicFreeway")
+        assert result.upstream_parameters == set()
+
+    def test_facility_type_none_uses_all_edges(self):
+        """When facility_type is None, every facility's edges count."""
+        result = backward_chain(SYNTHETIC_RELS, target="spl", facility_type=None)
+        assert "hor_class" in result.upstream_parameters
+
+    def test_max_depth_caps_reverse_traversal(self):
+        """max_depth bounds how far back BFS will go."""
+        result = backward_chain(
+            SYNTHETIC_RELS,
+            target="bffs",
+            facility_type="BasicFreeway",
+            max_depth=1,
+        )
+        # Only the direct upstreams should fire; hor_class (depth 2) is excluded.
+        assert result.upstream_parameters == {"speed_limit", "trd"}
+        assert result.max_depth == 1
+
+    def test_to_dict_serialization_round_trip(self):
+        """to_dict() produces the JSON shape the API endpoint will return."""
+        result = backward_chain(SYNTHETIC_RELS, target="bffs", facility_type="BasicFreeway")
+        d = result.to_dict()
+
+        assert d["target"] == "bffs"
+        assert d["facility_type"] == "BasicFreeway"
+        assert d["upstream_count"] == 3
+        assert d["max_depth"] == 2
+        assert len(d["chain"]) == 3
+        for entry in d["chain"]:
+            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+
+    def test_paper_worked_example_runs_against_real_seed(self):
+        """bffs <- speed_limit <- hor_class must be present in the seed."""
+        rels = load_relationships_from_seed()
+        result = backward_chain(rels, target="bffs", facility_type="BasicFreeway")
+        assert "speed_limit" in result.upstream_parameters
+        assert "hor_class" in result.upstream_parameters
+        assert result.max_depth >= 2
 
 
 class TestLoadRelationshipsFromSeed:

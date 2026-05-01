@@ -74,3 +74,57 @@ class ForwardChainResponse(BaseModel):
         ge=0,
         description="Length of the longest path actually traversed",
     )
+
+
+class BackwardChainRequest(BaseModel):
+    """Input for ``POST /api/v1/reason/backward-chain``."""
+
+    target: str = Field(
+        ...,
+        min_length=1,
+        description=(
+            "Parameter whose value is in question; reverse traversal starts here"
+        ),
+        examples=["bffs"],
+    )
+    facility_type: str | None = Field(
+        default=None,
+        description=(
+            "Restrict traversal to AFFECTS edges of this facility type. "
+            "If omitted, every facility type is considered."
+        ),
+        examples=["BasicFreeway"],
+    )
+    max_depth: int = Field(
+        default=10,
+        ge=1,
+        le=20,
+        description="Hard cap on reverse traversal depth",
+    )
+
+
+class BackwardChainResponse(BaseModel):
+    """Result of ``POST /api/v1/reason/backward-chain``."""
+
+    target: str = Field(..., description="Target parameter requested")
+    facility_type: str | None = Field(
+        ...,
+        description="Facility type filter (echoed from the request)",
+    )
+    chain: list[ChainStepModel] = Field(
+        default_factory=list,
+        description=(
+            "One entry per upstream candidate. Each via_path reads in causal "
+            "order ('root_cause -> ... -> target')."
+        ),
+    )
+    upstream_count: int = Field(
+        ...,
+        ge=0,
+        description="Number of upstream parameters reached",
+    )
+    max_depth: int = Field(
+        ...,
+        ge=0,
+        description="Length of the longest reverse path traversed",
+    )

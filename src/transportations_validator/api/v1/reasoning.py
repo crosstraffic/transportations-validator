@@ -14,11 +14,14 @@ from typing import Any
 from fastapi import APIRouter
 
 from transportations_validator.models.reasoning import (
+    BackwardChainRequest,
+    BackwardChainResponse,
     ChainStepModel,
     ForwardChainRequest,
     ForwardChainResponse,
 )
 from transportations_validator.validators.forward_chain import (
+    backward_chain,
     forward_chain,
     load_relationships_from_seed,
 )
@@ -71,5 +74,46 @@ async def reason_forward_chain(request: ForwardChainRequest) -> ForwardChainResp
             for s in result.chain
         ],
         downstream_count=len(result.chain),
+        max_depth=result.max_depth,
+    )
+
+
+@router.post("/reason/backward-chain", response_model=BackwardChainResponse)
+async def reason_backward_chain(request: BackwardChainRequest) -> BackwardChainResponse:
+    """Walk AFFECTS edges in reverse from a target parameter to find upstream causes.
+
+    Use case: a downstream check has just rejected a derived value (e.g.
+    ``bffs`` is out of bounds). Backward chaining surfaces every upstream
+    parameter the engineer should re-examine, with the rule chain that links
+    each candidate to the symptom.
+
+    Worked example (BasicFreeway): a failure on ``bffs`` returns
+    ``speed_limit`` (depth 1) and ``hor_class`` (depth 2). Each ``via_path``
+    reads in causal order, e.g. ``["hor_class -> speed_limit",
+    "speed_limit -> bffs"]``.
+
+    An unknown ``target`` is not an error — it returns an empty chain, which
+    the caller can treat as "no upstream parameter in the KG affects this."
+    """
+    result = backward_chain(
+        _relationships(),
+        target=request.target,
+        facility_type=request.facility_type,
+        max_depth=request.max_depth,
+    )
+
+    return BackwardChainResponse(
+        target=result.target,
+        facility_type=result.facility_type,
+        chain=[
+            ChainStepModel(
+                parameter=s.parameter,
+                depth=s.depth,
+                via_path=s.via_path,
+                reason=s.reason,
+            )
+            for s in result.chain
+        ],
+        upstream_count=len(result.chain),
         max_depth=result.max_depth,
     )

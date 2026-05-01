@@ -117,3 +117,88 @@ class TestForwardChainEndpoint:
             assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
             assert isinstance(entry["depth"], int)
             assert isinstance(entry["via_path"], list)
+
+
+class TestBackwardChainEndpoint:
+    """POST /api/v1/reason/backward-chain"""
+
+    def setup_method(self) -> None:
+        _relationships.cache_clear()
+
+    def test_paper_worked_example_reverse(self):
+        """bffs <- speed_limit <- hor_class on BasicFreeway."""
+        response = client.post(
+            "/api/v1/reason/backward-chain",
+            json={"target": "bffs", "facility_type": "BasicFreeway"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["target"] == "bffs"
+        assert data["facility_type"] == "BasicFreeway"
+        assert data["upstream_count"] >= 2
+        assert data["max_depth"] >= 2
+
+        upstream = {step["parameter"] for step in data["chain"]}
+        assert "speed_limit" in upstream
+        assert "hor_class" in upstream
+
+        # via_path reads in causal order: root cause -> symptom.
+        hor_step = next(s for s in data["chain"] if s["parameter"] == "hor_class")
+        assert hor_step["depth"] == 2
+        assert hor_step["via_path"][-1].endswith("-> bffs")
+        assert hor_step["via_path"][0].startswith("hor_class ->")
+
+    def test_unknown_target_returns_empty_chain(self):
+        """Unknown targets are not errors; they just have no upstream."""
+        response = client.post(
+            "/api/v1/reason/backward-chain",
+            json={"target": "definitely_not_a_real_parameter_xyz"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["chain"] == []
+        assert data["upstream_count"] == 0
+        assert data["max_depth"] == 0
+
+    def test_max_depth_caps_reverse_traversal(self):
+        """max_depth=1 stops the BFS after the direct upstreams."""
+        response = client.post(
+            "/api/v1/reason/backward-chain",
+            json={
+                "target": "bffs",
+                "facility_type": "BasicFreeway",
+                "max_depth": 1,
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["max_depth"] <= 1
+        # hor_class is depth 2 from bffs, so it must be excluded.
+        assert "hor_class" not in {s["parameter"] for s in data["chain"]}
+
+    def test_max_depth_out_of_bounds_rejected(self):
+        """max_depth must be in [1, 20] per the request schema."""
+        response = client.post(
+            "/api/v1/reason/backward-chain",
+            json={"target": "bffs", "max_depth": 0},
+        )
+        assert response.status_code == 422
+
+    def test_missing_target_rejected(self):
+        """target is required."""
+        response = client.post("/api/v1/reason/backward-chain", json={})
+        assert response.status_code == 422
+
+    def test_chain_entry_shape(self):
+        """Each chain entry exposes the four documented fields."""
+        response = client.post(
+            "/api/v1/reason/backward-chain",
+            json={"target": "bffs", "facility_type": "BasicFreeway"},
+        )
+        data = response.json()
+        assert len(data["chain"]) > 0
+        for entry in data["chain"]:
+            assert set(entry.keys()) == {"parameter", "depth", "via_path", "reason"}
+            assert isinstance(entry["depth"], int)
+            assert isinstance(entry["via_path"], list)
