@@ -163,37 +163,8 @@ async def validate_semantic_firewall(
 
     Returns deterministic, traceable validation results with actionable error messages.
     """
-    # Build input dict from request
-    data = {}
-    # Detect empty input — agent provided nothing to analyze.
-    # Return early with a clarification asking what to validate.
-    if all(
-        getattr(request, field) is None
-        for field in ("lane_width", "shoulder_width", "hor_class",
-                      "passing_type", "design_rad", "speed_limit")
-    ):
-        return SemanticFirewallResponse(
-            is_valid=True,
-            errors=[],
-            constraints_checked=0,
-            clarifications=[
-                Clarification(
-                    type=ClarificationType.MISSING_PARAMETER,
-                    message="No parameters were provided for validation.",
-                    suggested_question=(
-                        "Which Two-Lane Highway parameters would you like to validate? "
-                        "Available: lane_width, shoulder_width, hor_class, passing_type, "
-                        "design_rad, speed_limit (HCM Chapter 15)."
-                    ),
-                )
-            ],
-            message="No input provided; clarification needed",
-        )
-
-    errors: list[SemanticFirewallError] = []
-    constraints_checked = 0
-
-    # SF-001: Lane Width (9-12 ft)
+    # Build the input dict from request fields (None values are skipped).
+    data: dict[str, Any] = {}
     if request.lane_width is not None:
         data["lane_width"] = request.lane_width
     if request.shoulder_width is not None:
@@ -228,10 +199,10 @@ async def validate_semantic_firewall(
             message="No input provided; clarification needed",
         )
 
-    # Run the semantic validator (loads constraints from transportations-library)
+    # Run the semantic validator (loads constraints from transportations-library).
+    # Only ERROR-severity violations become constraint errors; warnings are
+    # suppressed at this layer.
     result = semantic.validate(data)
-
-    # Convert to API response format
     errors = [
         SemanticFirewallError(
             constraint_id=v.rule_id,
@@ -240,21 +211,16 @@ async def validate_semantic_firewall(
             message=f"{v.parameter} = {v.value} violates constraint: {v.constraint}",
             source=v.citation,
         )
-        for v in result.errors  # Only include errors, not warnings
+        for v in result.errors
     ]
 
+    # Detect conversational clarifications. Two triggers active today:
+    #   - UNIT_CONFLICT on lane_width (2.5-4.5 ft is implausible feet but plausible
+    #     metric: common metric lane widths are 3.0-3.75 m).
+    #   - MISSING_PARAMETER for SV-005 partial input (needs both design_rad
+    #     and speed_limit).
     clarifications: list[Clarification] = []
 
-    # UNIT_CONFLICT heuristic on lane_width: 2.5-4.5 ft is implausibly narrow as feet
-    # but matches common metric lane widths (3.0 m, 3.25 m, 3.5 m, 3.65 m, 3.75 m).
-    # Emit a clarification alongside the SV-001 error so the agent can ask the user
-    # to confirm units.
-    clarifications: list[Clarification] = []
-
-    # UNIT_CONFLICT heuristic: lane_width in plausible-metric range (2.5-4.5).
-    # A real lane is >=9 ft; the 2.5-4.5 range matches common metric lane widths
-    # (3.0 m, 3.25 m, 3.5 m, 3.65 m, 3.75 m). The agent should confirm units before
-    # treating this as a hard rejection.
     if request.lane_width is not None and 2.5 <= request.lane_width <= 4.5:
         metric_equiv_ft = request.lane_width * 3.28084
         clarifications.append(
@@ -274,10 +240,6 @@ async def validate_semantic_firewall(
             )
         )
 
-    # SV-005 partial input: exactly one of (design_rad, speed_limit) provided.
-    # Detect partial SF-005 input: exactly one of (design_rad, speed_limit) provided.
-    # The agent should ask the user for the missing value rather than silently skipping
-    # the speed-curvature compatibility check.
     if (request.design_rad is None) != (request.speed_limit is None):
         if request.design_rad is not None:
             clarifications.append(

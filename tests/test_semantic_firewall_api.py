@@ -32,10 +32,12 @@ class TestSemanticFirewallEndpoint:
         data = response.json()
         assert data["is_valid"] is True
         assert len(data["errors"]) == 0
-        assert data["constraints_checked"] == 5
+        # New semantic.py also runs SV-010 (speed_limit standalone) when spl is provided,
+        # so 6 constraints fire when all six request fields are populated.
+        assert data["constraints_checked"] == 6
 
     def test_sf001_lane_width_too_narrow(self):
-        """Lane width below 9 ft should fail SF-001."""
+        """Lane width below 9 ft should fail SV-001."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 8.0},
@@ -44,11 +46,13 @@ class TestSemanticFirewallEndpoint:
         data = response.json()
         assert data["is_valid"] is False
         assert len(data["errors"]) == 1
-        assert data["errors"][0]["constraint_id"] == "SF-001"
-        assert "9-12 ft" in data["errors"][0]["message"]
+        assert data["errors"][0]["constraint_id"] == "SV-001"
+        # New message format: "lane_width = 8.0 violates constraint: 9.0 ≤ lane_width ≤ 12.0 ft"
+        msg = data["errors"][0]["message"]
+        assert "9.0" in msg and "12.0" in msg and "ft" in msg
 
     def test_sf001_lane_width_too_wide(self):
-        """Lane width above 12 ft should fail SF-001."""
+        """Lane width above 12 ft should fail SV-001."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 14.0},
@@ -56,10 +60,10 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-001"
+        assert data["errors"][0]["constraint_id"] == "SV-001"
 
     def test_sf002_shoulder_width_negative(self):
-        """Negative shoulder width should fail SF-002."""
+        """Negative shoulder width should fail SV-002."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"shoulder_width": -1.0},
@@ -67,10 +71,10 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-002"
+        assert data["errors"][0]["constraint_id"] == "SV-002"
 
     def test_sf002_shoulder_width_too_wide(self):
-        """Shoulder width above 8 ft should fail SF-002."""
+        """Shoulder width above 8 ft should fail SV-002."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"shoulder_width": 12.0},
@@ -78,10 +82,10 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-002"
+        assert data["errors"][0]["constraint_id"] == "SV-002"
 
     def test_sf003_horizontal_class_invalid(self):
-        """Horizontal class outside 0-5 should fail SF-003."""
+        """Horizontal class outside 0-5 should fail SV-003."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"hor_class": 7},
@@ -89,11 +93,13 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-003"
-        assert "0-5" in data["errors"][0]["message"]
+        assert data["errors"][0]["constraint_id"] == "SV-003"
+        # New message format lists allowed values: "hor_class ∈ {0, 1, 2, 3, 4, 5}"
+        msg = data["errors"][0]["message"]
+        assert "0" in msg and "5" in msg
 
     def test_sf004_passing_type_invalid(self):
-        """Passing type not in {0, 1, 2} should fail SF-004."""
+        """Passing type not in {0, 1, 2} should fail SV-004."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"passing_type": 3},
@@ -101,10 +107,10 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-004"
+        assert data["errors"][0]["constraint_id"] == "SV-004"
 
     def test_sf005_speed_curvature_unsafe(self):
-        """Radius too small for speed should fail SF-005."""
+        """Radius too small for speed should fail SV-005."""
         # 55 mph requires R >= 835 ft, so 500 should fail
         response = client.post(
             "/api/v1/validate/firewall",
@@ -113,11 +119,11 @@ class TestSemanticFirewallEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["is_valid"] is False
-        assert data["errors"][0]["constraint_id"] == "SF-005"
+        assert data["errors"][0]["constraint_id"] == "SV-005"
         assert "835" in data["errors"][0]["message"]
 
     def test_sf005_speed_curvature_safe(self):
-        """Radius adequate for speed should pass SF-005."""
+        """Radius adequate for speed should pass SV-005."""
         # 55 mph requires R >= 835 ft, so 1000 should pass
         response = client.post(
             "/api/v1/validate/firewall",
@@ -145,10 +151,10 @@ class TestSemanticFirewallEndpoint:
         assert data["is_valid"] is False
         assert len(data["errors"]) >= 4
         constraint_ids = {e["constraint_id"] for e in data["errors"]}
-        assert "SF-001" in constraint_ids
-        assert "SF-002" in constraint_ids
-        assert "SF-003" in constraint_ids
-        assert "SF-004" in constraint_ids
+        assert "SV-001" in constraint_ids
+        assert "SV-002" in constraint_ids
+        assert "SV-003" in constraint_ids
+        assert "SV-004" in constraint_ids
 
     def test_partial_input_valid(self):
         """Validation should work with partial inputs."""
@@ -310,7 +316,7 @@ class TestSemanticFirewallClarifications:
         assert "design radius" in clar["suggested_question"].lower()
 
     def test_sf005_both_provided_no_clarification(self):
-        """When both design_rad and speed_limit are provided, no SF-005 clarification."""
+        """When both design_rad and speed_limit are provided, no SV-005 clarification."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"design_rad": 1000.0, "speed_limit": 55},
@@ -320,7 +326,7 @@ class TestSemanticFirewallClarifications:
         assert len(data["clarifications"]) == 0
 
     def test_sf005_both_omitted_no_clarification(self):
-        """When neither design_rad nor speed_limit is provided, no SF-005 clarification."""
+        """When neither design_rad nor speed_limit is provided, no SV-005 clarification."""
         # Sub-step 1C will handle the all-None case separately
         response = client.post(
             "/api/v1/validate/firewall",
@@ -360,16 +366,16 @@ class TestSemanticFirewallClarifications:
         assert clar["suggested_question"] is not None
 
     def test_lane_width_metric_value_emits_unit_conflict(self):
-        """lane_width=3.5 (likely meters) should emit UNIT_CONFLICT clarification AND fail SF-001."""
+        """lane_width=3.5 (likely meters) should emit UNIT_CONFLICT clarification AND fail SV-001."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 3.5},
         )
         assert response.status_code == 200
         data = response.json()
-        # SF-001 still fires (3.5 ft is invalid)
+        # SV-001 still fires (3.5 ft is invalid)
         assert data["is_valid"] is False
-        assert any(e["constraint_id"] == "SF-001" for e in data["errors"])
+        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
         # AND a UNIT_CONFLICT clarification is emitted
         unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
         assert len(unit_clars) == 1
@@ -390,13 +396,13 @@ class TestSemanticFirewallClarifications:
         assert len(unit_clars) == 0
 
     def test_lane_width_above_metric_range_no_unit_conflict(self):
-        """lane_width=5 is invalid feet but outside metric heuristic range; SF-001 fires, no UNIT_CONFLICT."""
+        """lane_width=5 is invalid feet but outside metric heuristic range; SV-001 fires, no UNIT_CONFLICT."""
         response = client.post(
             "/api/v1/validate/firewall",
             json={"lane_width": 5.0},
         )
         assert response.status_code == 200
         data = response.json()
-        assert any(e["constraint_id"] == "SF-001" for e in data["errors"])
+        assert any(e["constraint_id"] == "SV-001" for e in data["errors"])
         unit_clars = [c for c in data["clarifications"] if c["type"] == "unit_conflict"]
         assert len(unit_clars) == 0
