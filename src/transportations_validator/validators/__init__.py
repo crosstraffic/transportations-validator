@@ -1,9 +1,12 @@
 """
-Validation module for transportation engineering inputs.
+Validation and reasoning module for transportation engineering inputs.
 
 Core validation (always available, zero dependencies):
     from transportations_validator.validators import semantic
     from transportations_validator.validators import validate, validate_highway
+
+Forward-chaining reasoning over AFFECTS edges (zero dependencies):
+    from transportations_validator.validators import forward_chain
 
 Full validation engine (requires [api] extras):
     from transportations_validator.validators import ValidationEngine
@@ -11,7 +14,12 @@ Full validation engine (requires [api] extras):
 
 # Always available - semantic validation with zero dependencies
 # Re-export semantic module for convenient access
-from transportations_validator.validators import semantic
+from transportations_validator.validators import forward_chain, semantic
+from transportations_validator.validators.forward_chain import (
+    ChainStep,
+    ForwardChainResult,
+    load_relationships_from_seed,
+)
 from transportations_validator.validators.semantic import (
     SPEED_RADIUS_TABLE,
     Severity,
@@ -34,10 +42,14 @@ from transportations_validator.validators.semantic import (
 __all__ = [
     # Semantic module
     "semantic",
+    # Forward-chaining reasoning module
+    "forward_chain",
     # Core types
     "Severity",
     "Violation",
     "ValidationResult",
+    "ChainStep",
+    "ForwardChainResult",
     # High-level validators
     "validate",
     "validate_highway",
@@ -52,6 +64,8 @@ __all__ = [
     "validate_phf",
     "validate_phv",
     "validate_speed_limit",
+    # Forward-chaining helpers
+    "load_relationships_from_seed",
     # Constants
     "SPEED_RADIUS_TABLE",
 ]
