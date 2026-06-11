@@ -582,7 +582,7 @@ class OpenDRIVEExtractor(BaseExtractor):
                 }
 
                 if geom.geometry_type == OpenDRIVEGeometryType.ARC and geom.radius_ft:
-                    # This is the key parameter for SF-005 validation
+                    # This is the key parameter for SV-005 validation
                     parameters[f"{geom_prefix}_radius"] = {
                         "value": geom.radius,
                         "name": "Arc Radius",
@@ -717,10 +717,10 @@ def extract_for_validation(
     parse_result: OpenDRIVEParseResult,
 ) -> dict[str, list[dict[str, Any]]]:
     """
-    Extract parameters suitable for Semantic Firewall validation.
+    Extract parameters suitable for Semantic Validator validation.
 
     Returns a dictionary organized by road, with parameters that can be
-    directly validated against the Semantic Firewall constraints.
+    directly validated against the Semantic Validator constraints.
     """
     validation_data: dict[str, list[dict[str, Any]]] = {}
 

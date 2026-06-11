@@ -122,7 +122,7 @@ class Clarification(BaseModel):
     )
     related_parameters: list[str] | None = Field(
         default=None,
-        description="Other parameters involved (e.g., SF-005 needs both design_rad and speed_limit)",
+        description="Other parameters involved (e.g., SV-005 needs both design_rad and speed_limit)",
     )
 
 
@@ -220,14 +220,14 @@ class SyncTriggerResponse(BaseModel):
 
 class SemanticFirewallRequest(BaseModel):
     """
-    Request to validate Two-Lane Highway inputs against Semantic Firewall constraints.
+    Request to validate Two-Lane Highway inputs against Semantic Validator constraints.
 
-    This implements the 5 hard constraints from Paper Section 2.2:
-    - SF-001: Lane Width (9-12 ft)
-    - SF-002: Shoulder Width (0-8 ft)
-    - SF-003: Horizontal Class (0-5)
-    - SF-004: Passing Type (0, 1, 2)
-    - SF-005: Speed-Curvature Compatibility
+    This implements the core hard constraints from Paper Section 2.2:
+    - SV-001: Lane Width (9-12 ft)
+    - SV-002: Shoulder Width (0-8 ft)
+    - SV-003: Horizontal Class (0-5)
+    - SV-004: Passing Type (0, 1, 2)
+    - SV-005: Speed-Curvature Compatibility
     """
 
     lane_width: float | None = Field(
@@ -261,7 +261,7 @@ class SemanticFirewallRequest(BaseModel):
     )
     speed_limit: int | None = Field(
         default=None,
-        description="Speed limit in mph (used with design_rad for SF-005)",
+        description="Speed limit in mph (used with design_rad for SV-005)",
         ge=0,
         le=100,
     )
@@ -274,7 +274,7 @@ class SemanticFirewallError(BaseModel):
     Matches the Rust ValidationError struct for cross-platform consistency.
     """
 
-    constraint_id: str = Field(..., description="Constraint ID (e.g., SF-001)")
+    constraint_id: str = Field(..., description="Constraint ID (e.g., SV-001)")
     parameter: str = Field(..., description="Parameter that violated the constraint")
     value: str = Field(..., description="The invalid value")
     message: str = Field(..., description="Human-readable error message")

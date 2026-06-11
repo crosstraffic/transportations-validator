@@ -33,15 +33,26 @@ class ParameterRepository(BaseRepository[Parameter]):
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
 
-    async def get_by_alias(self, alias: str) -> Parameter | None:
-        """Get parameter by alias."""
-        result = await self.session.execute(
+    async def get_by_alias(
+        self, alias: str, facility_type: FacilityType | None = None
+    ) -> Parameter | None:
+        """Get parameter by alias.
+
+        Generic aliases (e.g. "length", "width") are attached to parameters
+        across several facility types, so the match is filtered by facility
+        when one is known and ties are broken by alias confidence.
+        """
+        query = (
             select(Parameter)
             .join(ParameterAlias)
             .where(ParameterAlias.alias.ilike(alias))
             .options(selectinload(Parameter.aliases))
+            .order_by(ParameterAlias.confidence.desc())
         )
-        return result.scalar_one_or_none()
+        if facility_type:
+            query = query.where(Parameter.facility_type == facility_type)
+        result = await self.session.execute(query)
+        return result.scalars().first()
 
     async def get_with_aliases(self, id: int) -> Parameter | None:
         """Get parameter with aliases loaded."""
@@ -88,4 +99,4 @@ class ParameterRepository(BaseRepository[Parameter]):
             return param
 
         # Try alias match
-        return await self.get_by_alias(name)
+        return await self.get_by_alias(name, facility_type)
