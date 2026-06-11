@@ -35,8 +35,10 @@ Single-parameter repairs are exhausted before parameter pairs are tried
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from itertools import combinations
+from pathlib import Path
 from typing import Any, Callable, Protocol
 
 from transportations_validator.validators.forward_chain import (
@@ -211,6 +213,37 @@ class _Lever:
     depth: int
     via_path: list[str]
     confidence: float
+
+
+def load_parameter_bounds(
+    facility_type: str, seed_dir: Path | str | None = None
+) -> dict[str, tuple[float, float]]:
+    """Load (typical_min, typical_max) per numeric parameter from the seed.
+
+    These ranges come from the same authority-cited corpus the validator
+    enforces, so every trial value the repair search proposes is itself
+    within the documented typical range for the facility. Parameters
+    without both bounds (enums, ids) are omitted.
+    """
+    if seed_dir is None:
+        # __file__ -> .../src/transportations_validator/validators/repair.py
+        # parents[3] -> .../<project root>/
+        seed_dir = Path(__file__).resolve().parents[3] / "seed_data" / "parameters"
+    seed_dir = Path(seed_dir)
+
+    bounds: dict[str, tuple[float, float]] = {}
+    for path in sorted(seed_dir.glob("*.json")):
+        with open(path) as f:
+            doc = json.load(f)
+        if doc.get("facility_type") != facility_type:
+            continue
+        for param in doc.get("parameters", []):
+            lo = param.get("typical_min")
+            hi = param.get("typical_max")
+            if lo is None or hi is None:
+                continue
+            bounds[param["rust_field"]] = (float(lo), float(hi))
+    return bounds
 
 
 def repair_design(

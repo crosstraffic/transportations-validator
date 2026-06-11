@@ -214,3 +214,87 @@ class TestBackwardChainEndpoint:
             }
             assert isinstance(entry["depth"], int)
             assert isinstance(entry["via_path"], list)
+
+
+class TestRepairEndpoint:
+    """POST /api/v1/reason/repair"""
+
+    DEGRADED = {
+        "facility_type": "TwoLaneHighway",
+        "design": {
+            "passing_type": 0, "length": 2.0, "grade": 2.0, "spl": 60.0,
+            "volume": 650.0, "phv": 0.08, "phf": 0.94,
+            "lane_width": 9.0, "shoulder_width": 0.0, "apd": 20.0,
+        },
+        "goal_los": "C",
+        "immutable": ["volume", "grade", "phv", "phf", "spl", "length", "passing_type"],
+    }
+
+    def test_worked_example_returns_ranked_verified_repairs(self):
+        response = client.post("/api/v1/reason/repair", json=self.DEGRADED)
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["baseline_compliant"] is False
+        assert data["baseline_evaluated"]["los"] == "D"
+        assert data["repaired"] is True
+        assert data["evaluations"] >= 2
+
+        # Proposals are ranked by minimality and carry re-executed evidence.
+        deltas = [p["total_relative_delta"] for p in data["proposals"]]
+        assert deltas == sorted(deltas)
+        for proposal in data["proposals"]:
+            assert proposal["compliant"] is True
+            assert proposal["evaluated"]["los"] <= "C"
+            for change in proposal["changes"]:
+                assert change["parameter"] in data["candidates_considered"]
+
+    def test_immutable_parameters_never_proposed(self):
+        response = client.post("/api/v1/reason/repair", json=self.DEGRADED)
+        assert response.status_code == 200
+        touched = {
+            c["parameter"]
+            for p in response.json()["proposals"]
+            for c in p["changes"]
+        }
+        assert touched.isdisjoint(self.DEGRADED["immutable"])
+
+    def test_compliant_baseline_short_circuits(self):
+        good = {
+            **self.DEGRADED,
+            "design": {**self.DEGRADED["design"], "volume": 300.0,
+                       "lane_width": 12.0, "shoulder_width": 6.0, "apd": 5.0},
+        }
+        response = client.post("/api/v1/reason/repair", json=good)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["baseline_compliant"] is True
+        assert data["proposals"] == []
+
+    def test_unsupported_facility_rejected(self):
+        response = client.post(
+            "/api/v1/reason/repair",
+            json={**self.DEGRADED, "facility_type": "BasicFreeway"},
+        )
+        assert response.status_code == 422
+
+    def test_invalid_goal_letter_rejected(self):
+        response = client.post(
+            "/api/v1/reason/repair", json={**self.DEGRADED, "goal_los": "X"}
+        )
+        assert response.status_code == 422
+
+    def test_bounds_override_narrows_search(self):
+        # Lock lane_width to its current value via bounds; repair must come
+        # from another lever.
+        response = client.post(
+            "/api/v1/reason/repair",
+            json={**self.DEGRADED, "bounds": {"lane_width": [9.0, 9.0]}},
+        )
+        assert response.status_code == 200
+        touched = {
+            c["parameter"]
+            for p in response.json()["proposals"]
+            for c in p["changes"]
+        }
+        assert "lane_width" not in touched

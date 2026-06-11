@@ -1,9 +1,10 @@
-"""Reasoning API endpoints (forward / backward chaining over the KG).
+"""Reasoning API endpoints over the executable knowledge graph.
 
-These endpoints expose the lightweight inferential reasoning capability the
-paper claims for the Knowledge Graph. Today: forward chaining over AFFECTS
-edges. Backward chaining and provenance-weighted scoring will land in
-follow-up sub-steps under the same router.
+* ``/reason/forward-chain``  — design propagation (what must be re-derived?)
+* ``/reason/backward-chain`` — root-cause diagnosis (what could explain this?)
+* ``/reason/repair``         — abductive design repair (what is the minimal
+  change that makes the failed design compliant?), with every candidate
+  re-executed through the verified Rust implementation.
 """
 
 from __future__ import annotations
@@ -11,7 +12,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from transportations_validator.models.reasoning import (
     BackwardChainRequest,
@@ -19,11 +20,20 @@ from transportations_validator.models.reasoning import (
     ChainStepModel,
     ForwardChainRequest,
     ForwardChainResponse,
+    ParameterChangeModel,
+    RepairProposalModel,
+    RepairRequest,
+    RepairResponse,
 )
 from transportations_validator.validators.forward_chain import (
     backward_chain,
     forward_chain,
     load_relationships_from_seed,
+)
+from transportations_validator.validators.repair import (
+    load_parameter_bounds,
+    los_no_worse_than,
+    repair_design,
 )
 
 router = APIRouter()
@@ -116,4 +126,103 @@ async def reason_backward_chain(request: BackwardChainRequest) -> BackwardChainR
         ],
         upstream_count=len(result.chain),
         max_depth=result.max_depth,
+    )
+
+
+def _build_executor(facility_type: str):
+    """Resolve the verified-computation executor for a facility.
+
+    Imported lazily so the reasoning router stays importable when the Rust
+    library wheel is absent (the chaining endpoints don't need it).
+    """
+    if facility_type != "TwoLaneHighway":
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"Executable repair is not yet wired for facility type "
+                f"'{facility_type}'. Supported: TwoLaneHighway."
+            ),
+        )
+    try:
+        from transportations_validator.validators.executors import (
+            TwoLaneHighwayExecutor,
+        )
+
+        return TwoLaneHighwayExecutor()
+    except ImportError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+
+@router.post("/reason/repair", response_model=RepairResponse)
+async def reason_repair(request: RepairRequest) -> RepairResponse:
+    """Abductive design repair: minimal compliant fix for a failed check.
+
+    Backward-chains from the failed ``target`` over causal edges to find
+    repair levers, tries bounded candidate values nearest-first, and
+    re-executes every trial through the verified HCM implementation. A
+    proposal is returned only with its re-derived downstream values as
+    evidence of compliance.
+
+    Worked example (TwoLaneHighway): a 9 ft-lane, no-shoulder segment at
+    650 veh/h evaluates to LOS D. With demand and terrain immutable, the
+    search returns ranked geometric fixes (widen lanes to 10 ft; reduce
+    access-point density; add shoulder), each proved at LOS C.
+    """
+    executor = _build_executor(request.facility_type)
+
+    bounds = load_parameter_bounds(request.facility_type)
+    if request.bounds:
+        bounds.update(
+            {k: (float(lo), float(hi)) for k, (lo, hi) in request.bounds.items()}
+        )
+    # Derived quantities are evidence, not levers — never mutate them.
+    derived = {"ffs", "avg_speed", "percent_followers", "followers_density",
+               "flow_rate", "capacity", request.target}
+    immutable = frozenset(request.immutable) | derived
+
+    goal_letter = request.goal_los.upper()
+    result = repair_design(
+        _relationships(),
+        target=request.target,
+        design=dict(request.design),
+        executor=executor,
+        goal=los_no_worse_than(goal_letter),
+        bounds=bounds,
+        facility_type=request.facility_type,
+        immutable=immutable,
+        steps=request.steps,
+        max_changes=request.max_changes,
+        max_evaluations=request.max_evaluations,
+        goal_description=f"facility LOS no worse than {goal_letter}",
+    )
+
+    return RepairResponse(
+        target=result.target,
+        facility_type=request.facility_type,
+        goal=result.goal_description,
+        baseline_evaluated=result.baseline_evaluated,
+        baseline_compliant=result.baseline_compliant,
+        repaired=result.repaired,
+        proposals=[
+            RepairProposalModel(
+                changes=[
+                    ParameterChangeModel(
+                        parameter=c.parameter,
+                        old_value=c.old_value,
+                        new_value=c.new_value,
+                        relative_delta=c.relative_delta,
+                    )
+                    for c in p.changes
+                ],
+                compliant=p.compliant,
+                cardinality=p.cardinality,
+                total_relative_delta=p.total_relative_delta,
+                path_confidence=p.path_confidence,
+                via_paths=p.via_paths,
+                evaluated=p.evaluated,
+            )
+            for p in result.proposals
+        ],
+        candidates_considered=result.candidates_considered,
+        evaluations=result.evaluations,
     )
