@@ -3,6 +3,7 @@
 import math
 
 from transportations_validator.validators.forward_chain import (
+    CAUSAL_EDGE_TYPES,
     DEFAULT_AUTHORITY_WEIGHT,
     SOURCE_AUTHORITY_WEIGHTS,
     backward_chain,
@@ -365,3 +366,65 @@ class TestLoadRelationshipsFromSeed:
         assert "speed_limit" in result.downstream_parameters
         assert "bffs" in result.downstream_parameters
         assert result.max_depth >= 2
+
+    def test_hcm_computation_chain_forward_lw_to_los(self):
+        """lw -> ffs -> ... -> los: a geometric input must propagate to LOS."""
+        rels = load_relationships_from_seed()
+        result = forward_chain(rels, root="lw", facility_type="BasicFreeway")
+
+        assert "ffs" in result.downstream_parameters
+        assert "density" in result.downstream_parameters
+        assert "los" in result.downstream_parameters
+
+    def test_abductive_repair_chain_backward_from_los(self):
+        """Backward chain from a failed LOS must surface the geometric and
+        demand inputs an engineer could change — the search space for
+        abductive design repair."""
+        rels = load_relationships_from_seed()
+        result = backward_chain(rels, target="los", facility_type="BasicFreeway")
+
+        # Geometric levers
+        assert "lw" in result.upstream_parameters
+        assert "lc_r" in result.upstream_parameters
+        # Demand-side levers
+        assert "lane_count" in result.upstream_parameters
+        assert "phf" in result.upstream_parameters
+        # Deep causal root through the FFS chain
+        assert "speed_limit" in result.upstream_parameters
+        assert result.max_depth >= 4
+
+    def test_causal_edge_types_include_determines(self):
+        """With CAUSAL_EDGE_TYPES, repair search can cross DETERMINES edges:
+        design_rad DETERMINES hor_class, which AFFECTS speed_limit."""
+        rels = load_relationships_from_seed()
+
+        default = forward_chain(rels, root="design_rad", facility_type="BasicFreeway")
+        assert "hor_class" not in default.downstream_parameters
+
+        causal = forward_chain(
+            rels,
+            root="design_rad",
+            facility_type="BasicFreeway",
+            edge_types=CAUSAL_EDGE_TYPES,
+        )
+        assert "hor_class" in causal.downstream_parameters
+        assert "speed_limit" in causal.downstream_parameters
+
+    def test_causal_edge_types_backward_from_los_reaches_design_rad(self):
+        """The repair search space for a failed LOS extends through the
+        DETERMINES edge to the curve design radius."""
+        rels = load_relationships_from_seed()
+        result = backward_chain(
+            rels, target="los", facility_type="BasicFreeway", edge_types=CAUSAL_EDGE_TYPES
+        )
+        assert "design_rad" in result.upstream_parameters
+
+    def test_real_seed_affects_edges_carry_sources(self):
+        """Every AFFECTS edge declares its authority so provenance weighting
+        never falls back to the unknown-source default on real data."""
+        rels = load_relationships_from_seed()
+        affects = [r for r in rels if r.get("type") == "AFFECTS"]
+        missing = [
+            f"{r['from_field']} -> {r['to_field']}" for r in affects if "source" not in r
+        ]
+        assert not missing, f"AFFECTS edges without a source: {missing}"

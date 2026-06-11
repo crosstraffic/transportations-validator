@@ -121,18 +121,27 @@ class ForwardChainResult:
         }
 
 
+# Edge types that carry a causal direction. AFFECTS is the default for
+# propagation/diagnosis; repair search additionally follows DETERMINES
+# (functional assignment, e.g. design_rad -> hor_class) and CONSTRAINS
+# (bounding, e.g. speed_limit -> curvature).
+DEFAULT_EDGE_TYPES: frozenset[str] = frozenset({"AFFECTS"})
+CAUSAL_EDGE_TYPES: frozenset[str] = frozenset({"AFFECTS", "DETERMINES", "CONSTRAINS"})
+
+
 def forward_chain(
     relationships: list[dict[str, Any]],
     root: str,
     facility_type: str | None = None,
     max_depth: int = 10,
     enable_provenance_weighting: bool = True,
+    edge_types: frozenset[str] = DEFAULT_EDGE_TYPES,
 ) -> ForwardChainResult:
-    """Traverse AFFECTS edges from ``root`` to find downstream parameters.
+    """Traverse causal edges from ``root`` to find downstream parameters.
 
-    BFS from ``root`` following only AFFECTS edges. If ``facility_type`` is
-    given, edges from other facility types are ignored. Cycles are prevented
-    by tracking visited parameters.
+    BFS from ``root`` following ``edge_types`` edges (AFFECTS by default).
+    If ``facility_type`` is given, edges from other facility types are
+    ignored. Cycles are prevented by tracking visited parameters.
 
     Args:
         relationships: List of relationship dicts (as in
@@ -142,16 +151,19 @@ def forward_chain(
             If ``None``, every facility type is considered.
         max_depth: Hard cap on traversal depth (defensive against pathological
             graphs; the real graph is shallow).
+        edge_types: Relationship types to follow. Pass
+            :data:`CAUSAL_EDGE_TYPES` to additionally traverse DETERMINES and
+            CONSTRAINS edges (used by abductive repair search).
 
     Returns:
         A :class:`ForwardChainResult` listing every downstream parameter with
         its depth, the edge path that reached it, and the seed description.
     """
-    # Build adjacency restricted to AFFECTS edges and (optionally) facility
-    # type. Each edge entry is (to_field, description, weight).
+    # Build adjacency restricted to the requested edge types and (optionally)
+    # facility type. Each edge entry is (to_field, description, weight).
     affects_edges: dict[str, list[tuple[str, str, float]]] = {}
     for rel in relationships:
-        if rel.get("type") != "AFFECTS":
+        if rel.get("type") not in edge_types:
             continue
         if facility_type is not None and rel.get("facility_type") != facility_type:
             continue
@@ -239,8 +251,9 @@ def backward_chain(
     facility_type: str | None = None,
     max_depth: int = 10,
     enable_provenance_weighting: bool = True,
+    edge_types: frozenset[str] = DEFAULT_EDGE_TYPES,
 ) -> BackwardChainResult:
-    """Traverse AFFECTS edges in reverse from ``target`` to find upstream causes.
+    """Traverse causal edges in reverse from ``target`` to find upstream causes.
 
     Use case: a downstream check just failed (e.g. a derived ``bffs`` value is
     out of bounds). Backward chaining identifies every upstream parameter
@@ -268,7 +281,7 @@ def backward_chain(
     # Reverse adjacency: to_field -> [(from_field, desc, weight)].
     reverse_edges: dict[str, list[tuple[str, str, float]]] = {}
     for rel in relationships:
-        if rel.get("type") != "AFFECTS":
+        if rel.get("type") not in edge_types:
             continue
         if facility_type is not None and rel.get("facility_type") != facility_type:
             continue

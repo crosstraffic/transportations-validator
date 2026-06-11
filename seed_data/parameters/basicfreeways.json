@@ -9,7 +9,11 @@
       "typical_min": 50.0,
       "typical_max": 75.4,
       "description": "Base free flow speed before adjustments",
-      "aliases": ["base ffs", "base speed", "bffs"]
+      "aliases": [
+        "base ffs",
+        "base speed",
+        "bffs"
+      ]
     },
     {
       "name": "Lane Width",
@@ -19,7 +23,10 @@
       "typical_min": 10.0,
       "typical_max": 12.0,
       "description": "Width of travel lane",
-      "aliases": ["lane_width", "lane width"]
+      "aliases": [
+        "lane_width",
+        "lane width"
+      ]
     },
     {
       "name": "Right Lateral Clearance",
@@ -29,7 +36,11 @@
       "typical_min": 0,
       "typical_max": 6,
       "description": "Lateral clearance on right side of traveled way",
-      "aliases": ["right clearance", "right lateral clearance", "lcr"]
+      "aliases": [
+        "right clearance",
+        "right lateral clearance",
+        "lcr"
+      ]
     },
     {
       "name": "Left Lateral Clearance",
@@ -39,7 +50,11 @@
       "typical_min": 0,
       "typical_max": 6,
       "description": "Lateral clearance on left side of traveled way",
-      "aliases": ["left clearance", "left lateral clearance", "lcl"]
+      "aliases": [
+        "left clearance",
+        "left lateral clearance",
+        "lcl"
+      ]
     },
     {
       "name": "Grade",
@@ -49,7 +64,10 @@
       "typical_min": -2.0,
       "typical_max": 6.0,
       "description": "Segment percent grade",
-      "aliases": ["percent grade", "slope"]
+      "aliases": [
+        "percent grade",
+        "slope"
+      ]
     },
     {
       "name": "Speed Limit",
@@ -59,7 +77,10 @@
       "typical_min": 55,
       "typical_max": 75,
       "description": "Posted speed limit",
-      "aliases": ["posted speed", "speed limit"]
+      "aliases": [
+        "posted speed",
+        "speed limit"
+      ]
     },
     {
       "name": "Peak Hour Factor",
@@ -69,7 +90,10 @@
       "typical_min": 0.85,
       "typical_max": 0.95,
       "description": "Ratio of hourly volume to peak 15-minute flow rate",
-      "aliases": ["PHF", "peak hour factor"]
+      "aliases": [
+        "PHF",
+        "peak hour factor"
+      ]
     },
     {
       "name": "Truck Percentage",
@@ -79,7 +103,11 @@
       "typical_min": 0.02,
       "typical_max": 0.25,
       "description": "Proportion of trucks and buses in traffic stream",
-      "aliases": ["truck percent", "heavy vehicle percentage", "pt"]
+      "aliases": [
+        "truck percent",
+        "heavy vehicle percentage",
+        "pt"
+      ]
     },
     {
       "name": "Access Point Density",
@@ -89,7 +117,11 @@
       "typical_min": 0,
       "typical_max": 40,
       "description": "Number of access points per mile",
-      "aliases": ["access points", "apd", "access density"]
+      "aliases": [
+        "access points",
+        "apd",
+        "access density"
+      ]
     },
     {
       "name": "Total Ramp Density",
@@ -99,7 +131,10 @@
       "typical_min": 0,
       "typical_max": 4,
       "description": "Total number of ramps per mile",
-      "aliases": ["ramp density", "trd"]
+      "aliases": [
+        "ramp density",
+        "trd"
+      ]
     },
     {
       "name": "Lane Count",
@@ -109,7 +144,10 @@
       "typical_min": 2,
       "typical_max": 6,
       "description": "Number of lanes in analysis direction",
-      "aliases": ["number of lanes", "lanes"]
+      "aliases": [
+        "number of lanes",
+        "lanes"
+      ]
     },
     {
       "name": "Segment Length",
@@ -119,7 +157,10 @@
       "typical_min": 0.1,
       "typical_max": 10.0,
       "description": "Length of analysis segment",
-      "aliases": ["length", "segment length"]
+      "aliases": [
+        "length",
+        "segment length"
+      ]
     },
     {
       "name": "Shoulder Width",
@@ -129,7 +170,11 @@
       "typical_min": 4.0,
       "typical_max": 12.0,
       "description": "Width of paved shoulder (Green Book 4.4.2)",
-      "aliases": ["shoulder_width", "shoulder width", "sw"]
+      "aliases": [
+        "shoulder_width",
+        "shoulder width",
+        "sw"
+      ]
     },
     {
       "name": "Horizontal Class",
@@ -139,7 +184,11 @@
       "typical_min": 0,
       "typical_max": 5,
       "description": "Horizontal alignment classification (0=tangent to 5=severe curve)",
-      "aliases": ["horizontal_class", "curvature_class", "alignment_class"]
+      "aliases": [
+        "horizontal_class",
+        "curvature_class",
+        "alignment_class"
+      ]
     },
     {
       "name": "Design Radius",
@@ -149,7 +198,114 @@
       "typical_min": 300.0,
       "typical_max": 10000.0,
       "description": "Horizontal curve design radius (Green Book 3.3)",
-      "aliases": ["radius", "curve_radius", "design_radius"]
+      "aliases": [
+        "radius",
+        "curve_radius",
+        "design_radius"
+      ]
+    },
+    {
+      "name": "Free Flow Speed",
+      "rust_field": "ffs",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 50.0,
+      "typical_max": 75.4,
+      "description": "Free-flow speed after lane width, lateral clearance, and ramp density adjustments (HCM Eq. 12-2)",
+      "aliases": [
+        "free_flow_speed",
+        "FFS"
+      ]
+    },
+    {
+      "name": "Capacity",
+      "rust_field": "capacity",
+      "unit": "pc/hr/ln",
+      "data_type": "float",
+      "typical_min": 1700.0,
+      "typical_max": 2400.0,
+      "description": "Base segment capacity c = 2,200 + 10*(FFS - 50) (HCM Eq. 12-6)",
+      "aliases": [
+        "lane_capacity",
+        "base_capacity"
+      ]
+    },
+    {
+      "name": "Directional Demand Flow",
+      "rust_field": "demand_flow_i",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 9000.0,
+      "description": "Demand flow rate for analysis direction i (HCM Eq. 12-9)",
+      "aliases": [
+        "directional_demand",
+        "demand_flow"
+      ]
+    },
+    {
+      "name": "Demand Volume",
+      "rust_field": "v_p",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 9000.0,
+      "description": "Demand volume converted to flow rate via PHF, lane count, and heavy-vehicle factor (HCM Eq. 12-9)",
+      "aliases": [
+        "demand_volume",
+        "vp"
+      ]
+    },
+    {
+      "name": "Space Mean Speed",
+      "rust_field": "speed",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 5.0,
+      "typical_max": 85.0,
+      "description": "Space mean speed of the traffic stream from the FFS-anchored speed-flow curve (HCM Eq. 12-1)",
+      "aliases": [
+        "space_mean_speed",
+        "mean_speed"
+      ]
+    },
+    {
+      "name": "Density",
+      "rust_field": "density",
+      "unit": "pc/mi/ln",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 60.0,
+      "description": "Segment density D = v_p / S; 45 pc/mi/ln is density at capacity (HCM Eq. 12-11)",
+      "aliases": [
+        "segment_density",
+        "road_density"
+      ]
+    },
+    {
+      "name": "Volume-to-Capacity Ratio",
+      "rust_field": "vc_ratio",
+      "unit": null,
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 2.0,
+      "description": "Ratio of demand flow rate to capacity (HCM Eq. 12-12)",
+      "aliases": [
+        "v_c",
+        "degree_of_saturation"
+      ]
+    },
+    {
+      "name": "Level of Service",
+      "rust_field": "los",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "A,B,C,D,E,F",
+      "description": "Level of Service assigned by density thresholds; F when demand exceeds capacity (HCM Exhibit 12-15)",
+      "aliases": [
+        "LOS",
+        "service_level"
+      ]
     }
   ]
 }

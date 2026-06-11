@@ -6,21 +6,24 @@
       "to_field": "ssd",
       "type": "AFFECTS",
       "facility_type": "TwoLaneHighway",
-      "description": "Design speed determines required stopping sight distance"
+      "description": "Design speed determines required stopping sight distance",
+      "source": "AASHTO"
     },
     {
       "from_field": "speed_limit",
       "to_field": "ssd",
       "type": "AFFECTS",
       "facility_type": "TwoLaneHighway",
-      "description": "Speed limit influences stopping sight distance requirements"
+      "description": "Speed limit influences stopping sight distance requirements",
+      "source": "AASHTO"
     },
     {
       "from_field": "grade",
       "to_field": "ssd",
       "type": "AFFECTS",
       "facility_type": "TwoLaneHighway",
-      "description": "Grade affects braking distance in stopping sight distance calculation"
+      "description": "Grade affects braking distance in stopping sight distance calculation",
+      "source": "AASHTO"
     },
     {
       "from_field": "lane_width",
@@ -48,14 +51,16 @@
       "to_field": "bffs",
       "type": "AFFECTS",
       "facility_type": "BasicFreeway",
-      "description": "Speed limit influences base free-flow speed"
+      "description": "Speed limit influences base free-flow speed",
+      "source": "HCM"
     },
     {
       "from_field": "trd",
       "to_field": "bffs",
       "type": "AFFECTS",
       "facility_type": "BasicFreeway",
-      "description": "Ramp density affects free-flow speed through friction"
+      "description": "Ramp density affects free-flow speed through friction",
+      "source": "HCM"
     },
     {
       "from_field": "lane_count",
@@ -69,7 +74,8 @@
       "to_field": "bffs",
       "type": "AFFECTS",
       "facility_type": "BasicFreeway",
-      "description": "Access point density affects free-flow speed"
+      "description": "Access point density affects free-flow speed",
+      "source": "HCM"
     },
     {
       "from_field": "p_t",
@@ -83,14 +89,16 @@
       "to_field": "vertical_class",
       "type": "AFFECTS",
       "facility_type": "TwoLaneHighway",
-      "description": "Grade determines vertical class assignment"
+      "description": "Grade determines vertical class assignment",
+      "source": "HCM"
     },
     {
       "from_field": "hor_class",
       "to_field": "spl",
       "type": "AFFECTS",
       "facility_type": "TwoLaneHighway",
-      "description": "Horizontal alignment class affects appropriate speed"
+      "description": "Horizontal alignment class affects appropriate speed",
+      "source": "HCM"
     },
     {
       "from_field": "sup_ele",
@@ -132,14 +140,16 @@
       "to_field": "speed_limit",
       "type": "AFFECTS",
       "facility_type": "BasicFreeway",
-      "description": "Horizontal alignment class affects safe operating speed"
+      "description": "Horizontal alignment class affects safe operating speed",
+      "source": "AASHTO"
     },
     {
       "from_field": "curvature",
       "to_field": "cross_slope",
       "type": "AFFECTS",
       "facility_type": "LaneGeometry",
-      "description": "Curvature affects required superelevation/cross slope"
+      "description": "Curvature affects required superelevation/cross slope",
+      "source": "AASHTO"
     },
     {
       "from_field": "lane_width",
@@ -160,21 +170,24 @@
       "to_field": "ffs",
       "type": "AFFECTS",
       "facility_type": "MultilaneHighway",
-      "description": "Horizontal alignment class affects free flow speed"
+      "description": "Horizontal alignment class affects free flow speed",
+      "source": "HCM"
     },
     {
       "from_field": "median_type",
       "to_field": "lc_l",
       "type": "AFFECTS",
       "facility_type": "MultilaneHighway",
-      "description": "Median type affects left lateral clearance"
+      "description": "Median type affects left lateral clearance",
+      "source": "HCM"
     },
     {
       "from_field": "apd",
       "to_field": "ffs",
       "type": "AFFECTS",
       "facility_type": "MultilaneHighway",
-      "description": "Access point density affects free flow speed"
+      "description": "Access point density affects free flow speed",
+      "source": "HCM"
     },
     {
       "from_field": "road_mark_type",
@@ -188,7 +201,8 @@
       "to_field": "mark_width",
       "type": "AFFECTS",
       "facility_type": "PavementMarking",
-      "description": "Line weight (standard/bold) affects minimum width"
+      "description": "Line weight (standard/bold) affects minimum width",
+      "source": "MUTCD"
     },
     {
       "from_field": "speed_limit",
@@ -223,14 +237,160 @@
       "to_field": "lane_width",
       "type": "AFFECTS",
       "facility_type": "LaneGeometry",
-      "description": "Boundary continuity affects lane width measurement reliability"
+      "description": "Boundary continuity affects lane width measurement reliability",
+      "source": "derived"
     },
     {
       "from_field": "width_variance",
       "to_field": "lane_width",
       "type": "AFFECTS",
       "facility_type": "LaneGeometry",
-      "description": "Width variance indicates lane width measurement consistency"
+      "description": "Width variance indicates lane width measurement consistency",
+      "source": "derived"
+    },
+    {
+      "from_field": "bffs",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "FFS = BFFS - f_LW - f_RLC - 3.22*TRD^0.84 (HCM Eq. 12-2)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "lw",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Lane width adjustment f_LW reduces FFS for lanes narrower than 12 ft (HCM Exhibit 12-20)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "lc_r",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Right-side lateral clearance adjustment f_RLC reduces FFS (HCM Exhibit 12-21)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "trd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Total ramp density term 3.22*TRD^0.84 reduces FFS (HCM Eq. 12-2)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Base capacity c = 2,200 + 10*(FFS - 50) (HCM Eq. 12-6)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "demand_flow_i",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Demand volume converts to flow rate via PHF, lanes, and f_HV (HCM Eq. 12-9)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "phf",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Peak hour factor scales demand volume to peak flow rate (HCM Eq. 12-9)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "lane_count",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Per-lane demand flow divides by directional lane count (HCM Eq. 12-9)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "p_t",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Heavy-vehicle adjustment f_HV derives from truck proportion (HCM Eq. 12-10)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "grade",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Grade severity sets passenger-car equivalents in f_HV (HCM Exhibits 12-25/12-26)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Space mean speed follows the FFS-anchored speed-flow curve (HCM Eq. 12-1, Exhibit 12-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Speed degrades beyond the curve breakpoint as flow approaches capacity (HCM Eq. 12-1)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Density D = v_p / S (HCM Eq. 12-11)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "speed",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "Density D = v_p / S (HCM Eq. 12-11)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "density",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "LOS A-E assigned by density thresholds (HCM Exhibit 12-15)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "v/c ratio compares demand flow rate to capacity (HCM Eq. 12-12)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "v/c ratio compares demand flow rate to capacity (HCM Eq. 12-12)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "vc_ratio",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "description": "LOS F whenever demand exceeds capacity, v/c > 1.0 (HCM Exhibit 12-15)",
+      "source": "HCM"
     }
   ]
 }
