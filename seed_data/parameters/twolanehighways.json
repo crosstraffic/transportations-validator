@@ -9,7 +9,11 @@
       "typical_min": 10.0,
       "typical_max": 12.0,
       "description": "Width of travel lane",
-      "aliases": ["lane_width", "lane width", "lw"]
+      "aliases": [
+        "lane_width",
+        "lane width",
+        "lw"
+      ]
     },
     {
       "name": "Shoulder Width",
@@ -19,7 +23,10 @@
       "typical_min": 0.0,
       "typical_max": 10.0,
       "description": "Width of paved shoulder",
-      "aliases": ["shoulder_width", "shoulder width"]
+      "aliases": [
+        "shoulder_width",
+        "shoulder width"
+      ]
     },
     {
       "name": "Segment Length",
@@ -29,7 +36,10 @@
       "typical_min": 0.25,
       "typical_max": 3.0,
       "description": "Length of highway segment",
-      "aliases": ["length", "segment length"]
+      "aliases": [
+        "length",
+        "segment length"
+      ]
     },
     {
       "name": "Grade",
@@ -39,7 +49,10 @@
       "typical_min": -3.0,
       "typical_max": 6.0,
       "description": "Segment percent grade",
-      "aliases": ["percent grade", "slope"]
+      "aliases": [
+        "percent grade",
+        "slope"
+      ]
     },
     {
       "name": "Speed Limit",
@@ -49,7 +62,10 @@
       "typical_min": 50.0,
       "typical_max": 55.0,
       "description": "Posted speed limit",
-      "aliases": ["posted speed", "speed limit"]
+      "aliases": [
+        "posted speed",
+        "speed limit"
+      ]
     },
     {
       "name": "Volume",
@@ -59,7 +75,10 @@
       "typical_min": 750.0,
       "typical_max": 1100.0,
       "description": "Demand volume for analysis direction",
-      "aliases": ["traffic volume", "demand volume"]
+      "aliases": [
+        "traffic volume",
+        "demand volume"
+      ]
     },
     {
       "name": "Heavy Vehicle Percentage",
@@ -69,7 +88,11 @@
       "typical_min": 5.0,
       "typical_max": 25.0,
       "description": "Percentage of heavy vehicles in traffic stream",
-      "aliases": ["truck percent", "heavy vehicle percent", "phv"]
+      "aliases": [
+        "truck percent",
+        "heavy vehicle percent",
+        "phv"
+      ]
     },
     {
       "name": "Design Radius",
@@ -79,7 +102,10 @@
       "typical_min": 275.0,
       "typical_max": 2550.0,
       "description": "Design radius of horizontal curve",
-      "aliases": ["radius", "curve radius"]
+      "aliases": [
+        "radius",
+        "curve radius"
+      ]
     },
     {
       "name": "Superelevation",
@@ -89,7 +115,10 @@
       "typical_min": 0.0,
       "typical_max": 8.0,
       "description": "Superelevation rate",
-      "aliases": ["super", "superelevation"]
+      "aliases": [
+        "super",
+        "superelevation"
+      ]
     },
     {
       "name": "Peak Hour Factor",
@@ -99,7 +128,10 @@
       "typical_min": 0.85,
       "typical_max": 0.95,
       "description": "Ratio of hourly volume to peak 15-minute flow rate",
-      "aliases": ["PHF", "peak hour factor"]
+      "aliases": [
+        "PHF",
+        "peak hour factor"
+      ]
     },
     {
       "name": "Access Point Density",
@@ -109,7 +141,10 @@
       "typical_min": 0.0,
       "typical_max": 20.0,
       "description": "Number of access points per mile",
-      "aliases": ["access points", "apd"]
+      "aliases": [
+        "access points",
+        "apd"
+      ]
     },
     {
       "name": "Passing Type",
@@ -119,7 +154,10 @@
       "typical_min": 0,
       "typical_max": 2,
       "description": "Type of passing configuration (0=Constrained, 1=Zone, 2=Lane)",
-      "aliases": ["passing type", "passing configuration"],
+      "aliases": [
+        "passing type",
+        "passing configuration"
+      ],
       "allowed_values": "0,1,2"
     },
     {
@@ -130,7 +168,10 @@
       "typical_min": 1,
       "typical_max": 5,
       "description": "Vertical alignment class",
-      "aliases": ["vertical class", "vc"],
+      "aliases": [
+        "vertical class",
+        "vc"
+      ],
       "allowed_values": "1,2,3,4,5"
     },
     {
@@ -141,8 +182,99 @@
       "typical_min": 0,
       "typical_max": 5,
       "description": "Horizontal alignment class",
-      "aliases": ["horizontal class", "hc"],
+      "aliases": [
+        "horizontal class",
+        "hc"
+      ],
       "allowed_values": "0,1,2,3,4,5"
+    },
+    {
+      "name": "Free Flow Speed",
+      "rust_field": "ffs",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 45.0,
+      "typical_max": 70.0,
+      "description": "Free-flow speed after lane/shoulder and access-point adjustments (HCM Eq. 15-4)",
+      "aliases": [
+        "free_flow_speed",
+        "FFS"
+      ]
+    },
+    {
+      "name": "Average Travel Speed",
+      "rust_field": "avg_speed",
+      "unit": "mph",
+      "data_type": "float",
+      "typical_min": 20.0,
+      "typical_max": 70.0,
+      "description": "Average travel speed under prevailing demand (HCM Eq. 15-7)",
+      "aliases": [
+        "ats",
+        "average_travel_speed"
+      ]
+    },
+    {
+      "name": "Percent Followers",
+      "rust_field": "percent_followers",
+      "unit": "%",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 100.0,
+      "description": "Percentage of vehicles in platoons behind a slower leader (HCM Eq. 15-18)",
+      "aliases": [
+        "pf",
+        "follower_percentage"
+      ]
+    },
+    {
+      "name": "Follower Density",
+      "rust_field": "followers_density",
+      "unit": "followers/mi/ln",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 25.0,
+      "description": "Follower density FD = PF * v / (100 * ATS), the Ch.15 service measure (HCM Eq. 15-28)",
+      "aliases": [
+        "fd",
+        "follower_density"
+      ]
+    },
+    {
+      "name": "Demand Flow Rate",
+      "rust_field": "flow_rate",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 0.0,
+      "typical_max": 3200.0,
+      "description": "Demand flow rate v = V / PHF (HCM Eq. 15-1)",
+      "aliases": [
+        "demand_flow_rate"
+      ]
+    },
+    {
+      "name": "Capacity",
+      "rust_field": "capacity",
+      "unit": "veh/hr",
+      "data_type": "float",
+      "typical_min": 1500.0,
+      "typical_max": 1700.0,
+      "description": "Two-lane highway segment capacity (HCM Ch. 15)",
+      "aliases": [
+        "segment_capacity"
+      ]
+    },
+    {
+      "name": "Level of Service",
+      "rust_field": "los",
+      "unit": null,
+      "data_type": "enum",
+      "allowed_values": "A,B,C,D,E,F",
+      "description": "Level of Service from follower density thresholds (HCM Exhibit 15-6)",
+      "aliases": [
+        "LOS",
+        "service_level"
+      ]
     }
   ]
 }

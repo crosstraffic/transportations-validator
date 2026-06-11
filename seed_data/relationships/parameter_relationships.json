@@ -112,21 +112,24 @@
       "to_field": "hor_class",
       "type": "DETERMINES",
       "facility_type": "BasicFreeway",
-      "description": "Design radius determines horizontal alignment class"
+      "description": "Design radius determines horizontal alignment class",
+      "source": "HCM"
     },
     {
       "from_field": "design_rad",
       "to_field": "hor_class",
       "type": "DETERMINES",
       "facility_type": "TwoLaneHighway",
-      "description": "Design radius determines horizontal alignment class"
+      "description": "Design radius determines horizontal alignment class",
+      "source": "HCM"
     },
     {
       "from_field": "curvature",
       "to_field": "hor_class",
       "type": "DETERMINES",
       "facility_type": "LaneGeometry",
-      "description": "Lane curvature (1/radius) determines horizontal class"
+      "description": "Lane curvature (1/radius) determines horizontal class",
+      "source": "HCM"
     },
     {
       "from_field": "lw",
@@ -163,7 +166,8 @@
       "to_field": "hor_class",
       "type": "DETERMINES",
       "facility_type": "MultilaneHighway",
-      "description": "Design radius determines horizontal alignment class"
+      "description": "Design radius determines horizontal alignment class",
+      "source": "HCM"
     },
     {
       "from_field": "hor_class",
@@ -194,7 +198,8 @@
       "to_field": "lane_change",
       "type": "DETERMINES",
       "facility_type": "PavementMarking",
-      "description": "Marking type determines lane change permission"
+      "description": "Marking type determines lane change permission",
+      "source": "HCM"
     },
     {
       "from_field": "mark_weight",
@@ -209,28 +214,32 @@
       "to_field": "curvature",
       "type": "CONSTRAINS",
       "facility_type": "LaneGeometry",
-      "description": "Speed limit constrains maximum allowable curvature"
+      "description": "Speed limit constrains maximum allowable curvature",
+      "source": "AASHTO"
     },
     {
       "from_field": "confidence",
       "to_field": "lane_width",
       "type": "VALIDATES",
       "facility_type": "LaneGeometry",
-      "description": "Detection confidence validates lane width measurement"
+      "description": "Detection confidence validates lane width measurement",
+      "source": "derived"
     },
     {
       "from_field": "confidence",
       "to_field": "curvature",
       "type": "VALIDATES",
       "facility_type": "LaneGeometry",
-      "description": "Detection confidence validates curvature measurement"
+      "description": "Detection confidence validates curvature measurement",
+      "source": "derived"
     },
     {
       "from_field": "confidence",
       "to_field": "left_line_type",
       "type": "VALIDATES",
       "facility_type": "LaneGeometry",
-      "description": "Detection confidence validates marking type classification"
+      "description": "Detection confidence validates marking type classification",
+      "source": "derived"
     },
     {
       "from_field": "continuity_score",
@@ -390,6 +399,158 @@
       "type": "AFFECTS",
       "facility_type": "BasicFreeway",
       "description": "LOS F whenever demand exceeds capacity, v/c > 1.0 (HCM Exhibit 12-15)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "lane_width",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Lane and shoulder width adjustment a_LS reduces FFS for narrow cross-sections (HCM Eq. 15-4, Exhibit 15-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "shoulder_width",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Lane and shoulder width adjustment a_LS reduces FFS for narrow cross-sections (HCM Eq. 15-4, Exhibit 15-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "apd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Access-point density adjustment a_APD reduces FFS (HCM Eq. 15-4)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "spl",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Base FFS is estimated from the posted speed limit (HCM Ch. 15 Step 3)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Average travel speed degrades from FFS with demand flow (HCM Eq. 15-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Speed decreases with flow rate above 100 veh/h (HCM Eq. 15-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "hor_class",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Horizontal alignment class sets the speed reduction on curves (HCM Eq. 15-8, Exhibit 15-22)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Vertical class selects speed-model coefficients (HCM Exhibits 15-11..15-19)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "phv",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Heavy-vehicle percentage enters the speed-model coefficients (HCM Eq. 15-7)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "volume",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Demand flow rate v = V / PHF (HCM Eq. 15-1)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "phf",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Demand flow rate v = V / PHF (HCM Eq. 15-1)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Percent followers grows with demand flow (HCM Eq. 15-18)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Percent followers model uses FFS-dependent coefficients (HCM Eqs. 15-19..15-25)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "percent_followers",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "FD = PF * v / (100 * ATS) (HCM Eq. 15-28)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "avg_speed",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "FD = PF * v / (100 * ATS) (HCM Eq. 15-28)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "FD = PF * v / (100 * ATS) (HCM Eq. 15-28)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "followers_density",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "LOS A-E assigned by follower-density thresholds (HCM Exhibit 15-6)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "avg_speed",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Speed selects the follower-density threshold column (HCM Exhibit 15-6)",
+      "source": "HCM"
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Demand exceeding capacity yields LOS F (HCM Ch. 15)",
       "source": "HCM"
     }
   ]
