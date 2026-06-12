@@ -1,0 +1,58 @@
+{
+  "_note": "CONSTRUCTED evaluation scenario for H7 (defeasible reconciliation). State/local claims are illustrative fixtures written in the style of the cited manuals. This directory is intentionally separate from seed_data/rules/ and is never seeded into, or counted toward, the verified rule corpus.",
+  "constructed": true,
+  "scenario": "shoulder_width_county_road",
+  "description": "Three-tier hierarchy on one parameter: federal minimum shoulder (2 ft), state collector minimum (3 ft), county ordinance minimum (6 ft). The local rule defeats both upstream tiers by jurisdiction priority; a 4-ft shoulder passes federal and state but fails the governing county requirement.",
+  "parameter": "shoulder_width",
+  "facility_type": "TwoLaneHighway",
+  "default_context": {
+    "functional_class": "collector",
+    "ownership": "county"
+  },
+  "example_value": 4.0,
+  "claims": [
+    {
+      "name": "Minimum Usable Shoulder (AASHTO)",
+      "parameter": "shoulder_width",
+      "rule_type": "min",
+      "min_value": 2.0,
+      "jurisdiction": "federal",
+      "priority": 90,
+      "authority": "AASHTO",
+      "citation": "AASHTO Green Book, 7th Ed., Ch. 4 (Cross-Section Elements)",
+      "severity": "error",
+      "conditions": [],
+      "description": "National default: usable shoulder at least 2 ft."
+    },
+    {
+      "name": "Rural Collector Shoulder (WisDOT, constructed)",
+      "parameter": "shoulder_width",
+      "rule_type": "min",
+      "min_value": 3.0,
+      "jurisdiction": "state",
+      "priority": 50,
+      "authority": "state_DOT",
+      "citation": "WisDOT FDM 11-15-1, Cross-Section Elements (constructed fixture)",
+      "severity": "error",
+      "conditions": [
+        {"type": "functional_class", "value": "collector"}
+      ],
+      "description": "State supplement: rural collectors carry at least 3-ft paved shoulders."
+    },
+    {
+      "name": "County Highway Shoulder Ordinance (constructed)",
+      "parameter": "shoulder_width",
+      "rule_type": "min",
+      "min_value": 6.0,
+      "jurisdiction": "local",
+      "priority": 25,
+      "authority": "county_supplement",
+      "citation": "County Highway Design Ordinance §4.2 (constructed fixture)",
+      "severity": "error",
+      "conditions": [
+        {"type": "ownership", "value": "county"}
+      ],
+      "description": "Local ordinance: county-owned highways require 6-ft shoulders for farm equipment."
+    }
+  ]
+}

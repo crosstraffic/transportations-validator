@@ -240,6 +240,138 @@ class RepairResponse(BaseModel):
     )
 
 
+class ClaimModel(BaseModel):
+    """One rule claim competing in a reconciliation (seed-conflict shape)."""
+
+    name: str = Field(..., description="Rule name")
+    parameter: str = Field(..., description="Parameter the claim constrains")
+    rule_type: str = Field(
+        default="range", description="range | min | max | enum"
+    )
+    min_value: float | None = Field(default=None)
+    max_value: float | None = Field(default=None)
+    allowed_values: list[str] = Field(default_factory=list)
+    jurisdiction: str = Field(
+        default="federal", description="federal | state | local | project"
+    )
+    priority: int | None = Field(
+        default=None,
+        description=(
+            "Document priority (lower = higher authority). Defaults to the "
+            "jurisdiction hierarchy value."
+        ),
+    )
+    authority: str = Field(
+        default="unknown",
+        description="Source authority key (HCM, AASHTO, FHWA, state_DOT, ...)",
+    )
+    citation: str = Field(default="", description="Source citation")
+    severity: str = Field(default="error")
+    conditions: list[dict[str, str]] = Field(
+        default_factory=list,
+        description="Applicability conditions: [{'type': ..., 'value': ...}]",
+    )
+
+
+class ReconcileRequest(BaseModel):
+    """Input for ``POST /api/v1/reason/reconcile``.
+
+    Provide either ``scenario`` (a constructed conflict set from
+    ``seed_data/conflicts/``) or an inline ``claims`` list.
+    """
+
+    scenario: str | None = Field(
+        default=None,
+        description="Name of a constructed conflict scenario",
+        examples=["lane_width_state_trunk"],
+    )
+    claims: list[ClaimModel] | None = Field(
+        default=None,
+        description="Inline competing claims (overrides scenario claims)",
+    )
+    parameter: str | None = Field(
+        default=None,
+        description="Parameter to reconcile (defaults from scenario/claims)",
+    )
+    value: float | None = Field(
+        default=None,
+        description="Design value to obtain a verdict for (optional)",
+    )
+    context: dict[str, str] = Field(
+        default_factory=dict,
+        description=(
+            "Design context establishing applicability conditions, e.g. "
+            "{'terrain_type': 'mountainous'}. Merged over the scenario's "
+            "default context."
+        ),
+    )
+
+
+class ArgumentModel(BaseModel):
+    """One argument in the defeasible derivation."""
+
+    arg_id: str
+    name: str
+    claim: str = Field(..., description="Rendered claim, e.g. 'lane_width ∈ [12, 12]'")
+    jurisdiction: str
+    priority: int
+    authority: str
+    authority_weight: float
+    citation: str
+    severity: str
+    conditions: list[dict[str, str]] = Field(default_factory=list)
+    applicable: bool
+    applicability_reason: str
+    specificity: int
+    verdict: bool | None = Field(
+        default=None, description="This argument's verdict on the supplied value"
+    )
+    status: str = Field(..., description="undefeated | defeated | inapplicable")
+
+
+class DefeatModel(BaseModel):
+    """One resolved conflict in the derivation."""
+
+    winner: str
+    loser: str
+    principle: str = Field(
+        ..., description="jurisdiction_priority | specificity | provenance"
+    )
+    explanation: str
+
+
+class ReconcileResponse(BaseModel):
+    """Result of ``POST /api/v1/reason/reconcile``: a full argument trace."""
+
+    parameter: str
+    context: dict[str, str]
+    value: float | None
+    arguments: list[ArgumentModel]
+    defeats: list[DefeatModel]
+    unresolved: list[list[str]] = Field(
+        default_factory=list,
+        description="Argument-id pairs no principle could order (genuine ties)",
+    )
+    governing: list[str] = Field(
+        ..., description="Undefeated applicable arguments (the rules that govern)"
+    )
+    effective_min: float | None
+    effective_max: float | None
+    effective_claim: str = Field(
+        ..., description="Composed constraint from the governing arguments"
+    )
+    conflicted: bool = Field(
+        ..., description="True if any applicable arguments disagreed"
+    )
+    verdict: bool | None = Field(
+        default=None, description="Compliance of the value under governing rules"
+    )
+    trace_lines: list[str] = Field(
+        default_factory=list,
+        description="Human-readable defeasible derivation, line by line",
+    )
+
+
 class BackwardChainResponse(BaseModel):
     """Result of ``POST /api/v1/reason/backward-chain``."""
 

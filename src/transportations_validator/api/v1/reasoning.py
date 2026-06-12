@@ -5,6 +5,9 @@
 * ``/reason/repair``         — abductive design repair (what is the minimal
   change that makes the failed design compliant?), with every candidate
   re-executed through the verified Rust implementation.
+* ``/reason/reconcile``      — defeasible multi-jurisdiction reconciliation
+  (which of the overlapping/conflicting codes governs, and why?), returning
+  a full argument trace.
 """
 
 from __future__ import annotations
@@ -21,6 +24,8 @@ from transportations_validator.models.reasoning import (
     ForwardChainRequest,
     ForwardChainResponse,
     ParameterChangeModel,
+    ReconcileRequest,
+    ReconcileResponse,
     RepairProposalModel,
     RepairRequest,
     RepairResponse,
@@ -29,6 +34,10 @@ from transportations_validator.validators.forward_chain import (
     backward_chain,
     forward_chain,
     load_relationships_from_seed,
+)
+from transportations_validator.validators.reconcile import (
+    load_conflict_scenarios,
+    reconcile,
 )
 from transportations_validator.validators.repair import (
     load_parameter_bounds,
@@ -226,3 +235,59 @@ async def reason_repair(request: RepairRequest) -> RepairResponse:
         candidates_considered=result.candidates_considered,
         evaluations=result.evaluations,
     )
+
+
+@lru_cache(maxsize=1)
+def _conflict_scenarios() -> dict[str, dict[str, Any]]:
+    """Cached load of the constructed conflict scenarios (H7 evaluation set)."""
+    return load_conflict_scenarios()
+
+
+@router.post("/reason/reconcile", response_model=ReconcileResponse)
+async def reason_reconcile(request: ReconcileRequest) -> ReconcileResponse:
+    """Defeasible reconciliation of overlapping/conflicting codes.
+
+    Competing rule claims (from a constructed scenario or supplied inline)
+    are adjudicated by the superiority relation — jurisdiction priority,
+    then specificity, then provenance — and the full derivation is
+    returned: every argument with its citation, every defeat with the
+    deciding principle, surviving (governing) rules, the composed effective
+    constraint, and a verdict for the supplied value. Genuine ties are
+    reported as unresolved rather than silently broken.
+
+    Worked example (``scenario=lane_width_state_trunk``, value 11.0): the
+    AASHTO 11–12 ft default is defeated by the WisDOT 12-ft state-trunk
+    standard via jurisdiction priority, so an 11-ft lane that is compliant
+    under federal rules alone is NONCOMPLIANT — with the override on record.
+    """
+    claims: list[dict[str, Any]] = []
+    parameter = request.parameter
+    context: dict[str, str] = {}
+
+    if request.scenario is not None:
+        scenario = _conflict_scenarios().get(request.scenario)
+        if scenario is None:
+            raise HTTPException(
+                status_code=404,
+                detail=(
+                    f"Unknown conflict scenario '{request.scenario}'. "
+                    f"Available: {sorted(_conflict_scenarios())}"
+                ),
+            )
+        claims = list(scenario.get("claims", []))
+        parameter = parameter or scenario.get("parameter")
+        context.update(scenario.get("default_context", {}))
+
+    if request.claims is not None:
+        claims = [c.model_dump() for c in request.claims]
+    if not claims:
+        raise HTTPException(
+            status_code=422,
+            detail="Provide either 'scenario' or a non-empty 'claims' list.",
+        )
+    context.update(request.context)
+
+    result = reconcile(
+        claims, parameter=parameter, value=request.value, context=context
+    )
+    return ReconcileResponse(**result.to_dict())

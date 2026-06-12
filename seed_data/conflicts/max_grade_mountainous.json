@@ -1,0 +1,42 @@
+{
+  "_note": "CONSTRUCTED evaluation scenario for H7 (defeasible reconciliation). Claims are illustrative simplifications of the cited tables. This directory is intentionally separate from seed_data/rules/ and is never seeded into, or counted toward, the verified rule corpus.",
+  "constructed": true,
+  "scenario": "max_grade_mountainous",
+  "description": "Specificity (lex specialis) within a single jurisdiction tier: the general maximum grade (5%) is relaxed by a terrain-conditional exception (8% in mountainous terrain). Both claims share jurisdiction, priority, and authority, so only the satisfied terrain condition separates them — the defeasible-exception pattern. A 6.5% grade is noncompliant on level terrain and compliant once terrain_type=mountainous is established.",
+  "parameter": "grade",
+  "facility_type": "TwoLaneHighway",
+  "default_context": {
+    "terrain_type": "mountainous"
+  },
+  "example_value": 6.5,
+  "claims": [
+    {
+      "name": "Maximum Grade - General (AASHTO, constructed simplification)",
+      "parameter": "grade",
+      "rule_type": "max",
+      "max_value": 5.0,
+      "jurisdiction": "federal",
+      "priority": 95,
+      "authority": "AASHTO",
+      "citation": "AASHTO Green Book, 7th Ed., Ch. 7, Table 7-2 (constructed simplification)",
+      "severity": "error",
+      "conditions": [],
+      "description": "General default: rural arterial grades at most 5%."
+    },
+    {
+      "name": "Maximum Grade - Mountainous Exception (AASHTO, constructed simplification)",
+      "parameter": "grade",
+      "rule_type": "max",
+      "max_value": 8.0,
+      "jurisdiction": "federal",
+      "priority": 95,
+      "authority": "AASHTO",
+      "citation": "AASHTO Green Book, 7th Ed., Ch. 7, Table 7-2 (constructed simplification)",
+      "severity": "error",
+      "conditions": [
+        {"type": "terrain_type", "value": "mountainous"}
+      ],
+      "description": "Terrain exception: grades up to 8% permitted in mountainous terrain."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "_note": "CONSTRUCTED evaluation scenario for H7 (defeasible reconciliation). State/local claims are illustrative fixtures written in the style of the cited manuals. This directory is intentionally separate from seed_data/rules/ and is never seeded into, or counted toward, the verified rule corpus.",
+  "constructed": true,
+  "scenario": "lane_width_state_trunk",
+  "description": "State DOT standard narrows the federal lane-width default on the state trunk network: AASHTO allows 11-12 ft for rural arterials, WisDOT requires the full 12-ft lane. Demonstrates a jurisdiction-priority defeat (state over federal) and a non-monotonic verdict flip: an 11-ft lane is compliant under federal rules alone, noncompliant once the state rule enters.",
+  "parameter": "lane_width",
+  "facility_type": "TwoLaneHighway",
+  "default_context": {
+    "highway_class": "state_trunk"
+  },
+  "example_value": 11.0,
+  "claims": [
+    {
+      "name": "Rural Arterial Lane Width (AASHTO)",
+      "parameter": "lane_width",
+      "rule_type": "range",
+      "min_value": 11.0,
+      "max_value": 12.0,
+      "jurisdiction": "federal",
+      "priority": 95,
+      "authority": "AASHTO",
+      "citation": "AASHTO Green Book, 7th Ed., Ch. 7 (Rural and Urban Arterials)",
+      "severity": "error",
+      "conditions": [],
+      "description": "National default: rural arterial travel lanes 11-12 ft."
+    },
+    {
+      "name": "State Trunk Highway Standard Lane (WisDOT, constructed)",
+      "parameter": "lane_width",
+      "rule_type": "range",
+      "min_value": 12.0,
+      "max_value": 12.0,
+      "jurisdiction": "state",
+      "priority": 50,
+      "authority": "state_DOT",
+      "citation": "WisDOT FDM 11-15-1, Cross-Section Elements (constructed fixture)",
+      "severity": "error",
+      "conditions": [
+        {"type": "highway_class", "value": "state_trunk"}
+      ],
+      "description": "State standard: 12-ft lanes required on the state trunk network."
+    }
+  ]
+}

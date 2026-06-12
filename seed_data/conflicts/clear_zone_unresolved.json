@@ -1,0 +1,38 @@
+{
+  "_note": "CONSTRUCTED evaluation scenario for H7 (defeasible reconciliation). Claims are illustrative fixtures. This directory is intentionally separate from seed_data/rules/ and is never seeded into, or counted toward, the verified rule corpus.",
+  "constructed": true,
+  "scenario": "clear_zone_unresolved",
+  "description": "A genuine tie the principles cannot order: two state-tier documents with equal priority, equal specificity, and equal source authority disagree on the minimum clear zone (10 ft vs 12 ft). The reconciler surfaces the conflict as UNRESOLVED instead of silently picking a winner, and applies the strictest reading (12 ft) for the verdict. An 11-ft clear zone is therefore noncompliant, with the disagreement on record.",
+  "parameter": "clear_zone",
+  "facility_type": "TwoLaneHighway",
+  "default_context": {},
+  "example_value": 11.0,
+  "claims": [
+    {
+      "name": "Clear Zone Minimum - Design Manual (constructed)",
+      "parameter": "clear_zone",
+      "rule_type": "min",
+      "min_value": 10.0,
+      "jurisdiction": "state",
+      "priority": 50,
+      "authority": "state_DOT",
+      "citation": "State DOT Facilities Development Manual, Roadside Design (constructed fixture)",
+      "severity": "error",
+      "conditions": [],
+      "description": "Design manual: clear zone at least 10 ft on rural two-lane highways."
+    },
+    {
+      "name": "Clear Zone Minimum - Maintenance Manual (constructed)",
+      "parameter": "clear_zone",
+      "rule_type": "min",
+      "min_value": 12.0,
+      "jurisdiction": "state",
+      "priority": 50,
+      "authority": "state_DOT",
+      "citation": "State DOT Highway Maintenance Manual, Roadside Management (constructed fixture)",
+      "severity": "error",
+      "conditions": [],
+      "description": "Maintenance manual: clear zone at least 12 ft on the same network."
+    }
+  ]
+}

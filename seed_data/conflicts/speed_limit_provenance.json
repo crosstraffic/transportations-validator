@@ -1,0 +1,38 @@
+{
+  "_note": "CONSTRUCTED evaluation scenario for H7 (defeasible reconciliation). Claims are illustrative fixtures. This directory is intentionally separate from seed_data/rules/ and is never seeded into, or counted toward, the verified rule corpus.",
+  "constructed": true,
+  "scenario": "speed_limit_provenance",
+  "description": "Provenance tie-break: two claims share jurisdiction tier, document priority, and specificity, so neither jurisdiction nor lex specialis separates them. The claim tracing to the higher-authority source (FHWA guidance, weight 0.9) defeats the locally derived heuristic (weight 0.5). A 62-mph limit is compliant under the governing FHWA claim; the heuristic's opposite verdict is overridden.",
+  "parameter": "speed_limit",
+  "facility_type": "TwoLaneHighway",
+  "default_context": {},
+  "example_value": 62.0,
+  "claims": [
+    {
+      "name": "Rural Two-Lane Posted Speed Ceiling (FHWA, constructed)",
+      "parameter": "speed_limit",
+      "rule_type": "max",
+      "max_value": 65.0,
+      "jurisdiction": "federal",
+      "priority": 90,
+      "authority": "FHWA",
+      "citation": "FHWA Speed Limit Setting Guidance (constructed fixture)",
+      "severity": "warning",
+      "conditions": [],
+      "description": "Guidance ceiling: posted speed at most 65 mph on rural two-lane highways."
+    },
+    {
+      "name": "Legacy Corridor Speed Heuristic (derived, constructed)",
+      "parameter": "speed_limit",
+      "rule_type": "max",
+      "max_value": 60.0,
+      "jurisdiction": "federal",
+      "priority": 90,
+      "authority": "derived",
+      "citation": "Legacy corridor study heuristic, uncited (constructed fixture)",
+      "severity": "warning",
+      "conditions": [],
+      "description": "Derived heuristic without manual citation: posted speed at most 60 mph."
+    }
+  ]
+}

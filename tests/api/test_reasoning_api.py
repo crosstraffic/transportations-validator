@@ -298,3 +298,121 @@ class TestRepairEndpoint:
             for c in p["changes"]
         }
         assert "lane_width" not in touched
+
+
+class TestReconcileEndpoint:
+    """POST /api/v1/reason/reconcile — defeasible reconciliation traces."""
+
+    def test_scenario_jurisdiction_defeat(self):
+        """The paper trace: WisDOT state-trunk standard defeats AASHTO."""
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={"scenario": "lane_width_state_trunk", "value": 11.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["parameter"] == "lane_width"
+        assert data["conflicted"] is True
+        assert data["verdict"] is False
+        assert data["effective_claim"] == "lane_width ∈ [12, 12]"
+
+        (defeat,) = data["defeats"]
+        assert defeat["principle"] == "jurisdiction_priority"
+        assert data["governing"] == [defeat["winner"]]
+
+        statuses = {a["arg_id"]: a["status"] for a in data["arguments"]}
+        assert statuses["A1"] == "defeated"
+        assert statuses["A2"] == "undefeated"
+        assert any("Defeat:" in line for line in data["trace_lines"])
+
+    def test_context_override_changes_outcome(self):
+        """Off the state trunk network the state rule never applies, so the
+        federal default governs and 11 ft is compliant."""
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={
+                "scenario": "lane_width_state_trunk",
+                "value": 11.0,
+                "context": {"highway_class": "county_road"},
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["verdict"] is True
+        statuses = {a["arg_id"]: a["status"] for a in data["arguments"]}
+        assert statuses["A2"] == "inapplicable"
+
+    def test_inline_claims(self):
+        """Claims supplied directly, no scenario file involved."""
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={
+                "value": 6.5,
+                "context": {"terrain_type": "mountainous"},
+                "claims": [
+                    {
+                        "name": "General Max Grade",
+                        "parameter": "grade",
+                        "rule_type": "max",
+                        "max_value": 5.0,
+                        "jurisdiction": "federal",
+                        "priority": 95,
+                        "authority": "AASHTO",
+                    },
+                    {
+                        "name": "Mountainous Exception",
+                        "parameter": "grade",
+                        "rule_type": "max",
+                        "max_value": 8.0,
+                        "jurisdiction": "federal",
+                        "priority": 95,
+                        "authority": "AASHTO",
+                        "conditions": [
+                            {"type": "terrain_type", "value": "mountainous"}
+                        ],
+                    },
+                ],
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["verdict"] is True
+        (defeat,) = data["defeats"]
+        assert defeat["principle"] == "specificity"
+
+    def test_unresolved_tie_is_reported(self):
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={"scenario": "clear_zone_unresolved", "value": 11.0},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["unresolved"] == [["A1", "A2"]]
+        assert data["defeats"] == []
+        assert data["verdict"] is False
+        assert any("UNRESOLVED" in line for line in data["trace_lines"])
+
+    def test_unknown_scenario_404(self):
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={"scenario": "definitely_not_a_scenario"},
+        )
+        assert response.status_code == 404
+        assert "lane_width_state_trunk" in response.json()["detail"]
+
+    def test_no_scenario_no_claims_422(self):
+        response = client.post("/api/v1/reason/reconcile", json={})
+        assert response.status_code == 422
+
+    def test_static_reconciliation_without_value(self):
+        """No value: still returns the governing effective constraint."""
+        response = client.post(
+            "/api/v1/reason/reconcile",
+            json={"scenario": "shoulder_width_county_road"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["verdict"] is None
+        assert data["effective_min"] == 6.0
+        assert len(data["governing"]) == 1
