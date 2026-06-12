@@ -1,0 +1,1716 @@
+{
+  "_note": "Candidate AFFECTS edges induced from the Rust HCM implementation (KG-AUTO-1). Status candidate_unaudited: an audit queue, NOT loaded into the curated graph. Regenerate with scripts/extract_code_edges.py.",
+  "extraction": "validators/code_edges.py",
+  "relationships": [
+    {
+      "from_field": "passing_type",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "volume",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "volume",
+      "to_field": "flow_rate",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_demand_flow",
+          "file": "twolanehighways.rs",
+          "line": 660
+        }
+      ]
+    },
+    {
+      "from_field": "grade",
+      "to_field": "vertical_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_vertical_alignment",
+          "file": "twolanehighways.rs",
+          "line": 749
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "vertical_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_vertical_alignment",
+          "file": "twolanehighways.rs",
+          "line": 749
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "vertical_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_vertical_alignment",
+          "file": "twolanehighways.rs",
+          "line": 749
+        }
+      ]
+    },
+    {
+      "from_field": "apd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "lane_width",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "shoulder_width",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "spl",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "twolanehighways.rs",
+          "line": 988
+        }
+      ]
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "spl",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "spl",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "sup_ele",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "sup_ele",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "avg_speed",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "hor_class",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_average_speed",
+          "file": "twolanehighways.rs",
+          "line": 1095
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "percent_followers",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_percent_followers",
+          "file": "twolanehighways.rs",
+          "line": 1802
+        }
+      ]
+    },
+    {
+      "from_field": "avg_speed",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        },
+        {
+          "function": "determine_follower_density_pc_pz",
+          "file": "twolanehighways.rs",
+          "line": 2002
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "design_rad",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        },
+        {
+          "function": "determine_follower_density_pc_pz",
+          "file": "twolanehighways.rs",
+          "line": 2002
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "percent_followers",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        },
+        {
+          "function": "determine_follower_density_pc_pz",
+          "file": "twolanehighways.rs",
+          "line": 2002
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "phv",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "spl",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "sup_ele",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "followers_density",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_follower_density_pl",
+          "file": "twolanehighways.rs",
+          "line": 1896
+        }
+      ]
+    },
+    {
+      "from_field": "avg_speed",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "twolanehighways.rs",
+          "line": 2139
+        },
+        {
+          "function": "determine_facility_los",
+          "file": "twolanehighways.rs",
+          "line": 2217
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "twolanehighways.rs",
+          "line": 2139
+        }
+      ]
+    },
+    {
+      "from_field": "flow_rate",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "twolanehighways.rs",
+          "line": 2139
+        }
+      ]
+    },
+    {
+      "from_field": "followers_density",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "twolanehighways.rs",
+          "line": 2139
+        },
+        {
+          "function": "determine_facility_los",
+          "file": "twolanehighways.rs",
+          "line": 2217
+        }
+      ]
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "twolanehighways.rs",
+          "line": 2139
+        }
+      ]
+    },
+    {
+      "from_field": "lane_width",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "analyze",
+          "file": "twolanehighways.rs",
+          "line": 2471
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "analyze",
+          "file": "twolanehighways.rs",
+          "line": 2471
+        }
+      ]
+    },
+    {
+      "from_field": "shoulder_width",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "analyze",
+          "file": "twolanehighways.rs",
+          "line": 2471
+        }
+      ]
+    },
+    {
+      "from_field": "bffs",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "basicfreeways.rs",
+          "line": 604
+        },
+        {
+          "function": "estimate_basic_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 688
+        },
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "trd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_free_flow_speed",
+          "file": "basicfreeways.rs",
+          "line": 604
+        },
+        {
+          "function": "estimate_basic_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 688
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "calculate_speed",
+          "file": "basicfreeways.rs",
+          "line": 639
+        },
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "calculate_speed",
+          "file": "basicfreeways.rs",
+          "line": 639
+        },
+        {
+          "function": "estimate_capacity",
+          "file": "basicfreeways.rs",
+          "line": 712
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "calculate_speed",
+          "file": "basicfreeways.rs",
+          "line": 639
+        },
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "calculate_speed",
+          "file": "basicfreeways.rs",
+          "line": 639
+        }
+      ]
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "speed",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "calculate_speed",
+          "file": "basicfreeways.rs",
+          "line": 639
+        },
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "lane_count",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_basic_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 688
+        },
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "lc_r",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_basic_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 688
+        },
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "lw",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_basic_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 688
+        },
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "apd",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "lc_l",
+      "to_field": "ffs",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_multi_lane_ffs",
+          "file": "basicfreeways.rs",
+          "line": 698
+        }
+      ]
+    },
+    {
+      "from_field": "demand_flow_i",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "grade",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "lane_count",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "p_t",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "v_p",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_demand_volume",
+          "file": "basicfreeways.rs",
+          "line": 914
+        }
+      ]
+    },
+    {
+      "from_field": "demand_flow_i",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        },
+        {
+          "function": "estimate_lanes_from_aadt",
+          "file": "basicfreeways.rs",
+          "line": 956
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        }
+      ]
+    },
+    {
+      "from_field": "grade",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        }
+      ]
+    },
+    {
+      "from_field": "length",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        }
+      ]
+    },
+    {
+      "from_field": "los",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        }
+      ]
+    },
+    {
+      "from_field": "p_t",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "lane_count",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_number_of_lanes",
+          "file": "basicfreeways.rs",
+          "line": 928
+        },
+        {
+          "function": "estimate_lanes_from_aadt",
+          "file": "basicfreeways.rs",
+          "line": 956
+        }
+      ]
+    },
+    {
+      "from_field": "phf",
+      "to_field": "demand_flow_i",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_lanes_from_aadt",
+          "file": "basicfreeways.rs",
+          "line": 956
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        },
+        {
+          "function": "calculate_vc_ratio",
+          "file": "basicfreeways.rs",
+          "line": 1069
+        },
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "ffs",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "speed",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "speed",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "density",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        }
+      ]
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "estimate_density",
+          "file": "basicfreeways.rs",
+          "line": 1042
+        },
+        {
+          "function": "calculate_vc_ratio",
+          "file": "basicfreeways.rs",
+          "line": 1069
+        },
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "capacity",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "density",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "density",
+      "to_field": "vc_ratio",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "v_p",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    },
+    {
+      "from_field": "vc_ratio",
+      "to_field": "los",
+      "type": "AFFECTS",
+      "facility_type": "BasicFreeway",
+      "source": "code_derived",
+      "status": "candidate_unaudited",
+      "evidence": [
+        {
+          "function": "determine_segment_los",
+          "file": "basicfreeways.rs",
+          "line": 1118
+        }
+      ]
+    }
+  ]
+}
