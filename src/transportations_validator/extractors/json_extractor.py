@@ -44,6 +44,9 @@ class JSONExtractor(BaseExtractor):
         "vertical_class",
         "horizontal_class",
         "hor_class",
+        # GeometricDesign parameters
+        "h_radius",
+        "design_speed",
         # Context parameters
         "facility_type",
         "city_type",

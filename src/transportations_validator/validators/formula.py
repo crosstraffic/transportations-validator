@@ -152,7 +152,7 @@ class FormulaEvaluator:
 
         # Filter out known functions and constants
         reserved = set(self.SAFE_FUNCTIONS.keys()) | set(self.SAFE_NAMES.keys())
-        reserved |= {"and", "or", "not", "in", "is", "if", "else"}
+        reserved |= {"and", "or", "not", "in", "is", "if", "else", "implies"}
 
         return {m for m in matches if m not in reserved}
 
@@ -189,6 +189,17 @@ class FormulaEvaluator:
 
         # Replace hyphens in identifiers with underscores
         formula = re.sub(r"\b(\w+)-(\w+)\b", r"\1_\2", formula)
+
+        # Desugar the rule-corpus 'implies' connective (right-associative):
+        # "a implies b" -> "(not (a)) or (b)". simpleeval has no implication
+        # operator, so without this rewrite every implies-rule raised
+        # FormulaError and silently never fired.
+        if "implies" in formula:
+            parts = re.split(r"\bimplies\b", formula)
+            rewritten = parts[-1].strip()
+            for antecedent in reversed(parts[:-1]):
+                rewritten = f"(not ({antecedent.strip()})) or ({rewritten})"
+            formula = rewritten
 
         return formula
 

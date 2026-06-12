@@ -84,6 +84,15 @@ class ValidationResult(BaseModel):
     error_count: int
     warning_count: int
     parameters: list[ParameterValidation] = Field(default_factory=list)
+    clarifications: list["Clarification"] = Field(
+        default_factory=list,
+        description=(
+            "Questions the engine needs answered before the verdict is "
+            "complete: rules it could not check (missing inputs), rule sets "
+            "it could not choose (unestablished conditions), and values "
+            "that look like the wrong unit"
+        ),
+    )
 
 
 class ClarificationType(str, Enum):

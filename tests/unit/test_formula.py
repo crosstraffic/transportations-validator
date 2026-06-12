@@ -187,3 +187,57 @@ class TestFormulaEvaluator:
         normalized = evaluator._normalize_params(params)
         assert "a" in normalized
         assert "b" not in normalized
+
+
+class TestImpliesConnective:
+    """The rule corpus writes conditionals as 'a implies b'; without the
+    desugaring these rules raised FormulaError and silently never fired."""
+
+    def setup_method(self):
+        from transportations_validator.validators.formula import FormulaEvaluator
+
+        self.evaluator = FormulaEvaluator()
+
+    def test_implies_true_antecedent_violated(self):
+        # curvature in class-0 band but hor_class says otherwise -> False
+        assert (
+            self.evaluator.evaluate(
+                "curvature < 0.000128 implies hor_class == 0",
+                {"curvature": 0.0001, "hor_class": 2},
+            )
+            is False
+        )
+
+    def test_implies_true_antecedent_satisfied(self):
+        assert (
+            self.evaluator.evaluate(
+                "curvature < 0.000128 implies hor_class == 0",
+                {"curvature": 0.0001, "hor_class": 0},
+            )
+            is True
+        )
+
+    def test_implies_false_antecedent_vacuously_true(self):
+        assert (
+            self.evaluator.evaluate(
+                "curvature < 0.000128 implies hor_class == 0",
+                {"curvature": 0.5, "hor_class": 4},
+            )
+            is True
+        )
+
+    def test_implies_chain_right_associative(self):
+        # a implies (b implies c): a=True, b=True, c=False -> False
+        assert (
+            self.evaluator.evaluate(
+                "a == 1 implies b == 1 implies c == 1",
+                {"a": 1, "b": 1, "c": 0},
+            )
+            is False
+        )
+
+    def test_implies_not_extracted_as_parameter(self):
+        refs = self.evaluator.extract_parameters(
+            "curvature < 0.000128 implies hor_class == 0"
+        )
+        assert refs == {"curvature", "hor_class"}

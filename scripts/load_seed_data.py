@@ -185,6 +185,93 @@ async def load_inline_parameters(
         param_ids[key] = param.id
 
 
+async def get_or_create_condition_value(
+    session: AsyncSession,
+    cache: dict[tuple[str, str], int],
+    cond_type_name: str,
+    value: str,
+) -> int:
+    """Resolve a rule condition's (type, value) to a ConditionValue id.
+
+    Matching is case-insensitive ("level" matches the seeded "Level").
+    Types/values referenced by rules but absent from the condition seed
+    (e.g. design_speed, speed_category) are created on the fly so no rule
+    condition is silently dropped.
+    """
+    key = (cond_type_name, str(value).lower())
+    if key in cache:
+        return cache[key]
+
+    result = await session.execute(
+        select(ConditionType).where(ConditionType.name == cond_type_name)
+    )
+    ctype = result.scalar_one_or_none()
+    if ctype is None:
+        ctype = ConditionType(
+            name=cond_type_name,
+            description=f"Auto-created from rule seed condition '{cond_type_name}'",
+        )
+        session.add(ctype)
+        await session.flush()
+
+    result = await session.execute(
+        select(ConditionValue).where(ConditionValue.condition_type_id == ctype.id)
+    )
+    cval = next(
+        (v for v in result.scalars() if v.value.lower() == str(value).lower()),
+        None,
+    )
+    if cval is None:
+        cval = ConditionValue(
+            condition_type_id=ctype.id,
+            value=str(value),
+            display_name=str(value).capitalize(),
+        )
+        session.add(cval)
+        await session.flush()
+
+    cache[key] = cval.id
+    return cval.id
+
+
+async def ensure_rule_conditions(
+    session: AsyncSession,
+    cond_cache: dict[tuple[str, str], int],
+    rule: DesignRule,
+    conditions_data: list[dict],
+) -> int:
+    """Attach the rule's seed conditions if they are not already present.
+
+    Returns the number of RuleCondition rows created. Idempotent: existing
+    links (by condition_value_id) are kept, missing ones are backfilled —
+    this repairs databases seeded before conditions were loaded at all.
+    """
+    from transportations_validator.models.rule import RuleCondition
+
+    if not conditions_data:
+        return 0
+
+    result = await session.execute(
+        select(RuleCondition.condition_value_id).where(RuleCondition.rule_id == rule.id)
+    )
+    existing_value_ids = {row[0] for row in result}
+
+    created = 0
+    for cond in conditions_data:
+        cval_id = await get_or_create_condition_value(
+            session, cond_cache, cond["type"], cond["value"]
+        )
+        if cval_id in existing_value_ids:
+            continue
+        session.add(
+            RuleCondition(rule_id=rule.id, condition_value_id=cval_id, is_required=True)
+        )
+        existing_value_ids.add(cval_id)
+        created += 1
+
+    return created
+
+
 async def load_rules(
     session: AsyncSession,
     param_ids: dict[str, int],
@@ -193,6 +280,9 @@ async def load_rules(
     print("Loading rules...")
 
     from transportations_validator.models.rule import RuleSource
+
+    cond_cache: dict[tuple[str, str], int] = {}
+    condition_count = 0
 
     rules_dir = SEED_DATA_DIR / "rules"
     rules_files = list(rules_dir.glob("*.json"))
@@ -249,7 +339,13 @@ async def load_rules(
                     DesignRule.parameter_id == param_id, DesignRule.name == rule_data["name"]
                 )
             )
-            if result.scalar_one_or_none():
+            existing_rule = result.scalar_one_or_none()
+            if existing_rule:
+                # Backfill conditions for rules seeded before conditions
+                # were loaded.
+                condition_count += await ensure_rule_conditions(
+                    session, cond_cache, existing_rule, rule_data.get("conditions", [])
+                )
                 continue
 
             rule = DesignRule(
@@ -267,6 +363,10 @@ async def load_rules(
             session.add(rule)
             await session.flush()
             rule_count += 1
+
+            condition_count += await ensure_rule_conditions(
+                session, cond_cache, rule, rule_data.get("conditions", [])
+            )
 
             # Create source reference
             if "source_ref" in rule_data:
@@ -292,6 +392,7 @@ async def load_rules(
         total_rule_count += rule_count
 
     print(f"  Total: {total_rule_count} rules loaded")
+    print(f"  Total: {condition_count} rule conditions attached")
 
 
 async def main() -> None:

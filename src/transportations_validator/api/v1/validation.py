@@ -19,6 +19,7 @@ from transportations_validator.models.validation import (
     ValidationRequest,
     ValidationResponse,
 )
+from transportations_validator.validators.clarify import unit_conflict_clarification
 from transportations_validator.validators.engine import ValidationEngine
 
 router = APIRouter()
@@ -53,6 +54,7 @@ async def validate_data(
             facility_type=extraction.facility_type,
             result=result,
             extracted_context=extraction.context,
+            clarifications=result.clarifications,
             message="Validation completed successfully",
         )
 
@@ -88,6 +90,7 @@ async def validate_text(
             facility_type=extraction.facility_type,
             result=result,
             extracted_context=extraction.context,
+            clarifications=result.clarifications,
             message="Text validation completed",
         )
 
@@ -215,30 +218,18 @@ async def validate_semantic_firewall(
     ]
 
     # Detect conversational clarifications. Two triggers active today:
-    #   - UNIT_CONFLICT on lane_width (2.5-4.5 ft is implausible feet but plausible
-    #     metric: common metric lane widths are 3.0-3.75 m).
+    #   - UNIT_CONFLICT on lane_width via the shared corpus-driven detector
+    #     (implausible as feet, plausible as meters against the SV-001 range).
     #   - MISSING_PARAMETER for SV-005 partial input (needs both design_rad
     #     and speed_limit).
     clarifications: list[Clarification] = []
 
-    if request.lane_width is not None and 2.5 <= request.lane_width <= 4.5:
-        metric_equiv_ft = request.lane_width * 3.28084
-        clarifications.append(
-            Clarification(
-                type=ClarificationType.UNIT_CONFLICT,
-                parameter="lane_width",
-                message=(
-                    f"lane_width={request.lane_width} is implausibly narrow as feet "
-                    f"(real lanes are >=9 ft) but matches common metric lane widths. "
-                    f"If meters were intended, the equivalent is {metric_equiv_ft:.2f} ft."
-                ),
-                suggested_question=(
-                    f"Did you mean {request.lane_width} meters? CrossTraffic expects "
-                    f"lane_width in feet (HCM convention). The metric equivalent would be "
-                    f"{metric_equiv_ft:.2f} ft."
-                ),
-            )
+    if request.lane_width is not None:
+        unit_clar = unit_conflict_clarification(
+            "lane_width", request.lane_width, "ft", 9.0, 12.0
         )
+        if unit_clar:
+            clarifications.append(unit_clar)
 
     if (request.design_rad is None) != (request.speed_limit is None):
         if request.design_rad is not None:

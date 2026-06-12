@@ -15,11 +15,19 @@ from transportations_validator.extractors.base import ExtractionResult
 from transportations_validator.models.parameter import FacilityType
 from transportations_validator.models.rule import RuleType, Severity
 from transportations_validator.models.validation import (
+    Clarification,
     ParameterValidation,
     RuleViolation,
     SourceType,
     ValidationContext,
     ValidationResult,
+)
+from transportations_validator.validators.clarify import (
+    ambiguous_context_clarification,
+    dedupe_clarifications,
+    missing_input_clarification,
+    partition_rules_by_context,
+    unit_conflict_clarification,
 )
 from transportations_validator.validators.formula import FormulaError, FormulaEvaluator
 from transportations_validator.validators.resolvers.condition import ConditionResolver
@@ -74,6 +82,7 @@ class ValidationEngine:
         param_validations = []
         total_errors = 0
         total_warnings = 0
+        clarifications: list[Clarification] = []
 
         for param_key, param_data in extraction.parameters.items():
             # Skip nested segment data for now (handle separately)
@@ -86,6 +95,7 @@ class ValidationEngine:
                 extraction.facility_type,
                 merged_context,
                 extraction.parameters,  # Pass all params for formula evaluation
+                clarifications,
             )
 
             if validation:
@@ -103,6 +113,7 @@ class ValidationEngine:
             error_count=total_errors,
             warning_count=total_warnings,
             parameters=param_validations,
+            clarifications=dedupe_clarifications(clarifications),
         ), extraction
 
     def _extract(self, data: Any, source_type: SourceType | None = None) -> ExtractionResult:
@@ -151,8 +162,11 @@ class ValidationEngine:
         facility_type: str | None,
         context: dict[str, Any],
         all_params: dict[str, Any] | None = None,
+        clarifications: list[Clarification] | None = None,
     ) -> ParameterValidation | None:
         """Validate a single parameter against applicable rules."""
+        if clarifications is None:
+            clarifications = []
         value = param_data.get("value")
         if value is None:
             return None
@@ -178,8 +192,26 @@ class ValidationEngine:
                 warnings=[],
             )
 
-        # Get applicable rules
-        rules = await self.rule_repo.get_rules_for_context(param.id, context)
+        # Unit sanity: implausible in the documented unit but plausible as a
+        # metric misreading -> ask, don't guess (typical ranges come from the
+        # parameter corpus).
+        unit_clar = unit_conflict_clarification(
+            param.rust_field, value, param.unit, param.typical_min, param.typical_max
+        )
+        if unit_clar:
+            clarifications.append(unit_clar)
+
+        # Get the parameter's rules, then split applicable vs. those gated on
+        # conditions the context does not establish — the latter become
+        # AMBIGUOUS_CONTEXT clarifications instead of silently dropping.
+        all_rules = await self.rule_repo.get_by_parameter_id(param.id)
+        rules, unestablished = partition_rules_by_context(list(all_rules), context)
+        for cond_type, gated in unestablished.items():
+            clarifications.append(
+                ambiguous_context_clarification(
+                    param.rust_field, cond_type, gated["options"], gated["rules"]
+                )
+            )
 
         # Apply jurisdiction resolver to prioritize rules
         rules = await self.jurisdiction_resolver.prioritize_rules(
@@ -191,7 +223,9 @@ class ValidationEngine:
         warnings: list[RuleViolation] = []
 
         for rule in rules:
-            violation = self._check_rule(rule, value, all_params)
+            violation = self._check_rule(
+                rule, value, all_params, clarifications, param.rust_field
+            )
             if violation:
                 if rule.severity == Severity.ERROR:
                     violations.append(violation)
@@ -208,7 +242,12 @@ class ValidationEngine:
         )
 
     def _check_rule(
-        self, rule: Any, value: Any, all_params: dict[str, Any] | None = None
+        self,
+        rule: Any,
+        value: Any,
+        all_params: dict[str, Any] | None = None,
+        clarifications: list[Clarification] | None = None,
+        parameter_name: str | None = None,
     ) -> RuleViolation | None:
         """Check if a value violates a rule."""
         try:
@@ -221,7 +260,9 @@ class ValidationEngine:
             elif rule.rule_type == RuleType.ENUM:
                 return self._check_enum(rule, value)
             elif rule.rule_type == RuleType.FORMULA:
-                return self._check_formula(rule, value, all_params)
+                return self._check_formula(
+                    rule, value, all_params, clarifications, parameter_name
+                )
         except (TypeError, ValueError):
             return None
 
@@ -330,12 +371,22 @@ class ValidationEngine:
         return None
 
     def _check_formula(
-        self, rule: Any, value: Any, all_params: dict[str, Any] | None
+        self,
+        rule: Any,
+        value: Any,
+        all_params: dict[str, Any] | None,
+        clarifications: list[Clarification] | None = None,
+        parameter_name: str | None = None,
     ) -> RuleViolation | None:
         """Check formula constraint.
 
         Formula rules can reference multiple parameters and perform calculations.
         The formula should evaluate to True if the constraint is satisfied.
+
+        A formula whose referenced parameters are not all provided is NOT
+        silently skipped: that would make a missed check indistinguishable
+        from a passed one. It becomes a MISSING_PARAMETER clarification so
+        the conversational layer asks for the inputs and retries.
         """
         if not rule.formula:
             return None
@@ -350,6 +401,26 @@ class ValidationEngine:
                 params[key] = param_data["value"]
             else:
                 params[key] = param_data
+
+        # Detect unsatisfiable references before evaluating: the rule corpus
+        # tells us exactly which inputs this check needs.
+        referenced = self.formula_evaluator.extract_parameters(rule.formula)
+        provided = {
+            k.replace("-", "_") for k, v in params.items() if v is not None
+        }
+        missing = referenced - provided
+        if missing:
+            if clarifications is not None:
+                clarifications.append(
+                    missing_input_clarification(
+                        parameter=parameter_name or "this parameter",
+                        missing=missing,
+                        rule_name=rule.name,
+                        formula=rule.formula,
+                        citation=self._get_citation(rule),
+                    )
+                )
+            return None
 
         try:
             result = self.formula_evaluator.evaluate(rule.formula, params)
