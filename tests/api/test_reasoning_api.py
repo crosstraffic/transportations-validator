@@ -416,3 +416,93 @@ class TestReconcileEndpoint:
         assert data["verdict"] is None
         assert data["effective_min"] == 6.0
         assert len(data["governing"]) == 1
+
+
+class TestInverseDesignEndpoint:
+    """POST /api/v1/reason/inverse-design — goal-directed synthesis."""
+
+    SITE_700 = {
+        "facility_type": "TwoLaneHighway",
+        "site": {
+            "volume": 700.0, "grade": 2.0, "spl": 60.0, "phv": 0.08,
+            "phf": 0.94, "length": 2.0, "passing_type": 0,
+        },
+        "goal_los": "C",
+        "steps": 5,
+    }
+
+    def test_feasible_envelope_with_executed_proof(self):
+        response = client.post("/api/v1/reason/inverse-design", json=self.SITE_700)
+        assert response.status_code == 200
+        data = response.json()
+
+        assert data["achievable"] is True
+        assert data["design_parameters"] == ["lane_width", "shoulder_width", "apd"]
+        assert 0 < data["feasible_count"] < data["grid_size"]
+        # the recommendation is proved by execution, cheapest first
+        cheapest = data["cheapest"]
+        assert cheapest["evaluated"]["los"] <= "C"
+        costs = [f["cost"] for f in data["feasible"]]
+        assert costs == sorted(costs)
+        assert data["feasible"][0]["cost"] == cheapest["cost"]
+
+    def test_max_results_caps_list_not_counts(self):
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={**self.SITE_700, "max_results": 3},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["feasible"]) == 3
+        assert data["feasible_count"] > 3  # full set still counted
+        assert set(data["envelope"]) == set(data["design_parameters"])
+
+    def test_demand_dominated_site_reports_infeasible(self):
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={
+                **self.SITE_700,
+                "site": {**self.SITE_700["site"], "volume": 800.0},
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["achievable"] is False
+        assert data["cheapest"] is None
+        assert data["feasible"] == []
+
+    def test_unsupported_facility_rejected(self):
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={**self.SITE_700, "facility_type": "BasicFreeway"},
+        )
+        assert response.status_code == 422
+
+    def test_unknown_design_parameter_rejected(self):
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={**self.SITE_700, "design_parameters": ["not_a_parameter"]},
+        )
+        assert response.status_code == 422
+        assert "No legal bounds" in response.json()["detail"]
+
+    def test_missing_site_condition_explained(self):
+        """Omitting volume from the site is a 422 naming the gap, not a 500."""
+        site = {k: v for k, v in self.SITE_700["site"].items() if k != "volume"}
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={**self.SITE_700, "site": site},
+        )
+        assert response.status_code == 422
+        assert "volume" in response.json()["detail"]
+
+    def test_bounds_override_narrows_the_sweep(self):
+        """Locking shoulder_width to zero removes the cheap trade-off."""
+        response = client.post(
+            "/api/v1/reason/inverse-design",
+            json={**self.SITE_700, "bounds": {"shoulder_width": [0.0, 0.0]}},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        for f in data["feasible"]:
+            assert f["design"]["shoulder_width"] == 0.0

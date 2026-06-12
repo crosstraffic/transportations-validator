@@ -42,6 +42,10 @@ class TwoLaneHighwayExecutor:
     followers_density, los``.
     """
 
+    REQUIRED_INPUTS = frozenset(
+        {"spl", "volume", "lane_width", "shoulder_width", "apd"}
+    )
+
     def __init__(self) -> None:
         if not HAVE_RUST_LIBRARY:
             raise ImportError(

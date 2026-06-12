@@ -240,6 +240,112 @@ class RepairResponse(BaseModel):
     )
 
 
+class InverseDesignRequest(BaseModel):
+    """Input for ``POST /api/v1/reason/inverse-design``."""
+
+    facility_type: str = Field(
+        ...,
+        description="Facility whose verified computation proves feasibility. "
+                    "Currently supported: 'TwoLaneHighway'.",
+        examples=["TwoLaneHighway"],
+    )
+    site: dict[str, float | int] = Field(
+        ...,
+        description=(
+            "Fixed site conditions the engineer cannot design away "
+            "(volume, grade, spl, phv, phf, length, passing_type)."
+        ),
+    )
+    target: str = Field(
+        default="los",
+        min_length=1,
+        description="Performance metric the goal constrains",
+    )
+    goal_los: str = Field(
+        default="C",
+        pattern="^[A-Fa-f]$",
+        description="Synthesis goal: facility LOS no worse than this letter",
+    )
+    design_parameters: list[str] | None = Field(
+        default=None,
+        description=(
+            "Free parameters to sweep. Default: discovered as the bounded, "
+            "exogenous causal ancestors of the target not fixed by the "
+            "site (capped at 3 — scoped proof-of-concept)."
+        ),
+    )
+    bounds: dict[str, tuple[float, float]] | None = Field(
+        default=None,
+        description=(
+            "Override legal (min, max) per free parameter. Defaults to the "
+            "typical ranges from the authority-cited parameter corpus."
+        ),
+    )
+    steps: int = Field(
+        default=5, ge=2, le=9, description="Grid resolution per free parameter"
+    )
+    max_evaluations: int = Field(
+        default=500, ge=1, le=2000,
+        description="Hard cap on verified-computation executions",
+    )
+    max_results: int = Field(
+        default=10, ge=1, le=200,
+        description="Feasible designs returned (cheapest first); counts and "
+                    "the envelope always cover the full feasible set",
+    )
+
+
+class FeasibleDesignModel(BaseModel):
+    """One synthesized geometry, proved by forward execution."""
+
+    design: dict[str, float] = Field(..., description="Free-parameter values")
+    evaluated: dict[str, float | int | str] = Field(
+        ...,
+        description="Forward-executed result (ffs, avg_speed, "
+                    "followers_density, los, ...) — the proof of feasibility",
+    )
+    cost: float = Field(
+        ..., ge=0.0,
+        description="Buildability cost: normalized distance from the cheap "
+                    "end of each parameter (0 = cheapest possible)",
+    )
+
+
+class InverseDesignResponse(BaseModel):
+    """Result of ``POST /api/v1/reason/inverse-design``."""
+
+    target: str
+    facility_type: str
+    goal: str = Field(..., description="Human-readable synthesis goal")
+    site: dict[str, float | int]
+    design_parameters: list[str]
+    bounds: dict[str, tuple[float, float]] = Field(
+        ..., description="Legal range swept per free parameter"
+    )
+    achievable: bool = Field(
+        ..., description="False means no legal geometry meets the goal at "
+                         "this site — demand/terrain dominate"
+    )
+    feasible_count: int = Field(..., ge=0)
+    grid_size: int = Field(..., ge=1)
+    evaluations: int = Field(..., ge=0)
+    truncated: bool = Field(
+        ..., description="True if max_evaluations cut the sweep short"
+    )
+    cheapest: FeasibleDesignModel | None = Field(
+        default=None, description="The recommendation: cheapest feasible design"
+    )
+    envelope: dict[str, tuple[float, float]] = Field(
+        default_factory=dict,
+        description="Per-parameter (min, max) over the feasible set — the "
+                    "bounding box of the feasible region, not the region",
+    )
+    feasible: list[FeasibleDesignModel] = Field(
+        default_factory=list,
+        description="Feasible designs, cheapest first (capped at max_results)",
+    )
+
+
 class ClaimModel(BaseModel):
     """One rule claim competing in a reconciliation (seed-conflict shape)."""
 

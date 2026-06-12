@@ -552,6 +552,33 @@
       "facility_type": "TwoLaneHighway",
       "description": "Demand exceeding capacity yields LOS F (HCM Ch. 15)",
       "source": "HCM"
+    },
+    {
+      "from_field": "passing_type",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Segment capacity depends on passing type (1,700 pc/h passing-constrained/zone; 1,500 base for passing lane)",
+      "source": "HCM",
+      "source_detail": "HCM 7th Ed., Ch. 15, Step 2 capacity determination (Exhibit 15-5); audited from code-derived candidate (determine_demand_flow)"
+    },
+    {
+      "from_field": "vertical_class",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Capacity is reduced on steeper vertical classes",
+      "source": "HCM",
+      "source_detail": "HCM 7th Ed., Ch. 15, Step 2 capacity determination (Exhibit 15-5); audited from code-derived candidate (determine_demand_flow)"
+    },
+    {
+      "from_field": "phv",
+      "to_field": "capacity",
+      "type": "AFFECTS",
+      "facility_type": "TwoLaneHighway",
+      "description": "Heavy-vehicle percentage bands reduce capacity",
+      "source": "HCM",
+      "source_detail": "HCM 7th Ed., Ch. 15, Step 2 capacity determination (Exhibit 15-5); audited from code-derived candidate (determine_demand_flow)"
     }
   ]
 }

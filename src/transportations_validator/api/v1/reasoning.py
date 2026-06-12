@@ -8,6 +8,9 @@
 * ``/reason/reconcile``      — defeasible multi-jurisdiction reconciliation
   (which of the overlapping/conflicting codes governs, and why?), returning
   a full argument trace.
+* ``/reason/inverse-design`` — goal-directed synthesis (what geometry
+  achieves LOS C at this site, and what is the cheapest?), every feasible
+  design proved by forward execution.
 """
 
 from __future__ import annotations
@@ -21,8 +24,11 @@ from transportations_validator.models.reasoning import (
     BackwardChainRequest,
     BackwardChainResponse,
     ChainStepModel,
+    FeasibleDesignModel,
     ForwardChainRequest,
     ForwardChainResponse,
+    InverseDesignRequest,
+    InverseDesignResponse,
     ParameterChangeModel,
     ReconcileRequest,
     ReconcileResponse,
@@ -35,6 +41,7 @@ from transportations_validator.validators.forward_chain import (
     forward_chain,
     load_relationships_from_seed,
 )
+from transportations_validator.validators.inverse import inverse_design
 from transportations_validator.validators.reconcile import (
     load_conflict_scenarios,
     reconcile,
@@ -235,6 +242,69 @@ async def reason_repair(request: RepairRequest) -> RepairResponse:
         candidates_considered=result.candidates_considered,
         evaluations=result.evaluations,
     )
+
+
+@router.post("/reason/inverse-design", response_model=InverseDesignResponse)
+async def reason_inverse_design(
+    request: InverseDesignRequest,
+) -> InverseDesignResponse:
+    """Goal-directed inverse design: synthesize geometry for a target LOS.
+
+    The dual of ``/reason/repair``: instead of fixing a failing design, it
+    starts from fixed site conditions and sweeps the legal range of the
+    free design parameters (discovered as bounded, exogenous causal
+    ancestors of the target, or named explicitly), forward-executing every
+    grid point through the verified HCM implementation. Feasibility is
+    proved, not predicted; designs are ranked by a transparent buildability
+    cost, and an unachievable goal is reported as such.
+
+    Worked example (TwoLaneHighway, 700 veh/h, grade 2%): LOS C is
+    achievable on 83 of 125 grid geometries; the cheapest keeps 10-ft
+    lanes and unmanaged access, buying compliance with a 7.5-ft shoulder.
+    At 800 veh/h the same goal is infeasible for every legal geometry —
+    demand dominates, and the system says so.
+    """
+    executor = _build_executor(request.facility_type)
+
+    required = getattr(type(executor), "REQUIRED_INPUTS", frozenset())
+    free = set(request.design_parameters or [])
+
+    bounds = load_parameter_bounds(request.facility_type)
+    if request.bounds:
+        bounds.update(
+            {k: (float(lo), float(hi)) for k, (lo, hi) in request.bounds.items()}
+        )
+
+    goal_letter = request.goal_los.upper()
+    try:
+        result = inverse_design(
+            _relationships(),
+            request.target,
+            dict(request.site),
+            executor,
+            los_no_worse_than(goal_letter),
+            bounds=bounds,
+            design_parameters=request.design_parameters,
+            facility_type=request.facility_type,
+            steps=request.steps,
+            max_evaluations=request.max_evaluations,
+            goal_description=f"facility LOS no worse than {goal_letter}",
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        missing = sorted(required - set(request.site) - free)
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"Executor input {e} is neither a site condition nor a free "
+                f"design parameter. Provide via 'site': {missing}."
+            ),
+        )
+
+    payload = result.to_dict()
+    payload["feasible"] = payload["feasible"][: request.max_results]
+    return InverseDesignResponse(facility_type=request.facility_type, **payload)
 
 
 @lru_cache(maxsize=1)
