@@ -151,19 +151,23 @@ def _build_executor(facility_type: str):
     Imported lazily so the reasoning router stays importable when the Rust
     library wheel is absent (the chaining endpoints don't need it).
     """
-    if facility_type != "TwoLaneHighway":
+    supported = {"TwoLaneHighway", "BasicFreeway"}
+    if facility_type not in supported:
         raise HTTPException(
             status_code=422,
             detail=(
                 f"Executable repair is not yet wired for facility type "
-                f"'{facility_type}'. Supported: TwoLaneHighway."
+                f"'{facility_type}'. Supported: {', '.join(sorted(supported))}."
             ),
         )
     try:
         from transportations_validator.validators.executors import (
+            BasicFreewayExecutor,
             TwoLaneHighwayExecutor,
         )
 
+        if facility_type == "BasicFreeway":
+            return BasicFreewayExecutor()
         return TwoLaneHighwayExecutor()
     except ImportError as e:
         raise HTTPException(status_code=503, detail=str(e))

@@ -103,3 +103,82 @@ class TwoLaneHighwayExecutor:
             "followers_density": followers_density,
             "los": str(los),
         }
+
+
+class BasicFreewayExecutor:
+    """HCM Chapter 12 (basic freeway segments) via the Rust library.
+
+    Evaluates a single directional basic-freeway segment, exercising a
+    *different equation family* than the two-lane methodology — the
+    ``lane_width → FFS → capacity/speed → density → LOS`` chain (HCM Eqs.
+    12-1..12-11). The design dict uses the basic-freeway rust_field names:
+
+    Required: ``bffs, lw, lane_count, demand_flow_i``
+    Optional: ``lc_r`` (right lateral clearance ft, default 6),
+              ``lc_l`` (default 6), ``trd`` (total ramp density, default 0),
+              ``grade`` (%, default 0), ``length`` (mi, default 0.625),
+              ``p_t`` (heavy-vehicle proportion, default 0.25),
+              ``phf`` (default 0.95), ``terrain_type``, ``city_type``.
+
+    Keys are the BasicFreeway ``rust_field`` names (``lw`` not ``lane_width``),
+    so they line up with the curated AFFECTS graph and the rule-corpus bounds —
+    repair levers (e.g. ``lw → ffs → density → los``) mutate the same keys the
+    executor reads.
+
+    Returns the design augmented with: ``ffs, capacity, speed, density,
+    vc_ratio, los``.
+
+    ⚠ The library's heavy-vehicle PCE table is tabulated only at discrete
+    ``(grade, length)`` grid points (grade ∈ {-2, 0, 2, 2.5}; length ∈
+    {0.125, 0.375, 0.625, 0.875, 1.25, 1.5}); off-grid combinations raise a
+    Rust panic. We surface that as a clean ``ValueError`` so a repair/inverse
+    sweep — which varies geometry/demand, not grade/length — never crashes.
+    """
+
+    REQUIRED_INPUTS = frozenset({"bffs", "lw", "lane_count", "demand_flow_i"})
+
+    def __init__(self) -> None:
+        if not HAVE_RUST_LIBRARY:
+            raise ImportError(
+                "transportations_library (Rust/PyO3) is required for "
+                "BasicFreewayExecutor — install the transportations-library "
+                "wheel to enable executable repair."
+            )
+
+    def evaluate(self, design: dict[str, Any]) -> dict[str, Any]:
+        try:
+            bf = _tl.BasicFreeways(
+                bffs=float(design["bffs"]),
+                lane_width=float(design["lw"]),
+                lane_count=int(design["lane_count"]),
+                lc_r=int(design.get("lc_r", 6)),
+                lc_l=int(design.get("lc_l", 6)),
+                trd=int(design.get("trd", 0)),
+                grade=float(design.get("grade", 0.0)),
+                terrain_type=design.get("terrain_type"),
+                phf=float(design.get("phf", 0.95)),
+                p_t=float(design.get("p_t", 0.25)),
+                demand_flow_i=float(design["demand_flow_i"]),
+                length=float(design.get("length", 0.625)),
+                highway_type=str(design.get("highway_type", "basic")),
+                city_type=design.get("city_type"),
+            )
+            los = bf.run_operational_analysis()
+            result = {
+                "ffs": bf.ffs(),
+                "capacity": bf.capacity(),
+                "speed": bf.speed(),
+                "density": bf.density(),
+                "vc_ratio": bf.vc_ratio(),
+                "los": str(los),
+            }
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except BaseException as exc:  # noqa: BLE001 - PyO3 PanicException ∉ Exception
+            raise ValueError(
+                "BasicFreeway design is non-evaluable (likely heavy-vehicle "
+                "PCE not tabulated for this grade/length/p_t): "
+                f"grade={design.get('grade')}, length={design.get('length')}, "
+                f"p_t={design.get('p_t')} — {exc}"
+            ) from None
+        return {**design, **result}

@@ -274,9 +274,36 @@ class TestRepairEndpoint:
     def test_unsupported_facility_rejected(self):
         response = client.post(
             "/api/v1/reason/repair",
-            json={**self.DEGRADED, "facility_type": "BasicFreeway"},
+            json={**self.DEGRADED, "facility_type": "MultilaneHighway"},
         )
         assert response.status_code == 422
+
+    def test_basicfreeway_repair_supported(self):
+        """BasicFreeway is now executable (HCM Ch.12) — repair widens the
+        narrow lane to reach the LOS goal, verified by Rust re-execution."""
+        freeway = {
+            "facility_type": "BasicFreeway",
+            "design": {
+                "bffs": 70.0, "lw": 10.0, "lane_count": 2, "lc_r": 6, "trd": 1,
+                "demand_flow_i": 3000.0, "phf": 0.95, "p_t": 0.25,
+                "grade": 2.0, "length": 0.625,
+            },
+            "goal_los": "D",
+            "immutable": [
+                "demand_flow_i", "grade", "length", "p_t", "bffs",
+                "lane_count", "phf",
+            ],
+        }
+        response = client.post("/api/v1/reason/repair", json=freeway)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["baseline_evaluated"]["los"] == "E"
+        assert data["repaired"] is True
+        assert any(
+            c["parameter"] == "lw"
+            for p in data["proposals"] if p["compliant"]
+            for c in p["changes"]
+        )
 
     def test_invalid_goal_letter_rejected(self):
         response = client.post(
@@ -474,7 +501,7 @@ class TestInverseDesignEndpoint:
     def test_unsupported_facility_rejected(self):
         response = client.post(
             "/api/v1/reason/inverse-design",
-            json={**self.SITE_700, "facility_type": "BasicFreeway"},
+            json={**self.SITE_700, "facility_type": "MultilaneHighway"},
         )
         assert response.status_code == 422
 

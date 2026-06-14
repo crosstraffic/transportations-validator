@@ -283,3 +283,71 @@ class TestExecutableRepairTwoLane:
         )
         touched = {c.parameter for p in result.proposals for c in p.changes}
         assert "volume" not in touched
+
+
+from transportations_validator.validators.executors import (  # noqa: E402
+    BasicFreewayExecutor,
+)
+
+# Corridor B: a freight basic-freeway segment — 10 ft narrow lanes, 25% trucks
+# on a 2% grade. The verified HCM Ch.12 chain (lw → FFS → density → LOS) yields
+# LOS E at 3000 veh/h. A *different equation family* than the two-lane case.
+FREEWAY_DESIGN = {
+    "bffs": 70.0,
+    "lw": 10.0,
+    "lane_count": 2,
+    "lc_r": 6,
+    "trd": 1,
+    "demand_flow_i": 3000.0,
+    "phf": 0.95,
+    "p_t": 0.25,
+    "grade": 2.0,
+    "length": 0.625,
+}
+
+FREEWAY_BOUNDS = {"lw": (10.0, 12.0), "lc_r": (0.0, 6.0), "trd": (0.0, 4.0)}
+
+# Demand, grade, length, truck mix, BFFS and lane count are site conditions.
+FREEWAY_IMMUTABLE = {
+    "demand_flow_i", "grade", "length", "p_t", "bffs", "lane_count", "phf"
+}
+
+
+class TestExecutableRepairBasicFreeway:
+    def test_degraded_freeway_fails_goal(self):
+        out = BasicFreewayExecutor().evaluate(FREEWAY_DESIGN)
+        assert out["los"] == "E"
+
+    def test_repair_widens_lanes_to_reach_los_d(self):
+        rels = load_relationships_from_seed()
+        result = repair_design(
+            rels,
+            target="los",
+            design=FREEWAY_DESIGN,
+            executor=BasicFreewayExecutor(),
+            goal=los_no_worse_than("D"),
+            bounds=FREEWAY_BOUNDS,
+            facility_type="BasicFreeway",
+            immutable=FREEWAY_IMMUTABLE,
+            goal_description="facility LOS no worse than D",
+        )
+        assert not result.baseline_compliant
+        assert result.repaired
+        # Every compliant proposal is verified by re-execution through Rust.
+        for p in result.proposals:
+            assert p.evaluated["los"] <= "D"
+        # Widening the lane is a single-parameter fix (lw → FFS → density → LOS).
+        single_fixes = {
+            p.changes[0].parameter
+            for p in result.proposals
+            if p.compliant and p.cardinality == 1
+        }
+        assert "lw" in single_fixes
+
+    def test_off_grid_heavy_vehicle_inputs_raise_clean_error(self):
+        """The library's PCE table is sparse; the executor converts the Rust
+        panic into a ValueError instead of crashing a repair sweep."""
+        with pytest.raises(ValueError, match="non-evaluable"):
+            BasicFreewayExecutor().evaluate(
+                {**FREEWAY_DESIGN, "grade": 3.7, "length": 0.5}
+            )
