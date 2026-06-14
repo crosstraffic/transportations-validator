@@ -201,20 +201,25 @@ async def reason_repair(request: RepairRequest) -> RepairResponse:
     immutable = frozenset(request.immutable) | derived
 
     goal_letter = request.goal_los.upper()
-    result = repair_design(
-        _relationships(),
-        target=request.target,
-        design=dict(request.design),
-        executor=executor,
-        goal=los_no_worse_than(goal_letter),
-        bounds=bounds,
-        facility_type=request.facility_type,
-        immutable=immutable,
-        steps=request.steps,
-        max_changes=request.max_changes,
-        max_evaluations=request.max_evaluations,
-        goal_description=f"facility LOS no worse than {goal_letter}",
-    )
+    try:
+        result = repair_design(
+            _relationships(),
+            target=request.target,
+            design=dict(request.design),
+            executor=executor,
+            goal=los_no_worse_than(goal_letter),
+            bounds=bounds,
+            facility_type=request.facility_type,
+            immutable=immutable,
+            steps=request.steps,
+            max_changes=request.max_changes,
+            max_evaluations=request.max_evaluations,
+            goal_description=f"facility LOS no worse than {goal_letter}",
+        )
+    except ValueError as e:
+        # e.g. BasicFreeway inputs off the library's heavy-vehicle PCE grid —
+        # a non-evaluable design, not a server fault.
+        raise HTTPException(status_code=422, detail=str(e))
 
     return RepairResponse(
         target=result.target,

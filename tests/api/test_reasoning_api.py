@@ -305,6 +305,21 @@ class TestRepairEndpoint:
             for c in p["changes"]
         )
 
+    def test_basicfreeway_off_grid_inputs_return_422_not_500(self):
+        """Off-grid heavy-vehicle inputs are non-evaluable, not a server fault."""
+        freeway = {
+            "facility_type": "BasicFreeway",
+            "design": {
+                "bffs": 70.0, "lw": 10.0, "lane_count": 2,
+                "demand_flow_i": 3000.0, "grade": 3.7, "length": 0.5, "p_t": 0.25,
+            },
+            "goal_los": "D",
+            "immutable": ["demand_flow_i", "grade", "length", "p_t", "bffs", "lane_count"],
+        }
+        response = client.post("/api/v1/reason/repair", json=freeway)
+        assert response.status_code == 422
+        assert "non-evaluable" in response.json()["detail"]
+
     def test_invalid_goal_letter_rejected(self):
         response = client.post(
             "/api/v1/reason/repair", json={**self.DEGRADED, "goal_los": "X"}
