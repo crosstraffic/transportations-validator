@@ -1,0 +1,951 @@
+{
+  "meta": {
+    "task": "KG-AUTO-2",
+    "model": "mistral:latest",
+    "runtime": "ollama (local, open-weight)",
+    "facility_type": "TwoLaneHighway",
+    "source": "HCM 7th Ed. Chapter 15 (indexed RAG corpus)",
+    "n_windows": 10,
+    "run_at": "2026-06-14T21:18:40+00:00",
+    "status": "llm_extracted",
+    "audited": false
+  },
+  "edges": [
+    {
+      "from_param": "lane width",
+      "to_param": "speeds",
+      "basis": "definitional",
+      "evidence": "Lanes narrower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds"
+    },
+    {
+      "from_param": "clear paved shoulders",
+      "to_param": "speeds",
+      "basis": "definitional",
+      "evidence": "Lanes narrower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds"
+    },
+    {
+      "from_param": "traffic stream composition",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Lanes narrower than 12 ft and shoulders narrower than 6 ft may increase the percentage of vehicles in a follower status."
+    },
+    {
+      "from_param": "level terrain",
+      "to_param": "segment types",
+      "basis": "definitional",
+      "evidence": "Base conditions are not the same as typical or default conditions, both of which may reflect common restrictions. Base conditions are closer to what may be considered as ideal (i.e., the best conditions that can be expected given normal design and operational practice). This chapter\u2019s methodology accounts for the effects of geometric, traffic, and environmental factors that are more restrictive than the base conditions."
+    },
+    {
+      "from_param": "straight alignment",
+      "to_param": "segment types",
+      "basis": "definitional",
+      "evidence": "Base conditions are not the same as typical or default conditions, both of which may reflect common restrictions. Base conditions are closer to what may be considered as ideal (i.e., the best conditions that can be expected given normal design and operational practice). This chapter\u2019s methodology accounts for the effects of geometric, traffic, and environmental factors that are more restrictive than the base conditions."
+    },
+    {
+      "from_param": "no impediments to through traffic",
+      "to_param": "segment types",
+      "basis": "definitional",
+      "evidence": "Base conditions are not the same as typical or default conditions, both of which may reflect common restrictions. Base conditions are closer to what may be considered as ideal (i.e., the best conditions that can be expected given normal design and operational practice). This chapter\u2019s methodology accounts for the effects of geometric, traffic, and environmental factors that are more restrictive than the base conditions."
+    },
+    {
+      "from_param": "good environmental conditions",
+      "to_param": "segment types",
+      "basis": "definitional",
+      "evidence": "Base conditions are not the same as typical or default conditions, both of which may reflect common restrictions. Base conditions are closer to what may be considered as ideal (i.e., the best conditions that can be expected given normal design and operational practice). This chapter\u2019s methodology accounts for the effects of geometric, traffic, and environmental factors that are more restrictive than the base conditions."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "clear paved shoulders",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "traffic stream composition",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "level terrain",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "straight alignment",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "no impediments to through traffic",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "good environmental conditions",
+      "to_param": "operating quality",
+      "basis": "definitional",
+      "evidence": "Any consideration of operating quality criteria must account for these disparate functions. Exhibit 15-1 shows examples of various types of two-lane highways."
+    },
+    {
+      "from_param": "segmentation",
+      "to_param": "analysis",
+      "basis": "definitional",
+      "evidence": "A two-lane highway is divided into segments for analysis purposes. The ability to pass, lane geometry, grades, lane and shoulder widths, posted speed limits, traffic demands, adjacent land uses, driveways, and other characteristics of the facility should be homogeneous within each analysis segment."
+    },
+    {
+      "from_param": "segment types",
+      "to_param": "analysis",
+      "basis": "definitional",
+      "evidence": "The results of each segment analysis are then combined into results for the full highway. This chapter\u2019s analysis methodology can be used to analyze individual homogeneous segments of a two-lane highway, as well as extended lengths of a two-lane highway that are composed of multiple contiguous segments."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "average travel speed",
+      "basis": "definitional",
+      "evidence": "rower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds"
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "rower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds and may increase the percentage of vehicles in a follower status"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "average travel speed",
+      "basis": "definitional",
+      "evidence": "rower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "rower than 12 ft and shoulders narrower than 6 ft have been shown to reduce speeds and may increase the percentage of vehicles in a follower status"
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The traffic operations in a Passing Constrained segment are a function of: \u2022 Analysis direction flow rate"
+    },
+    {
+      "from_param": "opposing direction flow rate",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Opposing direction flow rate"
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The traffic operations in a Passing Constrained segment are a function of: \u2022 Percent heavy vehicles"
+    },
+    {
+      "from_param": "horizontal and vertical alignment",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The traffic operations in a Passing Constrained segment are a function of: \u2022 Horizontal and vertical alignment"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The traffic operations in a Passing Constrained segment are a function of: \u2022 Segment length"
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Analysis direction flow rate"
+    },
+    {
+      "from_param": "opposing direction flow rate",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Opposing direction flow rate"
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Percent heavy vehicles"
+    },
+    {
+      "from_param": "vertical and horizontal alignment",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Vertical and horizontal alignment"
+    },
+    {
+      "from_param": "passing zone length",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The effectiveness of a passing zone in improving traffic operations is a function of: \u2022 Passing zone length"
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "horizontal and vertical alignment",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "access points",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Access points lower the free-flow speed for the segment."
+    },
+    {
+      "from_param": "access points",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "By lowering the free-flow speed, access points will also indirectly affect the average speed."
+    },
+    {
+      "from_param": "access points",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "The total number of access points on an analysis segment is the sum of the number of active major driveways and road or street approaches (on both sides of the highway) where traffic enters and/or leaves the two-lane highway within the segment. Residential driveways and other low-volume driveways and side roads (generally with ADT below 20 vehicles per day) should not be counted as access points."
+    },
+    {
+      "from_param": "vertical alignment",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "Vertical Alignment Class 1 corresponds to a minimal reduction in free-flow speed, while Vertical Alignment Class 5 corresponds to a crawl-speed condition."
+    },
+    {
+      "from_param": "horizontal alignment",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "Horizontal alignment is also accommodated through a classification scheme that considers reductions in heavy-vehicle free-flow speed."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "speed limit",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "grade",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "On an upgrade, the speed reduction is a function of the effect of grade resistance limiting a vehicle\u2019s acceleration capability."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "horizontal class",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "Horizontal alignment is also accommodated through a classification scheme that considers reductions in heavy-vehicle free-flow speed."
+    },
+    {
+      "from_param": "superelevation",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "Horizontal alignment is also accommodated through a classification scheme that considers reductions in heavy-vehicle free-flow speed."
+    },
+    {
+      "from_param": "design radius",
+      "to_param": "heavy-vehicle free-flow speed",
+      "basis": "definitional",
+      "evidence": "Horizontal alignment is also accommodated through a classification scheme that considers reductions in heavy-vehicle free-flow speed."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "average travel speed",
+      "basis": "definitional",
+      "evidence": "Average speed also improves; however, this improvement is relatively minor and persists for a much shorter distance downstream, relative to follower-related improvements."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "average travel speed",
+      "basis": "numeric",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "The general relationship between percent followers and flow rate is non-linear, as illustrated in Exhibit 15-3."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "The general relationship between follower density and flow rate is illustrated in Exhibit 15-4."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "The capacity of a section of two-lane highway without a passing lane, under base conditions, is 1,700 veh/h/ln. This value assumes a low percentage of large trucks in the traffic stream, on the order of 5% or less."
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "maximum flow rates for passing lane segments",
+      "basis": "definitional",
+      "evidence": "Guidelines for maximum flow rates for passing lane segments are given in Exhibit 15-5. These values are a function of the heavy vehicle percentage and the vertical classification."
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "base free-flow speed",
+      "basis": "definitional",
+      "evidence": "BFFS is estimated with Equation 15-2, where BFFS is the base free-flow speed (mi/h) and S pl is the posted speed limit (mi/h)."
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Research performed in the development of this chapter\u2019s methodology ( 2 ) indicated that FFS is approximately 14% higher than the posted speed limit."
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "FFS = BFFS \u2212a (HV %) with Equation 15-4."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "The adjustment for lane and shoulder width f LS is calculated with Equation 15-5."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "The adjustment for lane and shoulder width f LS is calculated with Equation 15-5."
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "The adjustment for access points f A is calculated with Equation 15-6."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "FFS = BFFS \u2212a (HV %) with Equation 15-4."
+    },
+    {
+      "from_param": "opposing direction demand volume",
+      "to_param": "capacity",
+      "basis": "numeric",
+      "evidence": "If the demand flow rate exceeds capacity, the segment and facility LOS are set to F and the analysis stops at this point."
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "capacity",
+      "basis": "numeric",
+      "evidence": "If the demand flow rate exceeds capacity, the segment and facility LOS are set to F and the analysis stops at this point."
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "d/c ratio",
+      "basis": "numeric",
+      "evidence": "At the entrance to the segment being analyzed, adjust hourly demand volumes in both directions (analysis direction and opposing direction) to account for the peak 15-min volume within the analysis hour, using Equation 15-1."
+    },
+    {
+      "from_param": "demand flow rate",
+      "to_param": "capacity",
+      "basis": "numeric",
+      "evidence": "If the demand flow rate exceeds capacity, the segment and facility LOS are set to F and the analysis stops at this point."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "minimum segment length",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-10 provides recommended minimum and maximum segment lengths for use in computing segment speeds and percent followers."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "maximum segment length",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-10 provides recommended minimum and maximum segment lengths for use in computing segment speeds and percent followers."
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "The calculations for free-flow speed, average speed, and percent followers require classifying the vertical alignment on the basis of the segment\u2019s length and grade. Exhibit 15-11 is used for this purpose."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "vertical class",
+      "basis": "numeric",
+      "evidence": "The calculations for free-flow speed, average speed, and percent followers require classifying the vertical alignment on the basis of the segment\u2019s length and grade. Exhibit 15-11 is used for this purpose."
+    },
+    {
+      "from_param": "segment percent grade",
+      "to_param": "vertical class",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-11 is used to determine the vertical alignment classification value, which is used to identify the appropriate set of coefficient values used in many of the ensuing calculations."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "minimum segment length (for computing segment speeds and percent followers)",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-10 provides recommended minimum and maximum segment lengths for use in computing segment speeds and percent followers."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "maximum segment length (for computing segment speeds and percent followers)",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-10 provides recommended minimum and maximum segment lengths for use in computing segment speeds and percent followers."
+    },
+    {
+      "from_param": "percent followers at capacity",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: L"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: FFS"
+    },
+    {
+      "from_param": "% heavy vehicles",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: HV % ( [\u221a] L) + b ( [\u221a] FFS)"
+    },
+    {
+      "from_param": "demand flow rate in opposing direction",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: v o"
+    },
+    {
+      "from_param": "coefficient values for Equation 15-18",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "coefficient values for Equation 15-18",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "coefficient values for Equation 15-18",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "coefficient values for Equation 15-18",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "% heavy vehicles",
+      "to_param": "coefficient values for Equation 15-18",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "demand flow rate in opposing direction",
+      "to_param": "coefficient values for Equation 15-18",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-24"
+    },
+    {
+      "from_param": "passing type",
+      "to_param": "demand flow rate in opposing direction",
+      "basis": "definitional",
+      "evidence": "v Passing Constrained segments and o = 0 in Passing Lane segments."
+    },
+    {
+      "from_param": "coefficient values for Equation 15-19",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Passing Lane segments. Equation 15-19"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "coefficient values for Equation 15-19",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-25"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "coefficient values for Equation 15-19",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-25"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "coefficient values for Equation 15-19",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-25"
+    },
+    {
+      "from_param": "% heavy vehicles",
+      "to_param": "coefficient values for Equation 15-19",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-25"
+    },
+    {
+      "from_param": "percent followers at capacity",
+      "to_param": "PF 25 cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "PF 25 cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-20: L"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "PF 25 cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-20: FFS"
+    },
+    {
+      "from_param": "% heavy vehicles",
+      "to_param": "PF 25 cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-20: HV ( [\u221a] L) + c ( [\u221a] FFS)"
+    },
+    {
+      "from_param": "coefficient values for Equation 15- 20",
+      "to_param": "PF 25 cap",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-26"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "coefficient values for Equation 15-20",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-26"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "coefficient values for Equation 15-20",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-26"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "coefficient values for Equation 15-20",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-26"
+    },
+    {
+      "from_param": "% heavy vehicles",
+      "to_param": "coefficient values for Equation 15-20",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-26"
+    },
+    {
+      "from_param": "percent followers at capacity",
+      "to_param": "PF",
+      "basis": "numeric",
+      "evidence": "Equation 15-17"
+    },
+    {
+      "from_param": "horizontal curvature",
+      "to_param": "PF",
+      "basis": "definitional",
+      "evidence": "Horizontal curvature is not considered when estimating percent followers, because its impact on percent followers is much smaller than its impact on travel speed."
+    },
+    {
+      "from_param": "NumHV",
+      "to_param": "FlowRate FL",
+      "basis": "numeric",
+      "evidence": "Equation 15-24"
+    },
+    {
+      "from_param": "v d",
+      "to_param": "NumHV",
+      "basis": "numeric",
+      "evidence": "Equation 15-24: v d \u00d7 [HV%] 100"
+    },
+    {
+      "from_param": "HV%",
+      "to_param": "NumHV",
+      "basis": "numeric",
+      "evidence": "Equation 15-24: [HV%]"
+    },
+    {
+      "from_param": "PropFlowRate FL",
+      "to_param": "FlowRate FL",
+      "basis": "numeric",
+      "evidence": "Equation 15-26: FlowRate FL = v d \u00d7 PropFlowRate FL"
+    },
+    {
+      "from_param": "PropFlowRate FL",
+      "to_param": "FlowRate SL",
+      "basis": "numeric",
+      "evidence": "Equation 15-27: FlowRate SL = HV% FL percentage of heavy vehicles in the faster lane (%),"
+    },
+    {
+      "from_param": "NumHV SL",
+      "to_param": "FlowRate SL",
+      "basis": "numeric",
+      "evidence": "Equation 15-27: NumHV SL \u00d7 [HV %] [FL] 100 = NumHV \u2212(FlowRate )"
+    },
+    {
+      "from_param": "S init_FL",
+      "to_param": "S PLmid_FL",
+      "basis": "numeric",
+      "evidence": "Equation 15-32: S PLmid_FL = S init_FL + [Av] [g] [S] [p] [eedDi] [ff] [Ad] [j] 2"
+    },
+    {
+      "from_param": "S init_SL",
+      "to_param": "S PLmid_SL",
+      "basis": "numeric",
+      "evidence": "Equation 15-33: S PLmid_SL = S init_SL \u2212 [Av] [g] [S] [p] [eedDi] [ff] [Ad] [j] 2"
+    },
+    {
+      "from_param": "PF PLmid_FL",
+      "to_param": "FD PLmid",
+      "basis": "numeric",
+      "evidence": "Equation 15-34: FD PLmid = [PF] [PLmid_FL] 100 ( FD PLmid = [FlowRate] [FL] [PF] [PLmid_SL] S PLmid_FL [)] [ + ] [(] 100 [\u00d7] S PLmid_FL [PLmid_SL]"
+    },
+    {
+      "from_param": "FD",
+      "to_param": "FD PLmid",
+      "basis": "numeric",
+      "evidence": "Equation 15-35: FD = [PF] ( FD = [PF] [v] [d] 100 [\u00d7] S)"
+    },
+    {
+      "from_param": "PassLaneLength",
+      "to_param": "DownstreamDistance",
+      "basis": "numeric",
+      "evidence": "Equation 15-36 through Equation 15-38 are used to both determine the passing lane\u2019s effective length and the improvement in performance measures in downstream segments within the effective length."
+    },
+    {
+      "from_param": "DownstreamDistance",
+      "to_param": "%Improve PF",
+      "basis": "numeric",
+      "evidence": "Equation 15-36"
+    },
+    {
+      "from_param": "DownstreamDistance",
+      "to_param": "%Improve S",
+      "basis": "numeric",
+      "evidence": "Equation 15-37"
+    },
+    {
+      "from_param": "PF",
+      "to_param": "%Improve PF",
+      "basis": "definitional",
+      "evidence": "PF % improvement to percent followers on a segment downstream of a Passing Lane segment;"
+    },
+    {
+      "from_param": "S",
+      "to_param": "%Improve S",
+      "basis": "definitional",
+      "evidence": "PF % improvement to the average speed on a segment downstream of a Passing Lane segment;"
+    },
+    {
+      "from_param": "PF",
+      "to_param": "FD adj",
+      "basis": "numeric",
+      "evidence": "Equation 15-38"
+    },
+    {
+      "from_param": "FlowRate",
+      "to_param": "FD adj",
+      "basis": "numeric",
+      "evidence": "where FD adj adjusted follower density on a segment downstream of a Passing Lane segment = [PF] FlowRate 100 [p] [rove] [PF] ) \u00d7 [%Im] [p] S \u00d7 (1 +"
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "LOS",
+      "basis": "definitional",
+      "evidence": "*Step 10: Determine LOS The LOS is found by comparing the follower density value with the criteria of Exhibit 15-6, for the appropriate type of two-lane highway\u2014 higher-speed or lower-speed."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "effective width",
+      "basis": "definitional",
+      "evidence": "Equation 15-41 through Equation 15-45 are used to calculate the effective width We on the basis of the paved shoulder width Ws and the hourly directional volume V"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "definitional",
+      "evidence": "Equation 15-41 through Equation 15-45 are used to calculate the effective width We on the basis of the paved shoulder width Ws and the hourly directional volume V"
+    },
+    {
+      "from_param": "%OHP",
+      "to_param": "effective width",
+      "basis": "definitional",
+      "evidence": "Equation 15-41 through Equation 15-45 are used to calculate the effective width We on the basis of the paved shoulder width Ws and the hourly directional volume V"
+    },
+    {
+      "from_param": "hourly directional volume per lane",
+      "to_param": "effective width",
+      "basis": "definitional",
+      "evidence": "Equation 15-41 through Equation 15-45 are used to calculate the effective width We on the basis of the paved shoulder width Ws and the hourly directional volume V"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width as a function of traffic volume",
+      "basis": "definitional",
+      "evidence": "Equation 15-44: Wv = WOL + Ws Otherwise, Equation 15-45: Wv = (WOL + Ws ) \u00d7 (2 \u22120.005V )"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "average effective width of the outside through lane",
+      "basis": "definitional",
+      "evidence": "Equation 15-47: BLOS = 0.507ln (v OL ) + 0.1999St (1 + 10.38HV ) [2] + 7.066(1/P) [2] \u22120.0"
+    },
+    {
+      "from_param": "directional demand flow rate in the outside lane",
+      "to_param": "bicycle level of service score",
+      "basis": "definitional",
+      "evidence": "Equation 15-47: BLOS = 0.507ln (v OL ) + 0.1999St (1 + 10.38HV ) [2] + 7.066(1/P) [2] \u22120.0"
+    },
+    {
+      "from_param": "effective speed factor",
+      "to_param": "bicycle level of service score",
+      "basis": "definitional",
+      "evidence": "Equation 15-47: BLOS = 0.507ln (v OL ) + 0.1999St (1 + 10.38HV ) [2] + 7.066(1/P) [2] \u22120.0"
+    },
+    {
+      "from_param": "proportion of heavy vehicles",
+      "to_param": "bicycle level of service score",
+      "basis": "definitional",
+      "evidence": "Equation 15-47: BLOS = 0.507ln (v OL ) + 0.1999St (1 + 10.38HV ) [2] + 7.066(1/P) [2] \u22120.0"
+    },
+    {
+      "from_param": "pavement surface condition rating",
+      "to_param": "bicycle level of service score",
+      "basis": "definitional",
+      "evidence": "Equation 15-47: BLOS = 0.507ln (v OL ) + 0.1999St (1 + 10.38HV ) [2] + 7.066(1/P) [2] \u22120.0"
+    },
+    {
+      "from_param": "percentage of segment with occupied on-highway parking",
+      "to_param": "effective width",
+      "basis": "definitional",
+      "evidence": "Equation 15-41 through Equation 15-45 are used to calculate the effective width We on the basis of the paved shoulder width Ws and the hourly directional volume V"
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "effective speed factor",
+      "basis": "definitional",
+      "evidence": "Equation 15-46: S t = 1.1199 ln(S pl \u221220) + 0.8103"
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "percent followers after adjustment for calibration",
+      "basis": "definitional",
+      "evidence": "These calibration factors should preferably fall in the range of 0.85\u20131.15. Should the values fall outside that range, the analyst should recheck the field measurements and the data inputs to the HCM method to rule out errors. If the calibration factors still are not within the preferred range after error- checking, it is possible that this chapter\u2019s method is not well-suited for the segment\u2019s specific conditions, and simulation analysis should be considered instead."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "PF field,i field-measured percent followers for segment i (%)",
+      "basis": "definitional",
+      "evidence": "rage speed estimated by Chapter 15 method for segment i (mi/h), = PF field,i field-measured percent followers for segment i (%), = PFAF i calibration adjustment factor for percent followers for segment i (decimal), and = PF HCM,i percent followers estimated by Chapter 15 method for segment i (%)."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "PF HCM,i percent followers estimated by Chapter 15 method for segment i (%)",
+      "basis": "definitional",
+      "evidence": "rage speed estimated by Chapter 15 method for segment i (mi/h), = PF field,i field-measured percent followers for segment i (%), = PFAF i calibration adjustment factor for percent followers for segment i (decimal), and = PF HCM,i percent followers estimated by Chapter 15 method for segment i (%)."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "PFAF i calibration adjustment factor for percent followers for segment i (decimal)",
+      "basis": "definitional",
+      "evidence": "rage speed estimated by Chapter 15 method for segment i (mi/h), = PF field,i field-measured percent followers for segment i (%), = PFAF i calibration adjustment factor for percent followers for segment i (decimal), and = PF HCM,i percent followers estimated by Chapter 15 method for segment i (%)."
+    },
+    {
+      "from_param": "percent followers after adjustment for calibration",
+      "to_param": "calibration factors",
+      "basis": "definitional",
+      "evidence": "These calibration factors should preferably fall in the range of 0.85\u20131.15. Should the values fall outside that range, the analyst should recheck the field measurements and the data inputs to the HCM method to rule out errors."
+    },
+    {
+      "from_param": "percent followers after adjustment for calibration",
+      "to_param": "reasonableness",
+      "basis": "definitional",
+      "evidence": "Results obtained using these calibration factors should be checked for reasonableness. For example, percent followers after adjustment for calibration should not exceed 100%."
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "percent reduction in percent followers",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A1 presents results from simulation that show values of the reduction in percent followers in level terrain for different combinations of passing lane lengths and directional traffic flow rates (i.e., the total demand across the two directional lanes within the Passing Lane segment)."
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "optimum passing lane length",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-A2 shows optimum passing lane lengths derived from simulation, with the optimum length defined as the point where the relationship between percent followers and passing lane length transitions from curvilinear to linear."
+    },
+    {
+      "from_param": "directional traffic flow rate",
+      "to_param": "optimum passing lane length",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A2 shows optimum passing lane lengths derived from simulation, with the optimum length defined as the point where the relationship between percent followers and passing lane length transitions from curvilinear to linear."
+    },
+    {
+      "from_param": "grade",
+      "to_param": "speed reduction for a typical heavy truck",
+      "basis": "numeric",
+      "evidence": "AASHTO provides the following criteria for when a climbing lane should be considered ( A-1 ): \u2022 Upgrade traffic flow rate exceeds 200 veh/h; \u2022 Upgrade truck flow rate exceeds 20 veh/h; and \u2022 One or more of the following conditions exists: o A 10 mi/h or greater speed reduction is expected for a typical heavy truck;"
+    },
+    {
+      "from_param": "grade",
+      "to_param": "LOS E or F on the grade",
+      "basis": "numeric",
+      "evidence": "AASHTO provides the following criteria for when a climbing lane should be considered ( A-1 ): \u2022 Upgrade traffic flow rate exceeds 200 veh/h; \u2022 Upgrade truck flow rate exceeds 20 veh/h; and \u2022 One or more of the following conditions exists: o LOS E or F exists on the grade;"
+    },
+    {
+      "from_param": "grade",
+      "to_param": "reduction of two or more levels of service when moving from the approach segment to the grade",
+      "basis": "numeric",
+      "evidence": "AASHTO provides the following criteria for when a climbing lane should be considered ( A-1 ): \u2022 Upgrade traffic flow rate exceeds 200 veh/h; \u2022 Upgrade truck flow rate exceeds 20 veh/h; and \u2022 One or more of the following conditions exists: o A reduction of two or more levels of service is experienced when moving from the approach segment to the grade."
+    },
+    {
+      "from_param": "heavy vehicle",
+      "to_param": "speed of heavy vehicle at the end of the upgrade segment (mi/h)",
+      "basis": "numeric",
+      "evidence": "Equation 15-A1: V = 75 + a \u00d7 L + b \u00d7 L [2] + c \u00d7 L [3] where = V speed of heavy vehicle at the end of the upgrade segment (mi/h), = L length of the upgrade segment (mi), #### a, b, *c* #### = model coefficients (decimal), from Exhibit 15-A6, Exhibit 15-A7, or Exhibit 15-A8 for single-unit, intermediate semitrailer, and interstate semitrailer trucks, respectively."
+    },
+    {
+      "from_param": "heavy vehicle",
+      "to_param": "speed reduction on different lengths of grade for three truck types",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A3 through Exhibit 15-A5 can be used to determine speed reductions on different lengths of grade for three truck types (single-unit, intermediate semitrailer, and interstate semitrailer)."
+    },
+    {
+      "from_param": "heavy vehicle",
+      "to_param": "speed reduction",
+      "basis": "numeric",
+      "evidence": "Equation 15-A1 can be used to estimate the speed reduction."
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "improvement of percent followers",
+      "basis": "definitional",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 - 15.8 * ln (FlowRate) + 0.05 * FFS"
+    },
+    {
+      "from_param": "flow rate entering the 2+1 configuration",
+      "to_param": "improvement of percent followers",
+      "basis": "definitional",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 - 15.8 * ln (FlowRate) + 0.05 * FFS"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "improvement of percent followers",
+      "basis": "definitional",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 - 15.8 * ln (FlowRate) + 0.05 * FFS"
+    },
+    {
+      "from_param": "percentage of heavy vehicles in the analysis direction",
+      "to_param": "improvement of percent followers",
+      "basis": "definitional",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 - 15.8 * ln (FlowRate) + 0.05 * FFS"
+    },
+    {
+      "from_param": "improvement of percent followers",
+      "to_param": "adjusted follower density",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 100 \u00d7 (1 \u2212 [%Improve] [%Follower])"
+    },
+    {
+      "from_param": "improvement of percent followers",
+      "to_param": "follower density adj, 2+1",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 100 \u00d7 (1 \u2212 [%Improve] [%Follower])"
+    },
+    {
+      "from_param": "improvement of average speed",
+      "to_param": "average speed in the analysis direction",
+      "basis": "definitional",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 - 1.86 * ln (FlowRate) - 0.1 * m)"
+    },
+    {
+      "from_param": "flow rate entering the 2+1 configuration",
+      "to_param": "improvement of average speed",
+      "basis": "definitional",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 - 1.86 * ln (FlowRate) - 0.1 * m)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "improvement of average speed",
+      "basis": "definitional",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 - 1.86 * ln (FlowRate) - 0.1 * m)"
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "improvement of average speed",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 100 \u00d7 (1 \u2212 [%Improve] [%Follower])"
+    },
+    {
+      "from_param": "percentage of heavy vehicles in the analysis direction",
+      "to_param": "improvement of average speed",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 100 \u00d7 (1 \u2212 [%Improve] [%Follower])"
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "improvement of average speed",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 100 \u00d7 (1 \u2212 [%Improve] [%Follower])"
+    }
+  ]
+}

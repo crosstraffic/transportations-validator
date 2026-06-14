@@ -1,0 +1,789 @@
+{
+  "meta": {
+    "task": "KG-AUTO-2",
+    "model": "llama3.1:latest",
+    "runtime": "ollama (local, open-weight)",
+    "facility_type": "TwoLaneHighway",
+    "source": "HCM 7th Ed. Chapter 15 (indexed RAG corpus)",
+    "n_windows": 10,
+    "run_at": "2026-06-14T21:15:42+00:00",
+    "status": "llm_extracted",
+    "audited": false
+  },
+  "edges": [
+    {
+      "from_param": "average travel speed",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-3: Percent Followers Versus Directional Flow Rate"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-3: Percent Followers Versus Directional Flow Rate"
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Traffic can operate at maximum speeds only if lanes and shoulders are wide enough not to constrain speeds."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Traffic can operate at maximum speeds only if lanes and shoulders are wide enough not to constrain speeds."
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "horizontal class",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "superelevation",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "design radius",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "average travel speed",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Section 2 presents the basic concepts for analyzing two-lane highways. It covers the characteristics of two-lane highways, including the geographic and land use context, and base conditions."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "followers density",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-4: Follower Density Versus Directional Flow Rate"
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Access points lower the free-flow speed for the segment."
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "average travel speed",
+      "basis": "definitional",
+      "evidence": "By lowering the free-flow speed, access points will also indirectly affect the average speed..."
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "followers density",
+      "basis": "definitional",
+      "evidence": "By lowering the free-flow speed, access points will also indirectly affect the follower density."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "level of service",
+      "basis": "numeric",
+      "evidence": "Percent followers represents the freedom to maneuver and the comfort and convenience of travel. It can also serve as a proxy for the need to provide passing opportunities."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "followers density",
+      "basis": "numeric",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "average speed",
+      "basis": "numeric",
+      "evidence": "The general relationship between percent followers and flow rate is non-linear..."
+    },
+    {
+      "from_param": "followers density",
+      "to_param": "level of service",
+      "basis": "numeric",
+      "evidence": "Follower density is used as the service measure for two-lane highways because of its sensitivity to both traffic demand and geometric alignment variability."
+    },
+    {
+      "from_param": "followers density",
+      "to_param": "average speed",
+      "basis": "numeric",
+      "evidence": "The general relationship between follower density and flow rate is illustrated in Exhibit 15-4."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower Density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "density",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "Capacity is governed by merge point at end of passing lane segment."
+    },
+    {
+      "from_param": "heavy vehicle percentage",
+      "to_param": "maximum flow rate",
+      "basis": "numeric",
+      "evidence": "Maximum Flow Rates for Passing Lane Segments"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "maximum flow rate",
+      "basis": "numeric",
+      "evidence": "Maximum Flow Rates for Passing Lane Segments"
+    },
+    {
+      "from_param": "demand-to-capacity ratio",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "follower density",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "demand flow rate",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "average effective width of the outside through lane",
+      "to_param": "bicycle LOS score",
+      "basis": "definitional",
+      "evidence": "The LOS ranges for bicycles on two-lane and multilane highways are based on a bicycle LOS (BLOS) score, which is in turn based on a traveler perception model."
+    },
+    {
+      "from_param": "motorized vehicle volumes",
+      "to_param": "bicycle LOS score",
+      "basis": "definitional",
+      "evidence": "The LOS ranges for bicycles on two-lane and multilane highways are based on a bicycle LOS (BLOS) score, which is in turn based on a traveler perception model."
+    },
+    {
+      "from_param": "motorized vehicle speeds",
+      "to_param": "bicycle LOS score",
+      "basis": "definitional",
+      "evidence": "The LOS ranges for bicycles on two-lane and multilane highways are based on a bicycle LOS (BLOS) score, which is in turn based on a traveler perception model."
+    },
+    {
+      "from_param": "heavy vehicle volumes",
+      "to_param": "bicycle LOS score",
+      "basis": "definitional",
+      "evidence": "The LOS ranges for bicycles on two-lane and multilane highways are based on a bicycle LOS (BLOS) score, which is in turn based on a traveler perception model."
+    },
+    {
+      "from_param": "pavement condition",
+      "to_param": "bicycle LOS score",
+      "basis": "definitional",
+      "evidence": "The LOS ranges for bicycles on two-lane and multilane highways are based on a bicycle LOS (BLOS) score, which is in turn based on a traveler perception model."
+    },
+    {
+      "from_param": "design plans",
+      "to_param": "lane width",
+      "basis": "definitional",
+      "evidence": "Lane width (ft) 12 ft Design p"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "flow rate",
+      "basis": "definitional",
+      "evidence": "At the entrance to the segment being analyzed, adjust hourly demand volumes in both directions (analysis direction and opposing direction) to account for the peak 15-min volume within the analysis hour, using Equation 15-1:"
+    },
+    {
+      "from_param": "peak hour factor",
+      "to_param": "flow rate",
+      "basis": "definitional",
+      "evidence": "At the entrance to the segment being analyzed, adjust hourly demand volumes in both directions (analysis direction and opposing direction) to account for the peak 15-min volume within the analysis hour, using Equation 15-1:"
+    },
+    {
+      "from_param": "demand flow rate",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "*Step 2: Determine Demand Flow Rates, Capacity, and d/c Ratio* At the entrance to the segment being analyzed, adjust hourly demand volumes in both directions (analysis direction and opposing direction) to account for the peak 15-min volume within the analysis hour, using Equation 15-1:"
+    },
+    {
+      "from_param": "capacity",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "*Step 2: Determine Demand Flow Rates, Capacity, and d/c Ratio* At the entrance to the segment being analyzed, adjust hourly demand volumes in both directions (analysis direction and opposing direction) to account for the peak 15-min volume within the analysis hour, using Equation 15-1:"
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "base free-flow speed",
+      "basis": "definitional",
+      "evidence": "*Estimating FFS* The posted speed limit serves as a surrogate for identifying FFS for base geometric conditions (i.e., lane width \u2265 12 ft, shoulder width \u2265 6 ft, no access points) and no heavy vehicles in the traffic stream."
+    },
+    {
+      "from_param": "base free-flow speed",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "*Estimating FFS* The FFS is calculated with Equation 15-3 through Equation 15-6."
+    },
+    {
+      "from_param": "heavy vehicle percentage",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "*Estimating FFS* The FFS can be estimated indirectly if field data are not available. This is a greater challenge on two-lane highways than on other types of uninterrupted-flow facilities."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "*Estimating FFS* The FFS can be estimated indirectly if field data are not available. This is a greater challenge on two-lane highways than on other types of uninterrupted-flow facilities."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "*Estimating FFS* The FFS can be estimated indirectly if field data are not available. This is a greater challenge on two-lane highways than on other types of uninterrupted-flow facilities."
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "*Estimating FFS* The FFS can be estimated indirectly if field data are not available. This is a greater challenge on two-lane highways than on other types of uninterrupted-flow facilities."
+    },
+    {
+      "from_param": "demand flow rate",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "*Step 5: Estimate the Average Speed* If the demand flow rate is less than or equal to 100 veh/h, the average speed is equal to the free-flow speed and Step 5 can be skipped."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "average speed",
+      "basis": "numeric",
+      "evidence": "*Step 5: Estimate the Average Speed* If the demand flow rate is less than or equal to 100 veh/h, the average speed is equal to the free-flow speed and Step 5 can be skipped."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "f LS",
+      "basis": "numeric",
+      "evidence": "Equation 15-5: f LS = 0.6 \u00d7 (12 \u2212LW) + 0.7 \u00d7 (6 \u2212SW)"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "f LS",
+      "basis": "numeric",
+      "evidence": "Equation 15-5: f LS = 0.6 \u00d7 (12 \u2212LW) + 0.7 \u00d7 (6 \u2212SW)"
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "f A",
+      "basis": "numeric",
+      "evidence": "Equation 15-6: f A = min (, 10)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "If the demand flow rate is less than or equal to 100 veh/h, the average speed is equal to the free-flow speed and Step 5 can be skipped."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "average speed",
+      "basis": "numeric",
+      "evidence": "Otherwise, the average speed is computed from the second formulation of Equation 15-7"
+    },
+    {
+      "from_param": "slope coefficient",
+      "to_param": "m",
+      "basis": "numeric",
+      "evidence": "The slope coefficient m in . The slope coefficient Equation 15-7 is calculated by Equation 15-8"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "m",
+      "basis": "numeric",
+      "evidence": "The slope coefficient m in . The slope coefficient Equation 15-7 is calculated by Equation 15-8"
+    },
+    {
+      "from_param": "demand flow rate in opposing direction",
+      "to_param": "m",
+      "basis": "numeric",
+      "evidence": "The slope coefficient m in . The slope coefficient Equation 15-7 is calculated by Equation 15-8"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "b 3",
+      "basis": "numeric",
+      "evidence": "Equation 15-9: b 3 = c 0 + c 1 \u00d7 [\u221a] L + c 2 \u00d7 FFS + c 3 \u00d7 (FFS \u00d7 [\u221a] L)"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "b 3",
+      "basis": "numeric",
+      "evidence": "Equation 15-9: b 3 = c 0 + c 1 \u00d7 [\u221a] L + c 2 \u00d7 FFS + c 3 \u00d7 (FFS \u00d7 [\u221a] L)"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "b 4",
+      "basis": "numeric",
+      "evidence": "Equation 15-10: b 4 = d 0 + d 1 \u00d7 [\u221a] HV % + d 2 \u00d7 FFS + d 3 \u00d7 (FFS \u00d7 [\u221a] HV %)"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "b 4",
+      "basis": "numeric",
+      "evidence": "Equation 15-10: b 4 = d 0 + d 1 \u00d7 [\u221a] HV % + d 2 \u00d7 FFS + d 3 \u00d7 (FFS \u00d7 [\u221a] HV %)"
+    },
+    {
+      "from_param": "demand flow rate in opposing direction",
+      "to_param": "p",
+      "basis": "numeric",
+      "evidence": "Equation 15-11: p = f 0 + f 1 \u00d7 FFS + f 2 \u00d7 L + f 3 \u00d7 p"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "p",
+      "basis": "numeric",
+      "evidence": "Equation 15-11: p = f 0 + f 1 \u00d7 FFS + f 2 \u00d7 L + f 3 \u00d7 p"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "p",
+      "basis": "numeric",
+      "evidence": "Equation 15-11: p = f 0 + f 1 \u00d7 FFS + f 2 \u00d7 L + f 3 \u00d7 p"
+    },
+    {
+      "from_param": "average speed on horizontal curve subsegment",
+      "to_param": "S HCi",
+      "basis": "numeric",
+      "evidence": "Equation 15-12: S HCi = min (S, FFS \u2212m \u00d7 \u221a 1, 000 [\u22120.1)]"
+    },
+    {
+      "from_param": "free-flow speed on horizontal curve subsegment",
+      "to_param": "FFS HCi",
+      "basis": "numeric",
+      "evidence": "Equation 15-13: FFS HCi = BFFS HCi \u22120.0255 \u00d7 HV %"
+    },
+    {
+      "from_param": "base free-flow speed on preceding tangent subsegment",
+      "to_param": "BFFS T",
+      "basis": "numeric",
+      "evidence": "Equation 15-14: BFFS HCi = min (BFFS T, 44.32 + 0.3728 \u00d7 BFFS T \u22126.868 \u00d7 HorizClass i)"
+    },
+    {
+      "from_param": "average speed on horizontal curve subsegment",
+      "to_param": "S HCi",
+      "basis": "numeric",
+      "evidence": "Equation 15-15: S HCi = max (0.277, \u221225.8993 \u22120.7756 \u00d7 FFS)"
+    },
+    {
+      "from_param": "average speed on horizontal curve subsegment",
+      "to_param": "S",
+      "basis": "numeric",
+      "evidence": "Equation 15-16: S = \u2211 i [(SubsegSpeed] [i] [ \u00d7 SubsegLength] [i] [)]"
+    },
+    {
+      "from_param": "percent followers at capacity flow rate",
+      "to_param": "PF cap",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: PF cap = b 0 + b 1 (L) + b 2 3 (FFS) + b 4 5 (HV % ( [\u221a] L) + b ( [\u221a] FFS)"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "percent followers at capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "percent followers at capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "percent followers at capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "percentage of heavy vehicles",
+      "to_param": "percent followers at capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "opposing flow rate",
+      "to_param": "percent followers at capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-18"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "percent followers at 25% of capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "percent followers at 25% of capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "percent followers at 25% of capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "percentage of heavy vehicles",
+      "to_param": "percent followers at 25% of capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "opposing flow rate",
+      "to_param": "percent followers at 25% of capacity",
+      "basis": "numeric",
+      "evidence": "Equation 15-20"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "slope coefficient m",
+      "basis": "numeric",
+      "evidence": "Equation 15-22"
+    },
+    {
+      "from_param": "capacity",
+      "to_param": "slope coefficient m",
+      "basis": "numeric",
+      "evidence": "Equation 15-22"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "power coefficient p",
+      "basis": "numeric",
+      "evidence": "Equation 15-23"
+    },
+    {
+      "from_param": "capacity at 25% of capacity",
+      "to_param": "power coefficient p",
+      "basis": "numeric",
+      "evidence": "Equation 15-23"
+    },
+    {
+      "from_param": "percentage of heavy vehicles",
+      "to_param": "percent followers for the segment",
+      "basis": "numeric",
+      "evidence": "Equation 15-17"
+    },
+    {
+      "from_param": "flow rate in each lane",
+      "to_param": "percent followers for the segment",
+      "basis": "numeric",
+      "evidence": "Equation 15-17"
+    },
+    {
+      "from_param": "percentage of heavy vehicles in each lane",
+      "to_param": "percent followers for the segment",
+      "basis": "numeric",
+      "evidence": "Equation 15-17"
+    },
+    {
+      "from_param": "average speed in each lane",
+      "to_param": "percent followers for the segment",
+      "basis": "numeric",
+      "evidence": "Equation 15-17"
+    },
+    {
+      "from_param": "flow rate in each lane",
+      "to_param": "follower density at the passing lane segment midpoint",
+      "basis": "numeric",
+      "evidence": "Equation 15-34"
+    },
+    {
+      "from_param": "percent followers in each lane",
+      "to_param": "follower density at the passing lane segment midpoint",
+      "basis": "numeric",
+      "evidence": "Equation 15-34"
+    },
+    {
+      "from_param": "average speed in each lane",
+      "to_param": "follower density at the passing lane segment midpoint",
+      "basis": "numeric",
+      "evidence": "Equation 15-34"
+    },
+    {
+      "from_param": "percent followers for the segment",
+      "to_param": "adjusted follower density on a segment downstream of a Passing Lane segment",
+      "basis": "numeric",
+      "evidence": "Equation 15-38"
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "effective width W e",
+      "basis": "numeric",
+      "evidence": "If W s is greater than or equal to 8 ft: **Equation 15-41:**"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "effective width W e",
+      "basis": "numeric",
+      "evidence": "If W s is greater than or equal to 4 ft and less than 8 ft: **Equation 15-42:**"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "effective width W e",
+      "basis": "numeric",
+      "evidence": "If W s is less than 4 ft: *s* **Equation 15-43:**"
+    },
+    {
+      "from_param": "hourly directional volume V",
+      "to_param": "effective width W v",
+      "basis": "numeric",
+      "evidence": "**Equation 15-44:**"
+    },
+    {
+      "from_param": "hourly directional volume V",
+      "to_param": "effective width W v",
+      "basis": "numeric",
+      "evidence": "**Equation 15-45:**"
+    },
+    {
+      "from_param": "posted speed limit S pl",
+      "to_param": "effective speed factor S t",
+      "basis": "numeric",
+      "evidence": "**Equation 15-46:**"
+    },
+    {
+      "from_param": "effective speed factor S t",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "directional demand flow rate v OL",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "effective speed factor S t",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "proportion of heavy vehicles HV",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "pavement surface condition rating P",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "average effective width W e",
+      "to_param": "bicycle level of service BLOS",
+      "basis": "numeric",
+      "evidence": "**Equation 15-47:**"
+    },
+    {
+      "from_param": "field-measured free-flow speed FFS field,i",
+      "to_param": "calibrated free-flow speed FFS HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-48:**"
+    },
+    {
+      "from_param": "speed adjustment factor SAF FFS,i",
+      "to_param": "calibrated free-flow speed FFS HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-48:**"
+    },
+    {
+      "from_param": "field-measured average speed S field,i",
+      "to_param": "calibrated average speed S HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-49:**"
+    },
+    {
+      "from_param": "speed adjustment factor SAF S,i",
+      "to_param": "calibrated average speed S HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-49:**"
+    },
+    {
+      "from_param": "field-measured percent followers PF field,i",
+      "to_param": "calibrated percent followers PF HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-50:**"
+    },
+    {
+      "from_param": "calibration adjustment factor PFAF i",
+      "to_param": "calibrated percent followers PF HCM,i",
+      "basis": "numeric",
+      "evidence": "**Equation 15-50:**"
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "As the amount of platooning increases, the highway\u2019s LOS deteriorates."
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A1 presents results from simulation that show values of the reduction in percent followers in level terrain for different combinations of passing lane lengths and directional traffic flow rates"
+    },
+    {
+      "from_param": "passing lane length",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Providing a passing lane on a two-lane highway can improve operational performance and LOS, as it provides passing opportunities that help break up vehicular platoons."
+    },
+    {
+      "from_param": "grade slope",
+      "to_param": "truck speed reduction",
+      "basis": "numeric",
+      "evidence": "The truck speed\u2013distance curves in Exhibit 15-A3 through Exhibit 15-A5 can be used to determine speed reductions on different lengths of grade for three truck types"
+    },
+    {
+      "from_param": "initial speed",
+      "to_param": "upgrade segment length",
+      "basis": "numeric",
+      "evidence": "The upgrade speed versus distance functions were developed assuming an initial speed of 75 mi/h. These functions can be modified to produce upgrade speeds for different initial speeds."
+    },
+    {
+      "from_param": "initial speed",
+      "to_param": "truck speed reduction",
+      "basis": "numeric",
+      "evidence": "Had the segment length not been adjusted, the final speed would have equaled 50 mi/h. Therefore, the 15 mi/h difference in initial speed created a 10 mi/h difference in the final speed on the upgrade."
+    },
+    {
+      "from_param": "grade slope",
+      "to_param": "upgrade segment length",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A9 through Exhibit 15-A11 provide additional upgrade segment lengths for various combinations of initial speed and grade slope, for single-unit, intermediate semitrailer, and interstate semitrailer trucks, respectively."
+    },
+    {
+      "from_param": "grade slope",
+      "to_param": "crawl speed",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A12 provides the segment lengths at which crawl speed is reached if the truck enters the segment with an initial speed of 75 mi/h."
+    },
+    {
+      "from_param": "FlowRate",
+      "to_param": "%Improve % Followers,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 \u221215.8 \u00d7 ln (FlowRate) + 0.05 \u00d7 FFS"
+    },
+    {
+      "from_param": "FlowRate",
+      "to_param": "%Improve AvgSpeed,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 \u22121.86 \u00d7 ln (FlowRate) \u22120.1 \u00d7 m"
+    },
+    {
+      "from_param": "%Followers [2+1]",
+      "to_param": "[%Followers] [2+1] 100",
+      "basis": "definitional",
+      "evidence": "Equation 15-A4: [%Followers] [2+1] 100 \u00d7 (1 \u2212 [%Improve] [%Follower]"
+    },
+    {
+      "from_param": "%Followers [2+1]",
+      "to_param": "FollowerDensity adj,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A4: FollowerDensity adj,2+1 = [%Followers] [2+1] 100"
+    },
+    {
+      "from_param": "FFS",
+      "to_param": "%Improve % Followers,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 \u221215.8 \u00d7 ln (FlowRate) + 0.05 \u00d7 FFS"
+    },
+    {
+      "from_param": "FFS",
+      "to_param": "%Improve AvgSpeed,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 \u22121.86 \u00d7 ln (FlowRate) \u22120.1 \u00d7 m"
+    },
+    {
+      "from_param": "FFS",
+      "to_param": "FollowerDensity adj,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A4: FollowerDensity adj,2+1 = [%Followers] [2+1] 100"
+    },
+    {
+      "from_param": "% Followers 2+1",
+      "to_param": "FollowerDensity adj,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A4: FollowerDensity adj,2+1 = [%Followers] [2+1] 100"
+    },
+    {
+      "from_param": "% Followers 2+1",
+      "to_param": "%Improve % Followers,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A4: FollowerDensity adj,2+1 = [%Followers] [2+1] 100"
+    },
+    {
+      "from_param": "S",
+      "to_param": "FollowerDensity adj,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A4: FollowerDensity adj,2+1 = [%Followers] [2+1] 100"
+    }
+  ]
+}

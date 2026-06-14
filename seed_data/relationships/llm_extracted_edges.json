@@ -1,0 +1,636 @@
+{
+  "meta": {
+    "task": "KG-AUTO-2",
+    "model": "gemma3:12b",
+    "runtime": "ollama (local, open-weight)",
+    "facility_type": "TwoLaneHighway",
+    "source": "HCM 7th Ed. Chapter 15 (indexed RAG corpus)",
+    "n_windows": 10,
+    "run_at": "2026-06-14T20:23:00+00:00",
+    "status": "llm_extracted",
+    "audited": false
+  },
+  "edges": [
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Traffic can operate at maximum speeds only if lanes and shoulders are wide enough not to constrain speeds."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Traffic can operate at maximum speeds only if lanes and shoulders are wide enough not to constrain speeds."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Traffic can operate at maximum speeds only if lanes and shoulders are wide enough not to constrain speeds."
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "motorized vehicle LOS",
+      "basis": "definitional",
+      "evidence": "This chapter\u2019s analysis methodology can be used to analyze individual homogeneous segments of a two-lane highway, as well as extended lengths of a two-lane highway that are composed of multiple contiguous segments."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "motorized vehicle LOS",
+      "basis": "definitional",
+      "evidence": "This chapter\u2019s analysis methodology can be used to analyze individual homogeneous segments of a two-lane highway, as well as extended lengths of a two-lane highway that are composed of multiple contiguous segments."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "motorized vehicle LOS",
+      "basis": "definitional",
+      "evidence": "This chapter\u2019s analysis methodology can be used to analyze individual homogeneous segments of a two-lane highway, as well as extended lengths of a two-lane highway that are composed of multiple contiguous segments."
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "The general relationship between average speed and flow rate is nonlinear, as illustrated in Exhibit 15-2."
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "horizontal alignment",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "vertical alignment",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The general relationship between percent followers and flow rate is non-linear, as illustrated in Exhibit 15-3."
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "horizontal alignment",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "vertical alignment",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "analysis direction flow rate",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "The general relationship between follower density and flow rate is illustrated in Exhibit 15-4."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "Follower density is defined as the number of vehicles in a follower state per mile per lane. Mathematically, it is the percent followers multiplied by density."
+    },
+    {
+      "from_param": "percent heavy vehicles",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "horizontal alignment",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "vertical alignment",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "The performance measure estimation models presented in this chapter assume three general classifications of heavy vehicles: small, medium, and large."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "higher-speed two-lane highways (\u226550 mi/h) ... follower density thresholds for a given LOS are higher for lower-speed highways than higher"
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "lower-speed two-lane highways (< 50 mi/h) ... follower density thresholds for a given LOS are higher for lower-speed highways than higher"
+    },
+    {
+      "from_param": "heavy vehicle percentage",
+      "to_param": "capacity",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-5: Maximum Flow Rates for Passing Lane Segments ... |Heavy Vehicle Percentage (%)|Maximum Flow Rate (veh/h)"
+    },
+    {
+      "from_param": "vertical classification",
+      "to_param": "capacity",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-5: Maximum Flow Rates for Passing Lane Segments ... |Heavy Vehicle Percentage (%)|Maximum Flow Rate (veh/h) by Vertical Class"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "Demand flow rates equivalent to capacity are rarely observed on two-lane highways"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "level of service",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "follower density",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "If the demand-to-capacity ratio is less than or equal to 1.0, follower density is used as the service measure for all two-lane highways."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Research performed in the development of this chapter\u2019s methodology ( 2 ) indicated that FFS is approximately 14% higher . than the posted speed limit."
+    },
+    {
+      "from_param": "posted speed limit",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "The BFFS is estimated with Equation 15-2 BFFS = 1.14 \u00d7 S pl"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-3 FFS = BFFS \u2212a (HV %)"
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-5 f LS = 0. 6 \u00d7 (12 \u2212LW) + 0. 7 \u00d7 (6 \u2212SW)"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-5 f LS = 0. 6 \u00d7 (12 \u2212LW) + 0. 7 \u00d7 (6 \u2212SW)"
+    },
+    {
+      "from_param": "access-point density",
+      "to_param": "free-flow speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-6 f A = min (, 10)"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "average travel speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-7 S = {FFS \u2212m( 1,000 [\u22120.1)] p"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "average travel speed",
+      "basis": "numeric",
+      "evidence": "Equation 15-7 S = {FFS \u2212m( 1,000 [\u22120.1)] p"
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional"
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "grade",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "average travel speed",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "grade",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "percent followers",
+      "basis": "numeric"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Equation 15-18 is used to calculate percent followers at capacity for Passing Constrained and Passing Zone segments."
+    },
+    {
+      "from_param": "segment length",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: PF cap = b 0 + b 1 (L) + b 2 3 (FFS)"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: PF cap = b 0 + b 1 (L) + b 2 3 (FFS)"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Equation 15-18: PF cap = b 0 + b 1 (L) + b 2 3 (FFS) + b 4 5 (HV % ( [\u221a] L)"
+    },
+    {
+      "from_param": "opposing flow rate",
+      "to_param": "percent followers",
+      "basis": "numeric",
+      "evidence": "Equation 15-18 is used for both Passing Constrained and Passing Zone segments. (Passing Constrained and Passing Zone segments. Equation 15-18)"
+    },
+    {
+      "from_param": "vertical class",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "Apply the equations and passing lane coefficient tables of Step 5 (Estimate the Average Speed)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "Apply the equations and passing lane coefficient tables of Step 5 (Estimate the Average Speed)"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "average speed",
+      "basis": "definitional",
+      "evidence": "Apply the equations and passing lane coefficient tables of Step 5 (Estimate the Average Speed)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Apply the equations and passing lane coefficient tables of Step 6 (Estimate the Percent Followers)"
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Apply the equations and passing lane coefficient tables of Step 6 (Estimate the Percent Followers)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "Apply Equation 15-34 to determine the follower density at the passing lane segment midpoint FD PLmid in followers/mi/ln."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "Apply Equation 15-34 to determine the follower density at the passing lane segment midpoint FD PLmid in followers/mi/ln."
+    },
+    {
+      "from_param": "average speed",
+      "to_param": "follower density",
+      "basis": "numeric",
+      "evidence": "Apply Equation 15-34 to determine the follower density at the passing lane segment midpoint FD PLmid in followers/mi/ln."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "speed limit",
+      "basis": "definitional",
+      "evidence": "Speed limit (mi/h) Must be provided"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "directional demand flow rate",
+      "basis": "numeric",
+      "evidence": "calculate the directional demand flow rate of motorized traffic in the outside lane with Equation 15- 40: Equation 15-40: V v OL = PHF \u00d7 N"
+    },
+    {
+      "from_param": "peak hour factor",
+      "to_param": "directional demand flow rate",
+      "basis": "numeric",
+      "evidence": "calculate the directional demand flow rate of motorized traffic in the outside lane with Equation 15- 40: Equation 15-40: V v OL = PHF \u00d7 N"
+    },
+    {
+      "from_param": "number of directional lanes",
+      "to_param": "directional demand flow rate",
+      "basis": "numeric",
+      "evidence": "calculate the directional demand flow rate of motorized traffic in the outside lane with Equation 15- 40: Equation 15-40: V v OL = PHF \u00d7 N"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-41: W e = W v + W s \u2212(%OHP \u00d7 10 ft)"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-41: W e = W v + W s \u2212(%OHP \u00d7 10 ft)"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-41: W e = W v + W s \u2212(%OHP \u00d7 10 ft)"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-42: W e = W v + W s \u22122 \u00d7 [%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-42: W e = W v + W s \u22122 \u00d7 [%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-42: W e = W v + W s \u22122 \u00d7 [%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-43: W e = W v \u2212[%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-43: W e = W v \u2212[%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-43: W e = W v \u2212[%OHP (2 ft + W s )]"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-44: W v = W OL + W s"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-44: W v = W OL + W s"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-44: W v = W OL + W s"
+    },
+    {
+      "from_param": "hourly directional volume",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-45: W v = (W OL + W s ) \u00d7 (2 \u22120.005V )"
+    },
+    {
+      "from_param": "outside lane width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-45: W v = (W OL + W s ) \u00d7 (2 \u22120.005V )"
+    },
+    {
+      "from_param": "paved shoulder width",
+      "to_param": "effective width",
+      "basis": "numeric",
+      "evidence": "Equation 15-45: W v = (W OL + W s ) \u00d7 (2 \u22120.005V )"
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "average travel speed",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "average travel speed",
+      "to_param": "percent followers",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "average travel speed",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "capacity",
+      "basis": "definitional",
+      "evidence": "Calibration consists of applying multiplicative factors to each of the following HCM-estimated performance measures: free-flow speed, average travel speed, and percent followers."
+    },
+    {
+      "from_param": "pavement condition",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-34(a) shows that the BLOS score is sensitive to the pavement condition rating."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-33(a) shows that traffic speed has a relatively small effect on the BLOS score."
+    },
+    {
+      "from_param": "heavy-vehicle percentage",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-33(b) shows that the heavy vehicle percentage has a large effect on the BLOS score."
+    },
+    {
+      "from_param": "demand volume",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-32 depicts how the bicycle level-of-service (BLOS) score is affected by different lane and shoulder widths at different directional volumes."
+    },
+    {
+      "from_param": "lane width",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-32 depicts how the bicycle level-of-service (BLOS) score is affected by different lane and shoulder widths at different directional volumes."
+    },
+    {
+      "from_param": "shoulder width",
+      "to_param": "level of service",
+      "basis": "definitional",
+      "evidence": "Exhibit 15-32 depicts how the bicycle level-of-service (BLOS) score is affected by different lane and shoulder widths at different directional volumes."
+    },
+    {
+      "from_param": "design speed",
+      "to_param": "free-flow speed",
+      "basis": "definitional",
+      "evidence": "rage speed estimated by Chapter 15 method for segment i (mi/h)"
+    },
+    {
+      "from_param": "grade",
+      "to_param": "truck speed",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A3 through Exhibit 15-A5 can be used to determine speed reductions on different lengths of grade"
+    },
+    {
+      "from_param": "truck speed",
+      "to_param": "segment length",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A9 through Exhibit 15-A11 provide additional upgrade segment lengths"
+    },
+    {
+      "from_param": "grade slope",
+      "to_param": "truck speed",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A3 through Exhibit 15-A5 can be used to determine speed reductions on different lengths of grade"
+    },
+    {
+      "from_param": "truck speed",
+      "to_param": "segment length",
+      "basis": "numeric",
+      "evidence": "Exhibit 15-A9 through Exhibit 15-A11 provide additional upgrade segment lengths"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "%Improve %Followers,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 \u221215.8 \u00d7 ln (FlowRate)"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "%Improve %Followers,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A2: %Improve %Followers,2+1 = 147.5 \u221215.8 \u00d7 ln (FlowRate) + 0.05 \u00d7 FFS"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "%Improve AvgSpeed,2+1",
+      "basis": "numeric",
+      "evidence": "Equation 15-A3: %Improve AvgSpeed,2+1 = max (0, 21.8 \u22121.86 \u00d7 ln (FlowRate)"
+    },
+    {
+      "from_param": "free-flow speed",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "where = FFS free-flow speed (mi/h)"
+    },
+    {
+      "from_param": "flow rate",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "where = FlowRate 2+1 flow rate entering the 2+1 configuration (veh/h)"
+    },
+    {
+      "from_param": "percent followers",
+      "to_param": "follower density",
+      "basis": "definitional",
+      "evidence": "where = % Followers 2+1 percent followers entering the 2+1 configuration (i.e., percent followers estimated at the end of the segment just upstream of the first passing lane)"
+    }
+  ]
+}
