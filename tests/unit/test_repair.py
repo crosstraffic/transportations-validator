@@ -351,3 +351,44 @@ class TestExecutableRepairBasicFreeway:
             BasicFreewayExecutor().evaluate(
                 {**FREEWAY_DESIGN, "grade": 3.7, "length": 0.5}
             )
+
+
+# Corridor C: mountainous rural two-lane climb. Pins the worked-example
+# numbers (scripts/corridor_c_worked_example.py) so executor or corpus drift
+# is caught.
+MOUNTAIN_SITE = {
+    "passing_type": 0, "length": 2.0, "grade": 6.0, "spl": 45.0, "volume": 800.0,
+    "phv": 0.06, "phf": 0.92, "lane_width": 11.0, "shoulder_width": 2.0, "apd": 8.0,
+}
+
+
+class TestCorridorCMountainous:
+    def test_steep_grade_yields_los_e(self):
+        out = TwoLaneHighwayExecutor().evaluate(MOUNTAIN_SITE)
+        assert out["los"] == "E"
+        assert out["ffs"] < 50.0  # narrow 11ft + 6% grade depress FFS
+
+    def test_terrain_conditional_grade_rule_flips(self):
+        """The same 6% grade is a violation in level terrain (≤5%) but
+        compliant in mountainous (≤8%) — the non-monotonic flip."""
+        import json
+        from pathlib import Path
+
+        rules_path = (
+            Path(__file__).resolve().parents[2]
+            / "seed_data" / "rules" / "aashto_gb_rules.json"
+        )
+        data = json.loads(rules_path.read_text())
+        rules = data if isinstance(data, list) else data.get("rules", [])
+        bounds = {}
+        for r in rules:
+            if (
+                r.get("facility_type") == "TwoLaneHighway"
+                and r.get("parameter_rust_field") == "grade"
+            ):
+                for c in r.get("conditions") or []:
+                    if c.get("type") == "terrain_type":
+                        bounds[c["value"]] = r.get("max_value")
+        grade = MOUNTAIN_SITE["grade"]
+        assert grade > bounds["level"]        # 6 > 5  → violation in level
+        assert grade <= bounds["mountainous"]  # 6 ≤ 8  → compliant in mountainous
