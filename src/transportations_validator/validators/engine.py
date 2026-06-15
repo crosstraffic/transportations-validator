@@ -1,11 +1,8 @@
 """Core validation engine orchestrator."""
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from transportations_validator.db.postgres.repositories import ParameterRepository, RuleRepository
 from transportations_validator.extractors import (
     JSONExtractor,
     LLMResponseExtractor,
@@ -30,8 +27,10 @@ from transportations_validator.validators.clarify import (
     unit_conflict_clarification,
 )
 from transportations_validator.validators.formula import FormulaError, FormulaEvaluator
-from transportations_validator.validators.resolvers.condition import ConditionResolver
-from transportations_validator.validators.resolvers.jurisdiction import JurisdictionResolver
+from transportations_validator.validators.rule_providers import RuleProvider
+
+if TYPE_CHECKING:
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -39,12 +38,41 @@ logger = logging.getLogger(__name__)
 class ValidationEngine:
     """Core validation engine that orchestrates the validation process."""
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(
+        self,
+        session: "AsyncSession | None" = None,
+        *,
+        provider: RuleProvider | None = None,
+    ) -> None:
+        """Construct with a DB session (Postgres path) or a RuleProvider.
+
+        ``ValidationEngine(session)`` keeps the original database-backed
+        behaviour. ``ValidationEngine(provider=SeedRuleProvider())`` (or
+        ``ValidationEngine.from_seed()``) runs the same evaluation entirely
+        in-process over the seed corpus — no database, no asyncpg. The DB
+        repositories/resolvers are imported lazily so the in-process path
+        never pulls the Postgres stack.
+        """
         self.session = session
-        self.param_repo = ParameterRepository(session)
-        self.rule_repo = RuleRepository(session)
-        self.condition_resolver = ConditionResolver(session)
-        self.jurisdiction_resolver = JurisdictionResolver(session)
+        self.provider = provider
+        self._param_repo = None
+        self._rule_repo = None
+        self._jurisdiction_resolver = None
+
+        if provider is None:
+            if session is None:
+                raise ValueError("ValidationEngine needs a session or a provider")
+            from transportations_validator.db.postgres.repositories import (
+                ParameterRepository,
+                RuleRepository,
+            )
+            from transportations_validator.validators.resolvers.jurisdiction import (
+                JurisdictionResolver,
+            )
+
+            self._param_repo = ParameterRepository(session)
+            self._rule_repo = RuleRepository(session)
+            self._jurisdiction_resolver = JurisdictionResolver(session)
 
         # Initialize extractors
         self.extractors = [
@@ -55,6 +83,28 @@ class ValidationEngine:
 
         # Formula evaluator for cross-parameter rules
         self.formula_evaluator = FormulaEvaluator()
+
+    @classmethod
+    def from_seed(cls, seed_dir: Any | None = None) -> "ValidationEngine":
+        """Engine backed by the seed corpus — full rules + clarifications, no DB."""
+        from transportations_validator.validators.rule_providers import SeedRuleProvider
+
+        return cls(provider=SeedRuleProvider(seed_dir))
+
+    async def _resolve_parameter(self, name: str, ft: Any) -> Any | None:
+        if self.provider is not None:
+            return await self.provider.resolve_parameter(name, ft)
+        return await self._param_repo.resolve_parameter_name(name, ft)
+
+    async def _rules_for(self, param: Any) -> list[Any]:
+        if self.provider is not None:
+            return await self.provider.rules_for(param)
+        return list(await self._rule_repo.get_by_parameter_id(param.id))
+
+    async def _prioritize(self, rules: list[Any], jurisdiction: str | None) -> list[Any]:
+        if self.provider is not None:
+            return await self.provider.prioritize(rules, jurisdiction)
+        return await self._jurisdiction_resolver.prioritize_rules(rules, jurisdiction)
 
     async def validate(
         self,
@@ -179,7 +229,7 @@ class ValidationEngine:
             except ValueError:
                 pass
 
-        param = await self.param_repo.resolve_parameter_name(param_key, ft)
+        param = await self._resolve_parameter(param_key, ft)
 
         if not param:
             # Parameter not in database, can't validate
@@ -204,7 +254,7 @@ class ValidationEngine:
         # Get the parameter's rules, then split applicable vs. those gated on
         # conditions the context does not establish — the latter become
         # AMBIGUOUS_CONTEXT clarifications instead of silently dropping.
-        all_rules = await self.rule_repo.get_by_parameter_id(param.id)
+        all_rules = await self._rules_for(param)
         rules, unestablished = partition_rules_by_context(list(all_rules), context)
         for cond_type, gated in unestablished.items():
             clarifications.append(
@@ -214,9 +264,7 @@ class ValidationEngine:
             )
 
         # Apply jurisdiction resolver to prioritize rules
-        rules = await self.jurisdiction_resolver.prioritize_rules(
-            rules, context.get("jurisdiction")
-        )
+        rules = await self._prioritize(rules, context.get("jurisdiction"))
 
         # Validate against each rule
         violations: list[RuleViolation] = []
