@@ -45,7 +45,7 @@ from transportations_validator.validators.forward_chain import (
     DEFAULT_AUTHORITY_WEIGHT,
     SOURCE_AUTHORITY_WEIGHTS,
 )
-from transportations_validator.validators.resolvers.jurisdiction import (
+from transportations_validator.validators.resolvers.priorities import (
     DEFAULT_PRIORITIES,
 )
 
@@ -545,7 +545,9 @@ def load_conflict_scenarios(
     design context, and competing claims marked ``"constructed": true``.
     """
     if scenario_dir is None:
-        scenario_dir = Path(__file__).resolve().parents[3] / "seed_data" / "conflicts"
+        from transportations_validator.seed_paths import seed_root
+
+        scenario_dir = seed_root() / "conflicts"
     scenario_dir = Path(scenario_dir)
 
     scenarios: dict[str, dict[str, Any]] = {}

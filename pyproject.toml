@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "transportations-validator"
-version = "0.1.1"
+version = "0.2.0"
 description = "Lightweight validator for transportation engineering inputs against HCM/AASHTO standards"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
@@ -79,8 +79,28 @@ Repository = "https://github.com/crosstraffic/transportations-validator"
 [project.scripts]
 transportations-validator = "transportations_validator.main:run"
 
+# KG-AUTO experiment artifacts live under seed_data/relationships/ for the dev scripts/tests, but are not runtime corpus — keep them out of the distributed package.
 [tool.hatch.build.targets.wheel]
 packages = ["src/transportations_validator"]
+exclude = [
+    "seed_data/relationships/llm_extracted_edges*.json",
+    "seed_data/relationships/code_derived_edges.json",
+    "seed_data/relationships/edge_tiers.json",
+]
+
+# Ship the seed corpus inside the installed package so the reasoning loaders
+# (relationships, parameter bounds, conflict scenarios) resolve when pip-installed,
+# not only from an editable source tree. Lands at
+# site-packages/transportations_validator/seed_data/.
+[tool.hatch.build.targets.wheel.force-include]
+"seed_data" = "transportations_validator/seed_data"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "seed_data/relationships/llm_extracted_edges*.json",
+    "seed_data/relationships/code_derived_edges.json",
+    "seed_data/relationships/edge_tiers.json",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

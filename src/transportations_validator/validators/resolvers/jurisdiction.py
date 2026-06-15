@@ -7,13 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from transportations_validator.db.postgres.repositories import SourceRepository
 
-# Jurisdiction hierarchy (lower number = higher priority)
-DEFAULT_PRIORITIES = {
-    "federal": 100,
-    "state": 50,
-    "local": 25,
-    "project": 10,
-}
+# Re-exported from the dependency-free priorities module so the reasoning layer
+# can import the constant without dragging in this DB-backed module.
+from transportations_validator.validators.resolvers.priorities import (
+    DEFAULT_PRIORITIES,
+)
 
 
 class JurisdictionResolver:

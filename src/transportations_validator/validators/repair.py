@@ -226,9 +226,9 @@ def load_parameter_bounds(
     without both bounds (enums, ids) are omitted.
     """
     if seed_dir is None:
-        # __file__ -> .../src/transportations_validator/validators/repair.py
-        # parents[3] -> .../<project root>/
-        seed_dir = Path(__file__).resolve().parents[3] / "seed_data" / "parameters"
+        from transportations_validator.seed_paths import seed_root
+
+        seed_dir = seed_root() / "parameters"
     seed_dir = Path(seed_dir)
 
     bounds: dict[str, tuple[float, float]] = {}

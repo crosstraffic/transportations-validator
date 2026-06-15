@@ -331,14 +331,9 @@ def load_relationships_from_seed(
     resolved relative to this module's location.
     """
     if seed_path is None:
-        # __file__ -> .../src/transportations_validator/validators/forward_chain.py
-        # parents[3] -> .../<project root>/
-        seed_path = (
-            Path(__file__).resolve().parents[3]
-            / "seed_data"
-            / "relationships"
-            / "parameter_relationships.json"
-        )
+        from transportations_validator.seed_paths import seed_root
+
+        seed_path = seed_root() / "relationships" / "parameter_relationships.json"
 
     with open(seed_path) as f:
         data = json.load(f)
