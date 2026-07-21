@@ -285,7 +285,7 @@ class TestRepairEndpoint:
             "facility_type": "BasicFreeway",
             "design": {
                 "bffs": 70.0, "lw": 10.0, "lane_count": 2, "lc_r": 6, "trd": 1,
-                "demand_flow_i": 3000.0, "phf": 0.95, "p_t": 0.25,
+                "demand_flow_i": 3100.0, "phf": 0.95, "p_t": 0.25,
                 "grade": 2.0, "length": 0.625,
             },
             "goal_los": "D",
@@ -297,6 +297,9 @@ class TestRepairEndpoint:
         response = client.post("/api/v1/reason/repair", json=freeway)
         assert response.status_code == 200
         data = response.json()
+        # 3100 veh/h (not 3000): with the corrected general-terrain default
+        # (sut_percentage=0, E_T=2.0) a 10 ft lane holds LOS D at 3000, so the
+        # demand is raised to keep the baseline genuinely below the LOS-D goal.
         assert data["baseline_evaluated"]["los"] == "E"
         assert data["repaired"] is True
         assert any(
@@ -305,13 +308,18 @@ class TestRepairEndpoint:
             for c in p["changes"]
         )
 
-    def test_basicfreeway_off_grid_inputs_return_422_not_500(self):
-        """Off-grid heavy-vehicle inputs are non-evaluable, not a server fault."""
+    def test_off_domain_specific_upgrade_returns_422_not_500(self):
+        """Off-domain heavy-vehicle inputs are non-evaluable, not a server fault.
+        Reached via a specific-upgrade mix (sut_percentage=30) at a grade beyond
+        the 6% maximum tabulated in Exhibits 12-26/27/28. At the default
+        sut_percentage=0 grade is irrelevant (general terrain), so this path is
+        only reachable with an explicit SUT mix."""
         freeway = {
             "facility_type": "BasicFreeway",
             "design": {
                 "bffs": 70.0, "lw": 10.0, "lane_count": 2,
-                "demand_flow_i": 3000.0, "grade": 3.7, "length": 0.5, "p_t": 0.25,
+                "demand_flow_i": 3000.0, "grade": 7.0, "length": 0.625, "p_t": 0.25,
+                "sut_percentage": 30,
             },
             "goal_los": "D",
             "immutable": ["demand_flow_i", "grade", "length", "p_t", "bffs", "lane_count"],

@@ -118,6 +118,9 @@ class BasicFreewayExecutor:
               ``lc_l`` (default 6), ``trd`` (total ramp density, default 0),
               ``grade`` (%, default 0), ``length`` (mi, default 0.625),
               ``p_t`` (heavy-vehicle proportion, default 0.25),
+              ``sut_percentage`` (single-unit-truck share of the heavy-vehicle
+              mix; 0 = unknown → general terrain, or 30/50/70 for the
+              specific-upgrade exhibits, default 0),
               ``phf`` (default 0.95), ``terrain_type``, ``city_type``.
 
     Keys are the BasicFreeway ``rust_field`` names (``lw`` not ``lane_width``),
@@ -128,11 +131,14 @@ class BasicFreewayExecutor:
     Returns the design augmented with: ``ffs, capacity, speed, density,
     vc_ratio, los``.
 
-    ⚠ The library's heavy-vehicle PCE table is tabulated only at discrete
-    ``(grade, length)`` grid points (grade ∈ {-2, 0, 2, 2.5}; length ∈
-    {0.125, 0.375, 0.625, 0.875, 1.25, 1.5}); off-grid combinations raise a
-    Rust panic. We surface that as a clean ``ValueError`` so a repair/inverse
-    sweep — which varies geometry/demand, not grade/length — never crashes.
+    ⚠ Heavy-vehicle equivalence depends on ``sut_percentage``. At the default
+    ``0`` the library reads the general-terrain exhibit (12-25) off
+    ``terrain_type`` and ignores grade/length entirely, so every geometry is
+    evaluable. Only the specific-upgrade exhibits (12-26/27/28, reached with
+    ``sut_percentage`` 30/50/70) consult the grade/length grid; the library
+    interpolates within it (grades to 6%) and raises for genuinely off-domain
+    inputs — grade beyond 6% or non-finite values. We surface any such failure
+    as a clean ``ValueError`` so a repair/inverse sweep never crashes.
     """
 
     REQUIRED_INPUTS = frozenset({"bffs", "lw", "lane_count", "demand_flow_i"})
@@ -158,6 +164,7 @@ class BasicFreewayExecutor:
                 terrain_type=design.get("terrain_type"),
                 phf=float(design.get("phf", 0.95)),
                 p_t=float(design.get("p_t", 0.25)),
+                sut_percentage=int(design.get("sut_percentage", 0)),
                 demand_flow_i=float(design["demand_flow_i"]),
                 length=float(design.get("length", 0.625)),
                 highway_type=str(design.get("highway_type", "basic")),
@@ -176,8 +183,10 @@ class BasicFreewayExecutor:
             raise
         except BaseException as exc:  # noqa: BLE001 - PyO3 PanicException ∉ Exception
             raise ValueError(
-                "BasicFreeway design is non-evaluable (likely heavy-vehicle "
-                "PCE not tabulated for this grade/length/p_t): "
+                "BasicFreeway design is non-evaluable (likely a specific-upgrade "
+                "heavy-vehicle PCE off the tabulated domain, e.g. grade beyond "
+                "6%): "
+                f"sut_percentage={design.get('sut_percentage', 0)}, "
                 f"grade={design.get('grade')}, length={design.get('length')}, "
                 f"p_t={design.get('p_t')} — {exc}"
             ) from None
