@@ -279,36 +279,36 @@ def _prefer(a: Argument, b: Argument) -> tuple[Argument, Argument, str, str] | N
     principle separates them (a genuine tie → unresolved conflict).
     """
     if a.priority != b.priority:
-        w, l = (a, b) if a.priority < b.priority else (b, a)
-        if w.jurisdiction != l.jurisdiction:
+        winner, loser = (a, b) if a.priority < b.priority else (b, a)
+        if winner.jurisdiction != loser.jurisdiction:
             why = (
-                f"{w.jurisdiction} (priority {w.priority}) governs over "
-                f"{l.jurisdiction} (priority {l.priority})"
+                f"{winner.jurisdiction} (priority {winner.priority}) governs over "
+                f"{loser.jurisdiction} (priority {loser.priority})"
             )
         else:
             why = (
-                f"higher-priority document within the {w.jurisdiction} tier "
-                f"({w.priority} over {l.priority})"
+                f"higher-priority document within the {winner.jurisdiction} tier "
+                f"({winner.priority} over {loser.priority})"
             )
-        return (w, l, PRINCIPLE_JURISDICTION, why)
+        return (winner, loser, PRINCIPLE_JURISDICTION, why)
     if a.specificity != b.specificity:
-        w, l = (a, b) if a.specificity > b.specificity else (b, a)
+        winner, loser = (a, b) if a.specificity > b.specificity else (b, a)
         return (
-            w,
-            l,
+            winner,
+            loser,
             PRINCIPLE_SPECIFICITY,
-            f"more specific rule ({w.specificity} condition(s) satisfied) "
-            f"overrides the general default ({l.specificity})",
+            f"more specific rule ({winner.specificity} condition(s) satisfied) "
+            f"overrides the general default ({loser.specificity})",
         )
     if a.authority_weight != b.authority_weight:
-        w, l = (a, b) if a.authority_weight > b.authority_weight else (b, a)
+        winner, loser = (a, b) if a.authority_weight > b.authority_weight else (b, a)
         return (
-            w,
-            l,
+            winner,
+            loser,
             PRINCIPLE_PROVENANCE,
-            f"higher-authority source {w.authority} "
-            f"(weight {w.authority_weight:g}) over {l.authority} "
-            f"(weight {l.authority_weight:g})",
+            f"higher-authority source {winner.authority} "
+            f"(weight {winner.authority_weight:g}) over {loser.authority} "
+            f"(weight {loser.authority_weight:g})",
         )
     return None
 

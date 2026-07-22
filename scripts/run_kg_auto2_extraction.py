@@ -29,7 +29,7 @@ import json
 import sys
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -200,7 +200,7 @@ def main() -> int:
             "facility_type": "TwoLaneHighway",
             "source": "HCM 7th Ed. Chapter 15 (indexed RAG corpus)",
             "n_windows": len(windows),
-            "run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "run_at": datetime.now(UTC).isoformat(timespec="seconds"),
             "status": "llm_extracted",
             "audited": False,
         },

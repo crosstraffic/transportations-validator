@@ -9,6 +9,7 @@ from the CARLA driving simulator.
 from pathlib import Path
 
 import pytest
+
 from transportations_validator.extractors.opendrive_extractor import (
     OpenDRIVEParser,
     calculate_mapping_metrics,

@@ -271,6 +271,7 @@ async def sync_to_postgres(constraints: dict, dry_run: bool = False):
     try:
         from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
         from sqlalchemy.orm import sessionmaker
+
         from transportations_validator.config import get_settings
         from transportations_validator.models.parameter import FacilityType, Parameter
         from transportations_validator.models.rule import DesignRule, RuleType, Severity

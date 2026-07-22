@@ -35,7 +35,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-
 # ─── Provenance weighting ──────────────────────────────────────────────────
 #
 # Each AFFECTS edge can carry an optional ``source`` field naming the

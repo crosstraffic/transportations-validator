@@ -31,7 +31,7 @@ explicitly a bounding box, since the feasible region need not be one.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import product
 from typing import Any
 

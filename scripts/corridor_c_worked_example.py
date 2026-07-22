@@ -64,7 +64,7 @@ def load_grade_rules(facility: str = "TwoLaneHighway") -> list[dict]:
 
 def cite(rule: dict) -> str:
     s = rule.get("source_ref", {})
-    parts = [f"AASHTO Green Book"]
+    parts = ["AASHTO Green Book"]
     if s.get("chapter"):
         parts.append(f"§{s['chapter']}.{s.get('section', '')}".rstrip("."))
     if s.get("exhibit"):

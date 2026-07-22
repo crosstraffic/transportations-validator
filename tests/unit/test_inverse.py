@@ -8,7 +8,6 @@ pin the paper's worked example (LOS C envelope vs demand volume).
 import pytest
 
 from transportations_validator.validators.inverse import (
-    FeasibleDesign,
     discover_design_parameters,
     inverse_design,
 )

@@ -18,7 +18,6 @@ from transportations_validator.validators.derivation import (
     verify_proposal,
 )
 
-
 # Clean paper example: hor_class -> speed_limit -> bffs (BasicFreeway).
 SYNTHETIC_RELS = [
     {
