@@ -177,7 +177,7 @@ class TestRealSource:
         return agreement_report(candidates, curated, facility)
 
     def test_twolane_recovers_the_ffs_chain(self, curated):
-        rep = self._report("TwoLaneHighway", "twolanehighways.rs", curated)
+        rep = self._report("TwoLaneHighway", "twolanehighways/twolanehighways.rs", curated)
         for edge in [
             ("lane_width", "ffs"),
             ("shoulder_width", "ffs"),
@@ -193,11 +193,11 @@ class TestRealSource:
     def test_twolane_surfaces_uncurated_true_dependency(self, curated):
         """phv appears in HCM Eq. 15-4 but was never curated: the code
         knows more than the humans wrote down."""
-        rep = self._report("TwoLaneHighway", "twolanehighways.rs", curated)
+        rep = self._report("TwoLaneHighway", "twolanehighways/twolanehighways.rs", curated)
         assert ("phv", "ffs") in rep["code_only"]
 
     def test_basicfreeway_recovers_the_density_chain(self, curated):
-        rep = self._report("BasicFreeway", "basicfreeways.rs", curated)
+        rep = self._report("BasicFreeway", "basicfreeways/basicfreeways.rs", curated)
         for edge in [
             ("lw", "ffs"),
             ("v_p", "density"),
@@ -211,5 +211,5 @@ class TestRealSource:
     def test_misses_are_the_table_encoded_edges(self, curated):
         """The unrecovered curated edges live in rules/tables, not step
         functions — the documented limit of code-derived acquisition."""
-        rep = self._report("BasicFreeway", "basicfreeways.rs", curated)
+        rep = self._report("BasicFreeway", "basicfreeways/basicfreeways.rs", curated)
         assert ("hor_class", "speed_limit") in rep["curated_only"]

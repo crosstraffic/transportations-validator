@@ -289,16 +289,20 @@ from transportations_validator.validators.executors import (  # noqa: E402
     BasicFreewayExecutor,
 )
 
-# Corridor B: a freight basic-freeway segment — 10 ft narrow lanes, 25% trucks
-# on a 2% grade. The verified HCM Ch.12 chain (lw → FFS → density → LOS) yields
-# LOS E at 3000 veh/h. A *different equation family* than the two-lane case.
+# Corridor B: a freight basic-freeway segment — 10 ft narrow lanes, 25% trucks on a 2% grade. A *different equation family* than the two-lane case.
+#
+# The verified HCM Ch.12 chain (lw → FFS → density → LOS) yields LOS E here. Re-derived by hand and confirmed against the library:
+#   FFS = 70 − f_LW(6.6, Exhibit 12-20 at 10 ft) − 3.22·TRD^0.84 = 60.18 mi/h; capacity = 2200 + 10·(FFS−50) = 2301.8 pc/h/ln.
+#   Heavy vehicles: no SUT mix is specified (sut_percentage defaults to 0), so E_T comes from the general-terrain exhibit (12-25, level) = 2.0, giving f_HV = 1/(1 + 0.25·(2.0−1)) = 0.80.
+#   v_p = 3100/(0.95·2·0.80) = 2039.5 pc/h/ln → S = 56.60 mi/h → density = 36.04 pc/mi/ln → LOS E (Exhibit 12-15, D ≤ 35 < 36.04 ≤ 45).
+# The demand is 3100, not the pre-fix 3000: under the old default sut_percentage=50 the segment read the specific-upgrade table (E_T 2.12, density 35.55, LOS E) at 3000, but the corrected general-terrain default lands it at LOS D (density 34.28) at 3000, so 3100 is the smallest round demand that keeps the baseline past the LOS-D density threshold (into LOS E) for the repair example below.
 FREEWAY_DESIGN = {
     "bffs": 70.0,
     "lw": 10.0,
     "lane_count": 2,
     "lc_r": 6,
     "trd": 1,
-    "demand_flow_i": 3000.0,
+    "demand_flow_i": 3100.0,
     "phf": 0.95,
     "p_t": 0.25,
     "grade": 2.0,
@@ -344,12 +348,16 @@ class TestExecutableRepairBasicFreeway:
         }
         assert "lw" in single_fixes
 
-    def test_off_grid_heavy_vehicle_inputs_raise_clean_error(self):
-        """The library's PCE table is sparse; the executor converts the Rust
-        panic into a ValueError instead of crashing a repair sweep."""
+    def test_off_domain_specific_upgrade_grade_raises_clean_error(self):
+        """The specific-upgrade PCE exhibits (12-26/27/28) are tabulated only to
+        a 6% grade. A steeper grade with an explicit SUT mix is off-domain; the
+        library raises a ValueError and the executor surfaces it as a clean
+        "non-evaluable" error instead of crashing a repair sweep. (At the
+        default sut_percentage=0 the general-terrain exhibit ignores grade
+        entirely, so this path is only reachable with a specific-upgrade mix.)"""
         with pytest.raises(ValueError, match="non-evaluable"):
             BasicFreewayExecutor().evaluate(
-                {**FREEWAY_DESIGN, "grade": 3.7, "length": 0.5}
+                {**FREEWAY_DESIGN, "sut_percentage": 30, "grade": 7.0}
             )
 
 
