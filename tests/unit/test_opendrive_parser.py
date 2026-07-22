@@ -9,6 +9,7 @@ Run with:
 """
 
 import pytest
+
 from transportations_validator.extractors.opendrive_extractor import (
     OpenDRIVEExtractor,
     OpenDRIVEGeometryType,

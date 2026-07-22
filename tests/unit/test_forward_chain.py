@@ -11,7 +11,6 @@ from transportations_validator.validators.forward_chain import (
     load_relationships_from_seed,
 )
 
-
 # Synthetic relationships isolated from the real seed file so unit tests are
 # stable against future seed-data edits. The canonical paper example is
 # preserved here verbatim.

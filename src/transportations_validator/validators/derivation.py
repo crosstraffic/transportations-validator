@@ -43,7 +43,6 @@ from typing import Any, Protocol
 from transportations_validator.validators import semantic
 from transportations_validator.validators.forward_chain import forward_chain
 
-
 # ─── Data shapes ────────────────────────────────────────────────────────────
 
 

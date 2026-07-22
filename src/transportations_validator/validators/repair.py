@@ -36,10 +36,11 @@ Single-parameter repairs are exhausted before parameter pairs are tried
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from itertools import combinations
 from pathlib import Path
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol
 
 from transportations_validator.validators.forward_chain import (
     CAUSAL_EDGE_TYPES,

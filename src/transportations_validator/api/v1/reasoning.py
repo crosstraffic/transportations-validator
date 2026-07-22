@@ -24,7 +24,6 @@ from transportations_validator.models.reasoning import (
     BackwardChainRequest,
     BackwardChainResponse,
     ChainStepModel,
-    FeasibleDesignModel,
     ForwardChainRequest,
     ForwardChainResponse,
     InverseDesignRequest,
