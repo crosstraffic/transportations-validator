@@ -65,10 +65,29 @@ dev = [
     "pre-commit>=3.6.0",
 ]
 
+# Executable-repair / Chapter 12 integration tests re-execute through the Rust
+# HCM library. It is optional: the validator runs fully without it and those
+# tests skip (see the pytest.importorskip in tests/unit/test_repair.py). Install
+# this extra to exercise them. At dev time the library is built from the sibling
+# checkout (see [tool.uv.sources]) so it always tracks the current library
+# source rather than a published wheel — this is what keeps a downstream venv
+# from silently holding a stale build.
+rust = [
+    "transportations-library>=0.2.0",
+]
+
 # All optional dependencies
 all = [
     "transportations-validator[api,dev]",
 ]
+
+[tool.uv.sources]
+# Local dev only: build transportations-library from the sibling checkout at
+# ../transportations-library. Applies solely when the `rust` extra is synced.
+# CI installs only ".[dev]" (no library, tests skip), so it never needs this;
+# any workflow that does want the library from the index should pass
+# `--no-sources` and rely on a published wheel.
+transportations-library = { path = "../transportations-library", editable = true }
 
 [project.urls]
 Homepage = "https://github.com/crosstraffic/transportations-validator"
