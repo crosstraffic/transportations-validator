@@ -1,12 +1,12 @@
 """Pydantic models for validation requests and responses."""
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class SourceType(str, Enum):
+class SourceType(StrEnum):
     """Type of source being validated."""
 
     RUST_LIB = "rust_lib"
@@ -95,7 +95,7 @@ class ValidationResult(BaseModel):
     )
 
 
-class ClarificationType(str, Enum):
+class ClarificationType(StrEnum):
     """Type of clarification the validator needs from the user/agent.
 
     Unlike a RuleViolation (input was wrong), a Clarification means the system

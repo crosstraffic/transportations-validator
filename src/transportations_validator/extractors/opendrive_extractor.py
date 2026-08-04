@@ -20,7 +20,7 @@ Paper Section: 4.1 (Digital Twin Validation)
 
 import math
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET  # noqa: N817
@@ -29,7 +29,7 @@ from transportations_validator.extractors.base import BaseExtractor, ExtractionR
 from transportations_validator.models.validation import SourceType, ValidationContext
 
 
-class OpenDRIVEGeometryType(str, Enum):
+class OpenDRIVEGeometryType(StrEnum):
     """OpenDRIVE geometry types."""
 
     LINE = "line"

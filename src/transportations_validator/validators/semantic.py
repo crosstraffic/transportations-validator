@@ -31,7 +31,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 # =============================================================================
@@ -163,7 +163,7 @@ _CONSTRAINTS, CONSTRAINTS_SOURCE = _load_constraints()
 TLH_CONSTRAINTS = _CONSTRAINTS.get("two_lane_highways", {})
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     """Severity level for validation violations."""
 
     ERROR = "error"

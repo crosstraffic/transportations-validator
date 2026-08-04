@@ -1,6 +1,6 @@
 """Parameter and parameter alias models."""
 
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import Float, ForeignKey, String, Text
@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from transportations_validator.models.base import Base, TimestampMixin
 
 
-class FacilityType(str, Enum):
+class FacilityType(StrEnum):
     """Transportation facility types."""
 
     # Traditional roadway types
@@ -32,7 +32,7 @@ class FacilityType(str, Enum):
     GEOMETRIC_DESIGN = "GeometricDesign"
 
 
-class DataType(str, Enum):
+class DataType(StrEnum):
     """Parameter data types."""
 
     FLOAT = "float"
