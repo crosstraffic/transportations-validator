@@ -18,6 +18,7 @@ from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects import postgresql
 
 revision: str = "004"
 down_revision: str | None = "003"
@@ -61,13 +62,17 @@ def upgrade() -> None:
         sa.Column("z", sa.Float(), nullable=True),
         sa.Column(
             "node_type",
-            sa.Enum(
+            postgresql.ENUM(
                 "intersection",
                 "endpoint",
                 "merge",
                 "diverge",
                 "crossing",
                 name="nodetype",
+                # The type is created explicitly above (guarded); without this
+                # flag create_table would issue a second, unguarded CREATE TYPE
+                # and break the chain on a fresh database.
+                create_type=False,
             ),
             nullable=False,
             server_default="endpoint",
@@ -124,7 +129,7 @@ def upgrade() -> None:
         sa.Column("vertical_class", sa.Integer(), nullable=True),
         sa.Column(
             "curve_type",
-            sa.Enum("crest", "sag", name="verticalcurvetype"),
+            postgresql.ENUM("crest", "sag", name="verticalcurvetype", create_type=False),
             nullable=True,
         ),
         sa.Column("s_start", sa.Float(), nullable=True),

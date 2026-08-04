@@ -1,6 +1,6 @@
 """Design rule and related models."""
 
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import Boolean, Float, ForeignKey, String, Text
 from sqlalchemy import Enum as SQLEnum
@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from transportations_validator.models.base import Base, TimestampMixin
 
 
-class RuleType(str, Enum):
+class RuleType(StrEnum):
     """Types of validation rules."""
 
     RANGE = "range"
@@ -20,7 +20,7 @@ class RuleType(str, Enum):
     RELATIONSHIP = "relationship"
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     """Violation severity levels."""
 
     ERROR = "error"
