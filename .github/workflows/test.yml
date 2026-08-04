@@ -46,13 +46,13 @@ jobs:
         run: uv sync --all-extras --dev --no-sources
 
       - name: Run linter
-        run: uv run ruff check .
+        run: uv run --no-sync ruff check .
 
       - name: Run type checker
         # Advisory until the typing pass lands: the codebase carries ~151
         # pre-existing mypy errors (untyped FastAPI decorators, missing
         # annotations), and a permanently red gate masks real test failures.
-        run: uv run mypy src/
+        run: uv run --no-sync mypy src/
         continue-on-error: true
 
       - name: Migrate and seed the database
@@ -60,13 +60,13 @@ jobs:
         env:
           DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
         run: |
-          uv run alembic upgrade head
-          uv run python scripts/load_seed_data.py
+          uv run --no-sync alembic upgrade head
+          uv run --no-sync python scripts/load_seed_data.py
 
       - name: Run tests
         env:
           DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
-        run: uv run pytest --cov=src --cov-report=xml
+        run: uv run --no-sync pytest --cov=src --cov-report=xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
