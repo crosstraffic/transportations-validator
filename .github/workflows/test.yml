@@ -37,25 +37,36 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install dependencies
-        # api is required: tests/conftest.py imports sqlalchemy unconditionally,
-        # so the suite cannot even collect without the api extra. The rust
-        # extra stays out — library-backed tests importorskip cleanly.
-        run: uv pip install -e ".[api,dev]" --system
+        # Everything the suite actually imports: the api extra (conftest imports
+        # sqlalchemy unconditionally), the rust extra (the reasoning API tests
+        # assert 200s that need the compute library — resolved from PyPI via
+        # --no-sources since CI has no sibling checkout), and both dev lists
+        # (the dependency-group carries aiosqlite for the sqlite-backed
+        # repository tests).
+        run: uv sync --all-extras --dev --no-sources
 
       - name: Run linter
-        run: ruff check .
+        run: uv run ruff check .
 
       - name: Run type checker
         # Advisory until the typing pass lands: the codebase carries ~151
         # pre-existing mypy errors (untyped FastAPI decorators, missing
         # annotations), and a permanently red gate masks real test failures.
-        run: mypy src/
+        run: uv run mypy src/
         continue-on-error: true
+
+      - name: Migrate and seed the database
+        # The service container starts empty; the API tests query real tables.
+        env:
+          DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
+        run: |
+          uv run alembic upgrade head
+          uv run python scripts/load_seed_data.py
 
       - name: Run tests
         env:
           DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
-        run: pytest --cov=src --cov-report=xml
+        run: uv run pytest --cov=src --cov-report=xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
