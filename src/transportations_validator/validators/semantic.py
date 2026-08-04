@@ -212,11 +212,27 @@ class ValidationResult:
         is_valid: True if no ERROR-level violations
         violations: List of all violations found
         constraints_checked: Number of constraints evaluated
+        params_supplied: Number of scalar input parameters the caller supplied, whether or not a rule applied to them
     """
 
     is_valid: bool
     violations: list[Violation] = field(default_factory=list)
     constraints_checked: int = 0
+    params_supplied: int = 0
+
+    @property
+    def coverage(self) -> str:
+        """How much of the supplied input the rule set actually spoke to: "none" (no applicable rule fired, the result endorses nothing), "partial" (some supplied parameters had no applicable rule), or "covered" (every supplied parameter was checked)."""
+        if self.constraints_checked == 0:
+            return "none"
+        if self.constraints_checked < self.params_supplied:
+            return "partial"
+        return "covered"
+
+    @property
+    def abstained(self) -> bool:
+        """True when no applicable rule fired, so a passing result must not be read as an endorsement."""
+        return self.coverage == "none"
 
     @property
     def errors(self) -> list[Violation]:
@@ -245,6 +261,9 @@ class ValidationResult:
             "error_count": self.error_count,
             "warning_count": self.warning_count,
             "constraints_checked": self.constraints_checked,
+            "params_supplied": self.params_supplied,
+            "coverage": self.coverage,
+            "abstained": self.abstained,
             "violations": [v.to_dict() for v in self.violations],
         }
 
@@ -662,6 +681,7 @@ def validate(data: dict[str, Any]) -> ValidationResult:
     """
     violations: list[Violation] = []
     checked = 0
+    supplied = sum(1 for v in data.values() if v is not None)
 
     # SV-001: Lane width
     if "lane_width" in data and data["lane_width"] is not None:
@@ -735,6 +755,7 @@ def validate(data: dict[str, Any]) -> ValidationResult:
         is_valid=error_count == 0,
         violations=violations,
         constraints_checked=checked,
+        params_supplied=supplied,
     )
 
 
@@ -782,6 +803,16 @@ def validate_highway(data: dict[str, Any]) -> ValidationResult:
     """
     violations: list[Violation] = []
     checked = 0
+
+    # Count every scalar parameter the caller supplied, so the result can report whether the rule set actually covered the input or partially/never spoke to it.
+    supplied = sum(1 for k, v in data.items() if k != "segments" and v is not None)
+    for segment in data.get("segments", []):
+        if not isinstance(segment, dict):
+            continue
+        supplied += sum(1 for k, v in segment.items() if k != "subsegments" and v is not None)
+        for subseg in segment.get("subsegments", []):
+            if isinstance(subseg, dict):
+                supplied += sum(1 for v in subseg.values() if v is not None)
 
     # Highway-level parameters
     if "lane_width" in data and data["lane_width"] is not None:
@@ -935,6 +966,7 @@ def validate_highway(data: dict[str, Any]) -> ValidationResult:
         is_valid=error_count == 0,
         violations=violations,
         constraints_checked=checked,
+        params_supplied=supplied,
     )
 
 
