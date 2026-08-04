@@ -84,7 +84,7 @@ all = [
 [tool.uv.sources]
 # Local dev only: build transportations-library from the sibling checkout at
 # ../transportations-library. Applies solely when the `rust` extra is synced.
-# CI installs only ".[dev]" (no library, tests skip), so it never needs this;
+# CI installs ".[api,dev]" (no rust extra, so library-backed tests skip); it never needs this;
 # any workflow that does want the library from the index should pass
 # `--no-sources` and rely on a published wheel.
 transportations-library = { path = "../transportations-library", editable = true }

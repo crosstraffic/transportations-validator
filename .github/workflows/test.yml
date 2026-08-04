@@ -37,7 +37,10 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install dependencies
-        run: uv pip install -e ".[dev]" --system
+        # api is required: tests/conftest.py imports sqlalchemy unconditionally,
+        # so the suite cannot even collect without the api extra. The rust
+        # extra stays out — library-backed tests importorskip cleanly.
+        run: uv pip install -e ".[api,dev]" --system
 
       - name: Run linter
         run: ruff check .
